@@ -19,6 +19,8 @@ docker run -d -p 80:80 [image name]
 In production environment docker will build the app and host it using nginx.
 
 ### Run docker for development env
+Create ```.env``` file based on ```.env.sample```
+
 There is a docker compose file that would set everything up for dev environment
 ```
 docker compose up -d
