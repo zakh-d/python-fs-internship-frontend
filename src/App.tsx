@@ -4,6 +4,8 @@ import PageNotFound from "./Pages/PageNotFound";
 import About from "./Pages/About";
 import { users } from "./Store/DummyData";
 import AllUsers from "./Pages/AllUsers";
+import UserProfile from "./Pages/UserProfile";
+import { userLoader } from "./Utils/loaders";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +22,8 @@ const router = createBrowserRouter([
     },
     {
         path: "/users/:userId",
+        element: <UserProfile/>,
+        loader: userLoader
 
     },
     {
