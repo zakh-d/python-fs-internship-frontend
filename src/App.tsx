@@ -9,6 +9,8 @@ import { companyLoader, userLoader } from "./Utils/loaders";
 import AllCompanies from "./Pages/AllCompanies";
 import CompanyProfile from "./Pages/CompanyProfile";
 import Layout from "./Pages/Layout";
+import UserAuthorization from "./Pages/UserAuthorization";
+import UserRegistration from "./Pages/UserRegistration";
 
 const router = createBrowserRouter([
     {
@@ -42,6 +44,14 @@ const router = createBrowserRouter([
                 element: <CompanyProfile/>,
                 loader: companyLoader
             },
+            {
+                path: "login",
+                element: <UserAuthorization/>
+            },
+            {
+                path: "register",
+                element: <UserRegistration/>
+            }
         ]
     },
 ]);
