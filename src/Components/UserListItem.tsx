@@ -2,10 +2,11 @@ import User from "../Types/UserType";
 
 const UserListItem = ({ user }: {user: User}) => {
     return (
-        <li key={user.id}>
-            <span>{user.firstName} {user.lastName}</span>
-            <span>{user.email}</span>
-        </li>
+        <tr key={user.id}>
+            <td>{user.firstName}</td>
+            <td>{user.lastName}</td>
+            <td>{user.email}</td>
+        </tr>
     );
 }
 

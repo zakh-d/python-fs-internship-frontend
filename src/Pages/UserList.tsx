@@ -7,9 +7,17 @@ const UserList = ({users}: {users: User[]}) => {
     return (
         <div>
             <Header title="All Users"/>
-            <ul>
-                {userItems}
-            </ul>
+            <div className="container">
+
+                <table className="table">
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                    </tr>
+                    {userItems}
+                </table>
+            </div>
         </div>
     )
 }
