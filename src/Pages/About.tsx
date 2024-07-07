@@ -1,10 +1,8 @@
 import { ReactElement } from "react";
-import Header from "../Components/Header";
 
 const About = (): ReactElement => {
   return (
     <div>
-      <Header title={"About Page"} />
       <section className="container-fluid">
         <h1>About Us</h1>
         <p>This is the about page</p>
