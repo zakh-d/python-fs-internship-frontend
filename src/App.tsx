@@ -2,8 +2,8 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Start from "./Pages/Start";
 import PageNotFound from "./Pages/PageNotFound";
 import About from "./Pages/About";
-import UserList from "./Pages/UserList";
 import { users } from "./Store/DummyData";
+import AllUsers from "./Pages/AllUsers";
 
 const router = createBrowserRouter([
     {
@@ -16,7 +16,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/users",
-        element: <UserList users={users}/>,
+        element: <AllUsers allUsers={users}/>,
+    },
+    {
+        path: "/users/:userId",
+
     },
     {
         path: "*",
