@@ -11,6 +11,9 @@ const Header = ({title}: HeaderProps): ReactElement => {
 
                 <nav>
                     <ul className="navbar-nav">
+                    <li className="nav-item">
+                            <NavLink to="/" className="nav-link">Home</NavLink>
+                        </li>
                         <li className="nav-item">
                             <NavLink to="/users" className="nav-link">All Users</NavLink>
                         </li>
