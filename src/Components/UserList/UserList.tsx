@@ -1,5 +1,5 @@
 import UserListItem from "./UserListItem";
-import User from "../Types/UserType"
+import User from "../../Types/UserType"
 
 const UserList = ({users}: {users: User[]}) => {
     const userItems = users.map((user) => <UserListItem user={user}/>);

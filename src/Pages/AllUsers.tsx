@@ -1,4 +1,4 @@
-import UserList from "../Components/UserList";
+import UserList from "../Components/UserList/UserList";
 import User from "../Types/UserType";
 
 const AllUsers = ({allUsers}: {allUsers: User[]}) => {

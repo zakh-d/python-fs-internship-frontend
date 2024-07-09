@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import User from "../Types/UserType";
+import User from "../../Types/UserType";
 
 const UserListItem = ({ user }: {user: User}) => {
     return (
