@@ -1,9 +1,13 @@
 import {ReactElement} from "react";
+import ModalWindow from "../Components/ModalWindow";
 
 const Start = (): ReactElement => {
     return (
         <section className="container-fluid">
-            <h1 className="text-center">Welcome</h1>
+            
+            <ModalWindow isOpen={true} onClose={() => {}}>
+                <h2>Welcome o my website</h2>
+            </ModalWindow>
         </section>
     );
 }
