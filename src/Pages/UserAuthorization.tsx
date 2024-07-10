@@ -1,18 +1,15 @@
 import { ReactElement } from "react";
+import Input from "../Components/Input";
 
 const UserAuthorization = ():ReactElement => {
     return (
         <section className="row justify-content-center">
             <h1 className="text-center">User Authorization</h1>
             <form className="col-lg-4 my-5 py-5 shadow rounded">
-                <div>
-                    <label className="form-label" htmlFor="email">Email:</label>
-                    <input className="form-control" type="email" id="email" name="email" required/>
-                </div>
-                <div>
-                    <label className="form-label" htmlFor="password">Password:</label>
-                    <input className="form-control" type="password" id="password" name="password" required/>
-                </div>
+                
+                <Input labelText="Email:" name="email" type="email" required={true}/>
+                <Input labelText="Password:" name="password" type="password" required={true}/>
+                
                 <button className="btn btn-primary mt-2">Login</button>
             </form>
         </section>

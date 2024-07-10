@@ -18,7 +18,7 @@ const FadeBackground = styled.div`
 type Props = {
     isOpen: boolean;
     onClose: () => void;
-    children: ReactElement[];
+    children: ReactElement[] | ReactElement;
 }
 
 const ModalWindow = ({ isOpen, onClose, children }: Props): ReactElement => {
