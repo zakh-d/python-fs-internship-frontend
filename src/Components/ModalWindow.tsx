@@ -1,19 +1,7 @@
 import { useState } from "react";
 import { ReactElement } from "react";
-import styled from "styled-components";
+import FadeBackground from "./FadeBackground";
 
-
-const FadeBackground = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 
 type Props = {
     isOpen: boolean;
