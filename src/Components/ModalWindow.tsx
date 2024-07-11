@@ -13,13 +13,8 @@ const ModalWindow = ({ isOpen, onClose, children }: Props): ReactElement => {
 
     const [isModalOpen, setModalOpen] = useState(isOpen);
 
-    if (!isModalOpen) {
-        return <div></div>;
-    }
-
-
     return (
-        <FadeBackground>
+        <FadeBackground className={isModalOpen ? "" : "d-none"}>
             <div className="bg-light rounded p-5">
                 {children}
                 <hr />
