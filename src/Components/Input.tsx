@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 
 type PropsType = {
     labelText: string;
@@ -8,12 +8,11 @@ type PropsType = {
 }
 
 const Input = ({labelText, name, type, required}: PropsType): ReactElement => {
-    const [randomHtmlId, _] = useState(name + Math.random().toString(36).substring(7));
     
     return (
         <div>
-            <label className="form-label" htmlFor={randomHtmlId}>{labelText}</label>
-            <input className="form-control"  name={name} type={type} id={randomHtmlId} required={required}/>
+            <label className="form-label" htmlFor={name + "_id"}>{labelText}</label>
+            <input className="form-control"  name={name} type={type} id={name + "_id"} required={required}/>
         </div>
      )
 }
