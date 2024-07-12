@@ -1,15 +1,14 @@
 import {ReactElement} from "react";
-import Header from "../Components/Header";
+import ModalWindow from "../Components/ModalWindow";
 
 const Start = (): ReactElement => {
     return (
-        <div>
-            <Header title={'Home Page'}/>
-
-            <section className="container-fluid">
-                <h1>Welcome</h1>
-            </section>
-        </div>
+        <section className="container-fluid">
+            
+            <ModalWindow isOpen={true} onClose={() => {}}>
+                <h2>Welcome o my website</h2>
+            </ModalWindow>
+        </section>
     );
 }
 

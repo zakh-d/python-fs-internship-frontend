@@ -5,7 +5,8 @@ const PageNotFound = () => {
     return (
         <div>
             <Header title={'Page was not found'}/>
-            <section className="container-fluid">
+            <section className="container">
+                <h1>404 :(</h1>
                 <Link to={'/'}>Go to Home Page</Link>
             </section>
         </div>
