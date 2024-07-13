@@ -9,6 +9,26 @@ import { selectAppHealth, selectDbHealth, selectRedisHealth } from "../Store/sel
 import HealthInfoItem from "../Components/HealthInfoItem";
 import HealthInfo from "../Types/HealthInfo";
 
+
+function apiCallAndUpdateStore(dispatch: any) {
+    healthApi.getHealth().then((data) => {
+        dispatch(setHealth(data));
+    }).catch(() => {
+        dispatch(setAppHealth({
+            status_code: 500,
+            details: "API is not available, cannot determine the health of db and redis",
+            result: "FAIL"
+        }));
+        const emptyHealth: HealthInfo = {
+            status_code: 0,
+            details: "",
+            result: ""
+        }
+        dispatch(setDbHealth(emptyHealth));
+        dispatch(setRedisHealth(emptyHealth));
+    });
+}
+
 const Start = (): ReactElement => {
 
     const testString = useSelector(selectTestString);
@@ -21,27 +41,10 @@ const Start = (): ReactElement => {
 
     useEffect(() => {
         
-        healthApi.getHealth().then((data) => {
-            dispatch(setHealth(data));
-        }).catch((error) => {
-            dispatch(setAppHealth({
-                status_code: 500,
-                details: "API is not available, cannot determine the health of db and redis",
-                result: "FAIL"
-            }));
-            const emptyHealth: HealthInfo = {
-                status_code: 0,
-                details: "",
-                result: ""
-            }
-            dispatch(setDbHealth(emptyHealth));
-            dispatch(setRedisHealth(emptyHealth));
-        });
+        apiCallAndUpdateStore(dispatch);
 
         const interval = setInterval(() => {
-            healthApi.getHealth().then((data) => {
-                dispatch(setHealth(data));
-            });
+            apiCallAndUpdateStore(dispatch);
         }, 3000);
 
         return () => clearInterval(interval);
