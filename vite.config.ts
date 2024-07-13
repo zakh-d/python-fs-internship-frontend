@@ -8,8 +8,8 @@ export default ({ mode }:{mode: string}) => {
   return defineConfig({
     plugins: [react()],
     server: {
-      host: process.env.REACT_APP_HOST || 'localhost',
-      port: parseInt(process.env.REACT_APP_PORT || '3000' ),
+      host: process.env.VITE_APP_HOST || 'localhost',
+      port: parseInt(process.env.VITE_APP_PORT || '3000' ),
     }
   })
 }
