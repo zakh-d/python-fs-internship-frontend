@@ -1,9 +1,8 @@
-import axios from "axios";
-import { API_HOST } from "../Config/config";
+import apiBase from "./api-configuration";
 
 export const healthApi = {
   getHealth: async () => {
-    const response = await axios.get("http://" + API_HOST + "/health");
+    const response = await apiBase.get("health");
     return response.data;
   },
 };
