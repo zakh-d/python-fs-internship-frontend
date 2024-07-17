@@ -1,37 +1,32 @@
 import { ReactElement } from "react";
 import { Form as FinalForm } from "react-final-form";
 import Input from "./Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userApi } from "../Api/users-api";
+import SignUpSchema from "../Types/SignUpSchema";
 
 
-const sendSignUpRequest = async (values: {
-    username: string,
-        first_name: string,
-        last_name: string,
-        email: string,
-        password: string,
-        password_confirm: string
-    }) => {
+const sendSignUpRequest = async (values: SignUpSchema) => {
     try {
-        const data = userApi.signUp(
-            values.username,
-            values.first_name,
-            values.last_name,
-            values.email,
-            values.password,
-            values.password_confirm
-        );
+        const data = userApi.signUp(values);
+
+        return true;
     } catch (error) {
         console.error(error);
     }
+    return false;
 }
 
 
 const RegistrationForm = () : ReactElement => {
+    const navigate = useNavigate();
     return (
         <FinalForm
-            onSubmit={sendSignUpRequest}
+            onSubmit={async (values: SignUpSchema) => {
+                if (await sendSignUpRequest(values)){
+                    navigate("/login");
+                }
+            }}
             render={({handleSubmit}) => (
                 <form onSubmit={handleSubmit} className="offset-lg-4 col-lg-4 offset-md-2 col-md-8 my-5 pt-3 pb-2 shadow rounded"> 
                     

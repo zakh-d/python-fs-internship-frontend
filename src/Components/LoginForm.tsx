@@ -2,23 +2,33 @@ import { ReactElement } from "react";
 import { Form as FinalForm } from "react-final-form";
 import Input from "./Input";
 import { authApi } from "../Api/auth-api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
-const sendLoginRequest = async (values: {username: string, password: string}) => {
+const authenticate = async (values: {username: string, password: string}) => {
     try {
         const data = await authApi.login(values.username, values.password);
-        console.log(data);
+        
+        if (data.access_token) {
+            localStorage.setItem("token", data.access_token);
+            return true;
+        }
     } catch (error) {
         console.error(error);
     }
+    return false;
 }
 
 
 const LoginForm = () : ReactElement => {
+    const navigate = useNavigate();
     return (
         <FinalForm
-            onSubmit={sendLoginRequest}
+            onSubmit={async (values: {username: string, password: string}) => {
+                if (await authenticate(values)) {
+                    navigate("/");
+                }
+            }}
             render={({handleSubmit}) => (
                 <form onSubmit={handleSubmit} className="offset-lg-4 col-lg-4 offset-md-2 col-md-8 my-5 pt-3 pb-2 shadow rounded"> 
                     <Input labelText="Username:" name="username" type="text" />

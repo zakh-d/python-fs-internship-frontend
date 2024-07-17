@@ -1,21 +1,16 @@
+import SignUpSchema from "../Types/SignUpSchema";
 import apiBase from "./api-configuration";
 
 export const userApi = {
-    signUp: async (
-        username: string,
-        first_name: string,
-        last_name: string,
-        email: string,
-        password: string,
-        password_confirmation: string) => {
+    signUp: async (signUpSchema: SignUpSchema) => {
 
         const response = await apiBase.post("users/sign_up/", {
-            username: username,
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            password: password,
-            password_confirmation: password_confirmation
+            username: signUpSchema.username,
+            first_name: signUpSchema.first_name,
+            last_name: signUpSchema.last_name,
+            email: signUpSchema.email,
+            password:  signUpSchema.password,
+            password_confirmation: signUpSchema.password_confirm
         });
 
         if (response.status !== 200) {
