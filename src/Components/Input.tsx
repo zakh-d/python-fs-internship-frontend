@@ -1,19 +1,24 @@
 import { ReactElement } from "react";
+import { Field } from "react-final-form";
 
 type PropsType = {
     labelText: string;
     name: string;
-    type: "text" | "email" | "password";
-    required: boolean;
+    type: "text" | "email" | "password" | "number" | "checkbox";
 }
 
-const Input = ({labelText, name, type, required}: PropsType): ReactElement => {
-    
+const Input = ({labelText, name, type}: PropsType): ReactElement => {
     return (
-        <div>
-            <label className="form-label" htmlFor={name + "_id"}>{labelText}</label>
-            <input className="form-control"  name={name} type={type} id={name + "_id"} required={required}/>
-        </div>
+        <Field 
+            name={name}
+            type={type}
+            render={({input, meta}) => (
+                <div>
+                    <label className="form-label" htmlFor={input.name + '_id'}>{labelText}</label>
+                    <input className="form-control"  {...input} id={input.name + '_id'} type={type}/>
+                </div>
+            )}
+        />
      )
 }
 
