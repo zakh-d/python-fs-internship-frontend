@@ -1,5 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import Company from "../Types/CompanyType";
+import {withAuthentication} from "../Utils/hoc/auth_redirect";
 
 const CompanyProfile = () => {
     const company: Company = useLoaderData() as Company;
@@ -15,4 +16,4 @@ const CompanyProfile = () => {
     );
 }
 
-export default CompanyProfile;
+export default withAuthentication(CompanyProfile);

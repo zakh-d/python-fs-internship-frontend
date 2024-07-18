@@ -1,7 +1,12 @@
 import UserList from "../Components/UserList/UserList";
 import User from "../Types/UserType";
+import {withAuthentication} from "../Utils/hoc/auth_redirect";
 
-const AllUsers = ({allUsers}: {allUsers: User[]}) => {
+interface PropsType extends JSX.IntrinsicAttributes {
+    allUsers: User[],
+}
+
+const AllUsers = ({allUsers}: PropsType) => {
     return (
         <div className="container">
 
@@ -10,4 +15,4 @@ const AllUsers = ({allUsers}: {allUsers: User[]}) => {
     )
 }
 
-export default AllUsers;
+export default withAuthentication(AllUsers);

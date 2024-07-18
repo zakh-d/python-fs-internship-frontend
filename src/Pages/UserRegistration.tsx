@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import RegistrationForm from "../Components/RegistrationForm";
+import { withoutAuthentication } from "../Utils/hoc/auth_redirect";
 
 const UserRegistration = ():ReactElement => {
     return (
@@ -10,4 +11,4 @@ const UserRegistration = ():ReactElement => {
     );
 }
 
-export default UserRegistration;
+export default withoutAuthentication(UserRegistration);

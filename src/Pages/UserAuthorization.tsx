@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import LoginForm from "../Components/LoginForm";
+import { withoutAuthentication } from "../Utils/hoc/auth_redirect";
 
 const UserAuthorization = ():ReactElement => {
     return (
@@ -10,4 +11,4 @@ const UserAuthorization = ():ReactElement => {
     );
 }
 
-export default UserAuthorization;
+export default withoutAuthentication(UserAuthorization);
