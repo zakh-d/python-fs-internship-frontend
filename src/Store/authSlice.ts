@@ -3,10 +3,12 @@ import User from "../Types/UserType"
 
 const initialState: {
     isAuthenticated: boolean,
-    me: User | null
+    me: User | null,
+    loginStatus: "idle" | "fetching" | "failed"
 } = {
     isAuthenticated: false,
-    me: null
+    me: null,
+    loginStatus: "idle",
 }
 
 const authSlice = createSlice({
@@ -20,10 +22,19 @@ const authSlice = createSlice({
         setMe: (state, action) => {
             state.me = action.payload;
             state.isAuthenticated = true;
+        },
+        loginStarted: (state) => {
+            state.loginStatus = "fetching";
+        },
+        loginSuccess: (state) => {
+            state.loginStatus = "idle";
+        },
+        loginFailed: (state) => {
+            state.loginStatus = "failed";
         }
     }
 });
 
 
-export const { eraseAuthInfo, setMe } = authSlice.actions;
+export const { eraseAuthInfo, setMe, loginStarted, loginSuccess, loginFailed } = authSlice.actions;
 export default authSlice.reducer;

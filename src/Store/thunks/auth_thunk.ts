@@ -1,6 +1,6 @@
 import { authApi } from "../../Api/auth-api";
 import User from "../../Types/UserType";
-import { eraseAuthInfo, setMe } from "../authSlice";
+import { eraseAuthInfo, loginFailed, loginStarted, loginSuccess, setMe } from "../authSlice";
 import { AppDispatch } from "../store";
 
 
@@ -21,5 +21,19 @@ export const getCurrentUser = () => async (dispatch: AppDispatch) => {
             localStorage.removeItem("token");
             dispatch(eraseAuthInfo());
         }
+    }
+}
+
+
+export const loginUser = (username: string, password: string) => async (dispatch: AppDispatch) => {
+    dispatch(loginStarted());
+    try {
+        const data = await authApi.login(username, password);
+        localStorage.setItem("token", data.access_token);
+        dispatch(loginSuccess());
+        dispatch(getCurrentUser());
+    }
+    catch (error) {
+        dispatch(loginFailed());
     }
 }
