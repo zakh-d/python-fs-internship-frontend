@@ -5,9 +5,10 @@ type PropsType = {
     labelText: string;
     name: string;
     type: "text" | "email" | "password" | "number" | "checkbox";
+    disabled?: boolean;
 }
 
-const Input = ({labelText, name, type}: PropsType): ReactElement => {
+const Input = ({labelText, name, type, disabled}: PropsType): ReactElement => {
     return (
         <Field 
             name={name}
@@ -15,7 +16,7 @@ const Input = ({labelText, name, type}: PropsType): ReactElement => {
             render={({input, meta}) => (
                 <div>
                     <label className="form-label" htmlFor={input.name + '_id'}>{labelText}</label>
-                    <input className="form-control"  {...input} id={input.name + '_id'} type={type}/>
+                    <input className="form-control" {...input} id={input.name + '_id'} type={type} disabled={disabled}/>
                 </div>
             )}
         />

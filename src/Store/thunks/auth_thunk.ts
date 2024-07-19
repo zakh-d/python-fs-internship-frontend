@@ -33,7 +33,10 @@ export const loginUser = (username: string, password: string) => async (dispatch
         dispatch(loginSuccess());
         dispatch(getCurrentUser());
     }
-    catch (error) {
+    catch (error: any) {
+        if (error.code && error.code === 'ERR_NETWORK') {
+            return;
+        }
         dispatch(loginFailed());
     }
 }

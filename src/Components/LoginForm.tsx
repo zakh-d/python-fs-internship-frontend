@@ -20,8 +20,8 @@ const LoginForm = () : ReactElement => {
             }}
             render={({handleSubmit}) => (
                 <form onSubmit={handleSubmit} className="offset-lg-4 col-lg-4 offset-md-2 col-md-8 my-5 pt-3 pb-2 shadow rounded">
-                    <Input labelText="Username:" name="username" type="text" />
-                    <Input labelText="Password:" name="password" type="password"/>
+                    <Input labelText="Username:" name="username" type="text" disabled={loginStatus === 'fetching'}/>
+                    <Input labelText="Password:" name="password" type="password" disabled={loginStatus === 'fetching'}/>
                     {loginStatus === 'failed' && 
                     <div className="alert alert-danger mt-2">Invalid Credentials</div>
                     } 
