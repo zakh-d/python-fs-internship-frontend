@@ -19,9 +19,12 @@ const LoginForm = () : ReactElement => {
                 dispatch(loginUser(values.username, values.password));    
             }}
             render={({handleSubmit}) => (
-                <form onSubmit={handleSubmit} className="offset-lg-4 col-lg-4 offset-md-2 col-md-8 my-5 pt-3 pb-2 shadow rounded"> 
+                <form onSubmit={handleSubmit} className="offset-lg-4 col-lg-4 offset-md-2 col-md-8 my-5 pt-3 pb-2 shadow rounded">
                     <Input labelText="Username:" name="username" type="text" />
                     <Input labelText="Password:" name="password" type="password"/>
+                    {loginStatus === 'failed' && 
+                    <div className="alert alert-danger mt-2">Invalid Credentials</div>
+                    } 
                     <div className="d-flex justify-content-between mb-2">
                         <button type="submit" 
                                 className="btn flex-fill btn-secondary mt-2 mr-1" 
