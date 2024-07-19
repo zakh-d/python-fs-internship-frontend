@@ -1,14 +1,14 @@
 import { ReactElement } from "react";
 import { Field } from "react-final-form";
 
-type PropsType = {
+export type InputPropsType = {
     labelText: string;
     name: string;
     type: "text" | "email" | "password" | "number" | "checkbox";
     disabled?: boolean;
 }
 
-const Input = ({labelText, name, type, disabled}: PropsType): ReactElement => {
+const Input = ({labelText, name, type, disabled}: InputPropsType): ReactElement => {
     return (
         <Field 
             name={name}
