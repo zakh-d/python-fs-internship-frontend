@@ -2,10 +2,13 @@ import {ReactElement} from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { selectIsAuthenticated, selectMe } from "../Store/selectors/auth_selector";
+import useAppDispatch from "../Store/hooks/dispatch";
+import { eraseAuthInfo } from "../Store/authSlice";
 
 type HeaderProps = {title: string};
 
 const Header = ({title}: HeaderProps): ReactElement => {
+    const dispatch = useAppDispatch();
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const me = useSelector(selectMe);
     return (
@@ -32,7 +35,11 @@ const Header = ({title}: HeaderProps): ReactElement => {
                                 <NavLink to="/about" className="nav-link">About</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/logout" className="nav-link">Logout</NavLink>
+                                <a href="#" onClick={(e ) => {
+                                    e.preventDefault();
+                                    dispatch(eraseAuthInfo());
+                                    localStorage.removeItem("token");
+                                }} className="nav-link">Logout</a>
                             </li>
                         </>
                     )}
