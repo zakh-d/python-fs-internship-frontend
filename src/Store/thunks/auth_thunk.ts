@@ -40,3 +40,14 @@ export const loginUser = (username: string, password: string) => async (dispatch
         dispatch(loginFailed());
     }
 }
+
+export const getAuth0Token = (getToken: Promise<string>) => async (dispatch: AppDispatch) => {
+    try {
+        const token = await getToken;
+        localStorage.setItem("token", token);
+        dispatch(loginSuccess());
+        dispatch(getCurrentUser());
+    } catch (error) {
+        dispatch(loginFailed());
+    }
+}
