@@ -9,7 +9,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { useAuth0 } from "@auth0/auth0-react";
 import { loginStarted } from "../Store/authSlice";
+import { validateEmail } from "../Utils/validate_email";
 
+type LoginData = {
+    email: string;
+    password: string;
+}
 
 const LoginForm = () : ReactElement => {
     const dispatch = useAppDispatch();
@@ -25,12 +30,25 @@ const LoginForm = () : ReactElement => {
     return (
 
         <FinalForm
-            onSubmit={async (values: {username: string, password: string}) => {
-                dispatch(loginUser(values.username, values.password));    
+            onSubmit={async (values: LoginData) => {
+                dispatch(loginUser(values.email, values.password));    
+            }}
+            validate={(values: LoginData) => {
+                const errors: {email?: string, password?: string} = {};
+                if (!values.email) {
+                    errors.email = "Required";
+                }
+                if (!validateEmail(values.email)) {
+                    errors.email = "Invalid email";
+                }
+                if (!values.password) {
+                    errors.password = "Required";
+                }
+                return errors;
             }}
             render={({handleSubmit}) => (
                 <form onSubmit={handleSubmit} className="offset-lg-4 col-lg-4 offset-md-2 col-md-8 my-5 pt-3 pb-2 shadow rounded">
-                    <Input labelText="Username:" name="username" type="text" disabled={loginStatus === 'fetching'}/>
+                    <Input labelText="Email:" name="email" type="email" disabled={loginStatus === 'fetching'}/>
                     <Input labelText="Password:" name="password" type="password" disabled={loginStatus === 'fetching'}/>
                     {loginStatus === 'failed' && 
                     <div className="alert alert-danger mt-2">Invalid Credentials</div>

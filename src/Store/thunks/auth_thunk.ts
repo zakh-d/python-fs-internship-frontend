@@ -25,10 +25,10 @@ export const getCurrentUser = () => async (dispatch: AppDispatch) => {
 }
 
 
-export const loginUser = (username: string, password: string) => async (dispatch: AppDispatch) => {
+export const loginUser = (email: string, password: string) => async (dispatch: AppDispatch) => {
     dispatch(loginStarted());
     try {
-        const data = await authApi.login(username, password);
+        const data = await authApi.login(email, password);
         localStorage.setItem("token", data.access_token);
         dispatch(loginSuccess());
         dispatch(getCurrentUser());

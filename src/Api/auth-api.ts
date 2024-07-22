@@ -1,9 +1,9 @@
 import apiBase from "./api-configuration";
 
 export const authApi = {
-    async login(username: string, password: string) {
+    async login(email: string, password: string) {
         const response = await apiBase.post("auth/sign_in", {
-            username: username,
+            email: email,
             password: password
         });
         if (response.status !== 200) {

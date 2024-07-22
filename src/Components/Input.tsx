@@ -15,8 +15,11 @@ const Input = ({labelText, name, type, disabled}: InputPropsType): ReactElement 
             type={type}
             render={({input, meta}) => (
                 <div>
-                    <label className="form-label" htmlFor={input.name + '_id'}>{labelText}</label>
+                    <label className="form-label" htmlFor={input.name + '_id'}>{labelText} <code>   </code>
+                    { meta.error && meta.touched && <span className="text-danger">{meta.error}</span> }
+                    </label>
                     <input className="form-control" {...input} id={input.name + '_id'} type={type} disabled={disabled}/>
+                    
                 </div>
             )}
         />

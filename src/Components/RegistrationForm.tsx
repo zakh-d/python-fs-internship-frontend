@@ -8,7 +8,7 @@ import signUp from "../Store/thunks/users_thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { validateEmail } from "../Utils/validate_email";
 
 const RegistrationForm = () : ReactElement => {
     const dispatch = useAppDispatch();
@@ -56,6 +56,39 @@ const RegistrationForm = () : ReactElement => {
             onSubmit={async (values: SignUpSchema) => {
                 dispatch(signUp(values));
             }}
+            validate={(values) => {
+                type FormErrorsType = {
+                    username?: string;
+                    email?: string;
+                    password?: string;
+                    password_confirm?: string;
+                }
+                const errors: FormErrorsType = {};
+
+                if (!values.username) {
+                    errors.username = 'Required';
+                }
+
+                if (!values.email) {
+                    errors.email = 'Required';
+                }
+
+                if (!values.password) {
+                    errors.password = 'Required';
+                }
+
+                if (!validateEmail(values.email)) {
+                    errors.email = 'Invalid email';
+                }
+
+                if (values.password !== values.password_confirm) {
+                    errors.password_confirm = 'Passwords do not match';
+                }
+
+
+                return errors;
+            }
+            }
             render={({handleSubmit}) => (
                 <form onSubmit={handleSubmit} className="offset-lg-4 col-lg-4 offset-md-2 col-md-8 my-5 pt-3 pb-2 shadow rounded"> 
                     
