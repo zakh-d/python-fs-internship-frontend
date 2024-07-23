@@ -13,7 +13,7 @@ const Header = ({title}: HeaderProps): ReactElement => {
         <header className="navbar navbar-expand navbar-light shadow mb-4">
             <div className="container-fluid">
                 <span className="navbar-brand mb-0 h1">
-                    {isAuthenticated ? me?.first_name + " " + me?.last_name : title}
+                    {isAuthenticated ? me?.username : title}
                 </span>
 
                 <nav>
