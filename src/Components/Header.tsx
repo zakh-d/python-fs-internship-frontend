@@ -1,6 +1,6 @@
 import {ReactElement} from "react";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { selectIsAuthenticated, selectMe } from "../Store/selectors/auth_selector";
 import LogoutButton from "./LogoutButton";
 
@@ -12,9 +12,11 @@ const Header = ({title}: HeaderProps): ReactElement => {
     return (
         <header className="navbar navbar-expand navbar-light shadow mb-4">
             <div className="container-fluid">
-                <span className="navbar-brand mb-0 h1">
-                    {isAuthenticated ? me?.username : title}
-                </span>
+                    {isAuthenticated ? <Link className="navbar-brand mb-0 h1" to={'/users/' + me?.id}>{me?.username}</Link> :
+                    <span className="navbar-brand mb-0 h1">
+                        {title}
+                    </span>
+                    }
 
                 <nav>
                     <ul className="navbar-nav">

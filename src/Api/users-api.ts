@@ -1,4 +1,3 @@
-import { UUID } from "crypto";
 import ServerValidationError from "../Types/ServerValidationError";
 import SignUpSchema from "../Types/SignUpSchema";
 import { UserUpdate } from "../Types/UserType";
@@ -46,21 +45,25 @@ export const userApi = {
         }
     },
 
-    get: async (userId: UUID) => {
-        const response = await apiBase.get(`users/${userId}`);
+    get: async (userId: string) => {
+        const response = await apiBase.get(`users/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        });
         if (response.status == 200) {
             return await response.data;
         }
     },
 
-    update: async (new_data: UserUpdate, userId: UUID) => {
+    update: async (new_data: UserUpdate, userId: string) => {
         const response = await apiBase.put(`users/${userId}`, new_data);
         if (response.status == 200) {
             return await response.data;
         }
     },
 
-    delete: async (userId: UUID) => {
+    delete: async (userId: string) => {
         const response = await apiBase.delete(`users/${userId}`);
         if (response.status == 200) {
             return await response.data;

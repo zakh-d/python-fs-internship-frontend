@@ -35,7 +35,6 @@ const router = createBrowserRouter([
             {
                 path: "users/:userId",
                 element: <UserProfile/>,
-                loader: userLoader
             },
             {
                 path: "companies", 

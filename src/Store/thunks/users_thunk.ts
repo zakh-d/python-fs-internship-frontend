@@ -4,6 +4,9 @@ import SignUpSchema from "../../Types/SignUpSchema";
 import { AppDispatch } from "../store";
 import { userListFetchFailed, userListFetchStarted, userListFetchSuccess } from "../userListSlice";
 import { signUpFailed, signUpStarted, signUpSuccess } from "../userSlice";
+import { RootState } from "../store";
+import { userProfileFetchStarted, userProfileFetchFailed, userProfileFetchSuccess } from "../user_profile_slice";
+import { selectMe } from "../selectors/auth_selector";
 
 export const signUp = (user: SignUpSchema) => async (dispatch: AppDispatch) => {
     dispatch(signUpStarted());
@@ -30,6 +33,20 @@ export const getUsers = () => async (dispatch: AppDispatch) => {
         }));
     } catch (error) {
         dispatch(userListFetchFailed(["An error occurred. Please try again later."]));
+    }
+}
+
+export const getUser = (userId: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(userProfileFetchStarted());
+    try {
+        const data = await userApi.get(userId);
+        const me = selectMe(getState());
+        dispatch(userProfileFetchSuccess({
+            user: data,
+            isMe: me?.id === userId
+        }));
+    } catch (error) {
+        dispatch(userProfileFetchFailed(["An error occurred. Please try again later."]));
     }
 }
 
