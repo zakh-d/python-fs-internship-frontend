@@ -2,6 +2,7 @@ import { ComponentType } from 'react';
 import { Navigate } from 'react-router-dom';
 import { selectFetchingMe, selectIsAuthenticated } from '../../Store/selectors/auth_selector';
 import { useSelector } from 'react-redux';
+import Loader from '../../Components/Loader';
 
 export function withAuthentication<WP extends JSX.IntrinsicAttributes>(Component: ComponentType<WP>) {
 
@@ -10,9 +11,7 @@ export function withAuthentication<WP extends JSX.IntrinsicAttributes>(Component
     const fetching = useSelector(selectFetchingMe);
 
     if (fetching) {
-      return <div className="container pt-4">
-        <h3 className="text-center">Loading...</h3>
-      </div>
+      return <Loader/>; 
     }
     if (isAuthenticated) {
       return <Component {...props} />;

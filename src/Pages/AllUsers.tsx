@@ -5,6 +5,7 @@ import {withAuthentication} from "../Utils/hoc/auth_redirect";
 import { selectCurrentPage, selectIsFetching, selectUsers } from "../Store/selectors/user_list_selectors";
 import { useEffect } from "react";
 import { getUsers } from "../Store/thunks/users_thunk";
+import Loader from "../Components/Loader";
 
 
 const AllUsers = () => {
@@ -21,9 +22,7 @@ const AllUsers = () => {
     }, [currentPage]);
 
     if (fetching) {
-        return <div className="container pt-4">
-            <h3 className="text-center">Loading...</h3>
-        </div>
+        return <Loader/>;
     }
 
     return (

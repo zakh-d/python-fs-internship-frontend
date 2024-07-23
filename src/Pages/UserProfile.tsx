@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser, selectIsFetching, selectIsMe } from "../Store/selectors/user_profile_selectors";
 import useAppDispatch from "../Store/hooks/dispatch";
 import { getUser } from "../Store/thunks/users_thunk";
+import Loader from "../Components/Loader";
 
 const UserProfile = () => {
     const {userId} = useParams();
@@ -23,9 +24,7 @@ const UserProfile = () => {
     }, [userId]);
 
     if (fetching) {
-        return <div className="container pt-4">
-            <h3 className="text-center">Loading...</h3>
-        </div>
+        return <Loader/>;
     }
 
     if (!user) {
