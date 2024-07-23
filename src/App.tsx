@@ -4,7 +4,7 @@ import About from "./Pages/About";
 import { companies } from "./Store/DummyData";
 import AllUsers from "./Pages/AllUsers";
 import UserProfile from "./Pages/UserProfile";
-import { companyLoader, userLoader } from "./Utils/loaders";
+import { companyLoader } from "./Utils/loaders";
 import AllCompanies from "./Pages/AllCompanies";
 import CompanyProfile from "./Pages/CompanyProfile";
 import Layout from "./Pages/Layout";
@@ -62,7 +62,7 @@ function App() {
 
     useEffect(() => {
         dispatch(getCurrentUser())
-    }, [localStorage.getItem("token")])
+    }, [])
     return (
         <RouterProvider router={router}/>
     )

@@ -4,11 +4,13 @@ import User from "../Types/UserType"
 const initialState: {
     isAuthenticated: boolean,
     me: User | null,
-    loginStatus: "idle" | "fetching" | "failed"
+    loginStatus: "idle" | "fetching" | "failed",
+    fetchingMe: boolean,
 } = {
     isAuthenticated: false,
     me: null,
     loginStatus: "idle",
+    fetchingMe: true,
 }
 
 const authSlice = createSlice({
@@ -31,10 +33,13 @@ const authSlice = createSlice({
         },
         loginFailed: (state) => {
             state.loginStatus = "failed";
+        },
+        currentUserWasLoaded: (state) => {
+            state.fetchingMe = false
         }
     }
 });
 
 
-export const { eraseAuthInfo, setMe, loginStarted, loginSuccess, loginFailed } = authSlice.actions;
+export const { eraseAuthInfo, setMe, loginStarted, loginSuccess, loginFailed, currentUserWasLoaded } = authSlice.actions;
 export default authSlice.reducer;

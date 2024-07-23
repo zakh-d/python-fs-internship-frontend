@@ -9,3 +9,11 @@ export function selectIsAuthenticated(state: RootState): boolean {
 export function selectMe(state: RootState) {
     return state.auth.me;
 }
+
+export function selectLoginStatus(state: RootState) {
+    return state.auth.loginStatus;
+}
+
+export function selectFetchingMe(state: RootState) {
+    return state.auth.fetchingMe;
+}
