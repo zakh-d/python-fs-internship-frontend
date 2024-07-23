@@ -28,9 +28,9 @@ const userSlice = createSlice({
         signUpFailed: (state, action) => {
             state.userCreation.status = "failed";
             state.userCreation.errors = action.payload;
-        } 
+        },
     }
 });
 
-export const { signUpStarted, signUpSuccess, signUpFailed } = userSlice.actions;
+export const { signUpStarted, signUpSuccess, signUpFailed} = userSlice.actions;
 export default userSlice.reducer;

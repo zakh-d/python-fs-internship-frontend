@@ -1,8 +1,7 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Start from "./Pages/Start";
-import PageNotFound from "./Pages/ErrorPage";
 import About from "./Pages/About";
-import { companies, users } from "./Store/DummyData";
+import { companies } from "./Store/DummyData";
 import AllUsers from "./Pages/AllUsers";
 import UserProfile from "./Pages/UserProfile";
 import { companyLoader, userLoader } from "./Utils/loaders";
@@ -19,7 +18,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Layout/>,
-        errorElement: <PageNotFound/>,
+        // errorElement: <PageNotFound/>,
         children: [
             {
                 path: "",
@@ -31,7 +30,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "users",
-                element: <AllUsers allUsers={users}/>,
+                element: <AllUsers/>,
             },
             {
                 path: "users/:userId",

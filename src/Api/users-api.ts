@@ -1,5 +1,7 @@
+import { UUID } from "crypto";
 import ServerValidationError from "../Types/ServerValidationError";
 import SignUpSchema from "../Types/SignUpSchema";
+import { UserUpdate } from "../Types/UserType";
 import apiBase from "./api-configuration";
 
 interface HasMessage {
@@ -9,7 +11,7 @@ interface HasMessage {
 export const userApi = {
     signUp: async (signUpSchema: SignUpSchema) => {
 
-        const response = await apiBase.post("users/sign_up/", {
+        const response = await apiBase.post("users/", {
             username: signUpSchema.username,
             first_name: signUpSchema.first_name,
             last_name: signUpSchema.last_name,
@@ -31,5 +33,38 @@ export const userApi = {
         });
 
         return response.data;
+    },
+
+    list: async () => {
+        const response = await apiBase.get("users/", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+        if (response.status == 200) {
+            return await response.data;
+        }
+    },
+
+    get: async (userId: UUID) => {
+        const response = await apiBase.get(`users/${userId}`);
+        if (response.status == 200) {
+            return await response.data;
+        }
+    },
+
+    update: async (new_data: UserUpdate, userId: UUID) => {
+        const response = await apiBase.put(`users/${userId}`, new_data);
+        if (response.status == 200) {
+            return await response.data;
+        }
+    },
+
+    delete: async (userId: UUID) => {
+        const response = await apiBase.delete(`users/${userId}`);
+        if (response.status == 200) {
+            return await response.data;
+        }
     }
+
 }
