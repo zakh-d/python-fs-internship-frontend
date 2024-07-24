@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type UserState = {
     userCreation: {
-        status: "idle" | "fetching" | "failed",
+        status: "idle" | "fetching" | "failed" | "success",
         errors: string[],
     }
 }
@@ -23,6 +23,9 @@ const userSlice = createSlice({
             state.userCreation.status = "fetching";
         },
         signUpSuccess: (state) => {
+            state.userCreation.status = "success";
+        },
+        signUpReset: (state) => {
             state.userCreation.status = "idle";
         },
         signUpFailed: (state, action) => {
@@ -32,5 +35,5 @@ const userSlice = createSlice({
     }
 });
 
-export const { signUpStarted, signUpSuccess, signUpFailed} = userSlice.actions;
+export const { signUpStarted, signUpSuccess, signUpFailed, signUpReset } = userSlice.actions;
 export default userSlice.reducer;
