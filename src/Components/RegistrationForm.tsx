@@ -4,7 +4,7 @@ import Input, { InputPropsType } from "./Input";
 import { Link } from "react-router-dom";
 import SignUpSchema from "../Types/SignUpSchema";
 import useAppDispatch from "../Store/hooks/dispatch";
-import signUp from "../Store/thunks/users_thunk";
+import { signUp } from "../Store/thunks/users_thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { useAuth0 } from "@auth0/auth0-react";

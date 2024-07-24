@@ -57,14 +57,20 @@ export const userApi = {
     },
 
     update: async (new_data: UserUpdate, userId: string) => {
-        const response = await apiBase.put(`users/${userId}`, new_data);
+        const response = await apiBase.put(`users/${userId}`, new_data, {headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }});
         if (response.status == 200) {
             return await response.data;
         }
     },
 
     delete: async (userId: string) => {
-        const response = await apiBase.delete(`users/${userId}`);
+        const response = await apiBase.delete(`users/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        });
         if (response.status == 200) {
             return await response.data;
         }

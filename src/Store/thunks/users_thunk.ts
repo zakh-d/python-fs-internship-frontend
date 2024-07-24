@@ -5,8 +5,11 @@ import { AppDispatch } from "../store";
 import { userListFetchFailed, userListFetchStarted, userListFetchSuccess } from "../userListSlice";
 import { signUpFailed, signUpStarted, signUpSuccess } from "../userSlice";
 import { RootState } from "../store";
-import { userProfileFetchStarted, userProfileFetchFailed, userProfileFetchSuccess } from "../user_profile_slice";
+import { userProfileFetchStarted, userProfileFetchFailed, userProfileFetchSuccess, deleteFetchiStarted, deleteFetchFinished } from "../user_profile_slice";
 import { selectMe } from "../selectors/auth_selector";
+import { eraseAuthInfo } from "../authSlice";
+import { UserUpdate } from "../../Types/UserType";
+import { getCurrentUser } from "./auth_thunk";
 
 export const signUp = (user: SignUpSchema) => async (dispatch: AppDispatch) => {
     dispatch(signUpStarted());
@@ -50,4 +53,28 @@ export const getUser = (userId: string) => async (dispatch: AppDispatch, getStat
     }
 }
 
-export default signUp;
+export const updateUser = (userId: string, new_data: UserUpdate) => async (dispatch: AppDispatch) => {
+    dispatch(userProfileFetchStarted());
+    try {
+        const data = await userApi.update(new_data, userId);
+        dispatch(userProfileFetchSuccess({
+            user: data,
+            isMe: true, // This is always true because the user is updating their own profile
+        }));
+        dispatch(getCurrentUser());
+    } catch (error) {
+        dispatch(userProfileFetchFailed(["An error occurred. Please try again later."]));
+    }
+}
+
+export const deleteUser = (userId: string) => async (dispatch: AppDispatch) => {
+    dispatch(deleteFetchiStarted());
+    try {
+        await userApi.delete(userId);
+        dispatch(deleteFetchFinished());
+        dispatch(eraseAuthInfo());
+        localStorage.removeItem("token");
+    } catch (error) {
+        dispatch(userProfileFetchFailed(["An error occurred. Please try again later."]));
+    }
+}  
