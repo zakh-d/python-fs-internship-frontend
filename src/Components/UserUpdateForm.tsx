@@ -1,12 +1,14 @@
 import { ReactElement } from "react";
 import {Form as FinalForm} from "react-final-form";
-import { UserDetail, UserUpdate } from "../Types/UserType";
+import { UserUpdate } from "../Types/UserType";
 import useAppDispatch from "../Store/hooks/dispatch";
 import { updateUser } from "../Store/thunks/users_thunk";
 import Input from "./Input";
+import UserFormProps from "../Types/UserFormProps";
+import { Link } from "react-router-dom";
 
 
-const UserUpdateForm = ({user, onSubmitAdditionaly, onCancelAdditionaly}: {user?: UserDetail, onSubmitAdditionaly: () => void, onCancelAdditionaly: () => void}): ReactElement => {
+const UserUpdateForm = ({user, onSubmitAdditionaly}: UserFormProps): ReactElement => {
    
     const dispatch = useAppDispatch();
 
@@ -35,9 +37,7 @@ const UserUpdateForm = ({user, onSubmitAdditionaly, onCancelAdditionaly}: {user?
                         <Input name="email" value={user.email} labelText="Email" type="email" disabled={true}/>
 
                         <div className="mt-2 d-flex">
-                            <button onClick={() => {
-                                onCancelAdditionaly();
-                                }} className="btn btn-danger flex-grow-1 me-1">Cancel</button>
+                            <Link to={'/users/' + user.id} className="btn btn-danger flex-grow-1 me-1">Cancel</Link>
                             <button className="btn btn-primary flex-grow-1 ms-1" type="submit">Save</button>
                         </div>
                     </form>

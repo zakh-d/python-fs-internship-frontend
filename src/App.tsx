@@ -34,7 +34,15 @@ const router = createBrowserRouter([
             },
             {
                 path: "users/:userId",
-                element: <UserProfile/>,
+                element: <UserProfile editing={false}/>,
+            },
+            {
+                path: "users/:userId/edit",
+                element: <UserProfile editing={true}/>,
+            },
+            {
+                path: "users/:userId/edit/password",
+                element: <UserProfile editing={true} changePassword={true}/>,
             },
             {
                 path: "companies", 
