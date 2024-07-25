@@ -1,14 +1,12 @@
 import { useParams } from "react-router-dom";
-import { Form as FinalForm} from "react-final-form";
 import {withAuthentication} from "../Utils/hoc/auth_redirect";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentUser, selectDeleteFetching, selectIsFetching, selectIsMe } from "../Store/selectors/user_profile_selectors";
 import useAppDispatch from "../Store/hooks/dispatch";
-import { deleteUser, getUser, updateUser } from "../Store/thunks/users_thunk";
+import { deleteUser, getUser } from "../Store/thunks/users_thunk";
 import Loader from "../Components/Loader";
-import Input from "../Components/Input";
-import { UserUpdate } from "../Types/UserType";
+import UserUpdateForm from "../Components/UserUpdateForm";
 
 const UserProfile = () => {
     const {userId} = useParams();
@@ -44,33 +42,10 @@ const UserProfile = () => {
        return (
         <div className="container p-5">
             <img className="m-auto d-block" width={250} src="https://www.svgrepo.com/show/384674/account-avatar-profile-user-11.svg" alt={user.first_name + "'s profile picture"}/>
-            <FinalForm
-                onSubmit={(values) => {
-                    const new_data: UserUpdate = {
-                        first_name: values.first_name,
-                        last_name: values.last_name,
-                        username: values.username,
-                    }
-                    dispatch(updateUser(user.id, new_data));
-                    setEditing(false);
-                }}
-                render={({handleSubmit}) => (
-                    <form onSubmit={handleSubmit} className="col-lg-4 offset-lg-4">
-                        <Input name="first_name" value={user.first_name} labelText="First Name" type="text"/>
-                        <Input name="last_name" value={user.last_name} labelText="Last Name" type="text"/>
-                        <Input name="username" value={user.username} labelText="Username" type="text"/>
-                        <Input name="email" value={user.email} labelText="Email" type="email" disabled={true}/>
-
-                        <div className="mt-2 d-flex">
-                            <button onClick={() => {
-                                setEditing(false);
-                                setDeleteConfirm(false);
-                                }} className="btn btn-danger flex-grow-1 me-1">Cancel</button>
-                            <button className="btn btn-primary flex-grow-1 ms-1" type="submit">Save</button>
-                        </div>
-                    </form>
-                )}
-            />
+            <UserUpdateForm user={user} onSubmitAdditionaly={() => setEditing(false)} onCancelAdditionaly={() => {
+                setEditing(false);
+                setDeleteConfirm(false);
+            }}/>
             {isMe &&
                 <> 
                 <div className="row">
