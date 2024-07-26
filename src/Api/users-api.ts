@@ -35,8 +35,8 @@ export const userApi = {
         return response.data;
     },
 
-    list: async () => {
-        const response = await apiBase.get("users/", {
+    list: async (page: number) => {
+        const response = await apiBase.get(`users/?page=${page}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }

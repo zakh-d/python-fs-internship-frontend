@@ -6,6 +6,7 @@ import { selectCurrentPage, selectIsFetching, selectUsers } from "../Store/selec
 import { useEffect } from "react";
 import { getUsers } from "../Store/thunks/users_thunk";
 import Loader from "../Components/Loader";
+import Pagination from "../Components/Pagination";
 
 
 const AllUsers = () => {
@@ -18,17 +19,19 @@ const AllUsers = () => {
        if (fetching) {
            return;
        }
-       dispatch(getUsers());
+       dispatch(getUsers(1));
     }, [currentPage]);
-
-    if (fetching) {
-        return <Loader/>;
-    }
 
     return (
         <div className="container">
-
-            <UserList users={users}/>
+            {fetching ? 
+                <Loader/> 
+                :
+                <UserList users={users}/>
+            }
+            <Pagination totalItems={1000} itemsPerPage={15} onPageChange={(page: number) => {
+                dispatch(getUsers(page));
+            }}/>
         </div>
     )
 }

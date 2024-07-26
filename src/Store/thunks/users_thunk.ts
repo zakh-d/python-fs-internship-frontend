@@ -25,10 +25,10 @@ export const signUp = (user: SignUpSchema) => async (dispatch: AppDispatch) => {
     }
 };
 
-export const getUsers = () => async (dispatch: AppDispatch) => {
+export const getUsers = (page: number) => async (dispatch: AppDispatch) => {
     dispatch(userListFetchStarted());
     try {
-        const data = await userApi.list();
+        const data = await userApi.list(page);
         dispatch(userListFetchSuccess({
             list: data.users,
             currentPage: 1,
