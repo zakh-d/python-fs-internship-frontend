@@ -13,6 +13,7 @@ import UserRegistration from "./Pages/UserRegistration";
 import { useEffect } from "react";
 import { getCurrentUser } from "./Store/thunks/auth_thunk";
 import useAppDispatch from "./Store/hooks/dispatch";
+import Toast from "./Components/Toast";
 
 const router = createBrowserRouter([
     {
@@ -72,7 +73,10 @@ function App() {
         dispatch(getCurrentUser())
     }, [])
     return (
-        <RouterProvider router={router}/>
+        <>
+            <RouterProvider router={router}/>
+            <Toast/>
+        </>
     )
 }
 

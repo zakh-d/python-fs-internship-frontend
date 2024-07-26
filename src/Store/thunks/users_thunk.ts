@@ -10,6 +10,7 @@ import { selectMe } from "../selectors/auth_selector";
 import { eraseAuthInfo } from "../authSlice";
 import { UserUpdate } from "../../Types/UserType";
 import { getCurrentUser } from "./auth_thunk";
+import { setToast } from "../toast_slice";
 
 export const signUp = (user: SignUpSchema) => async (dispatch: AppDispatch) => {
     dispatch(signUpStarted());
@@ -62,6 +63,10 @@ export const updateUser = (userId: string, new_data: UserUpdate) => async (dispa
             isMe: true, // This is always true because the user is updating their own profile
         }));
         dispatch(getCurrentUser());
+        dispatch(setToast({
+            message: "User updated successfully",
+            type: "success"
+        }));
     } catch (error) {
         if (error instanceof ServerValidationError) {
             dispatch(userProfileFetchFailed(error.errors));
@@ -81,6 +86,10 @@ export const updatePassword = (userId: string, old_password: string, new_passwor
             password: old_password
         }, userId);
         onSuccess();
+        dispatch(setToast({
+            message: "Password updated successfully",
+            type: "success"
+        }));
     } catch (error) {
         if (error instanceof ServerValidationError) {
             dispatch(userProfileFetchFailed(error.errors));
