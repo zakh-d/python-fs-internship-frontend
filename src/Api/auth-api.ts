@@ -2,7 +2,7 @@ import apiBase from "./api-configuration";
 
 export const authApi = {
     async login(email: string, password: string) {
-        const response = await apiBase.post("auth/sign_in", {
+        const response = await apiBase.post("users/sign_in", {
             email: email,
             password: password
         });
@@ -19,7 +19,7 @@ export const authApi = {
     },
 
     async me (token: string) {
-        const response = await apiBase.get("/auth/me/", {
+        const response = await apiBase.get("/users/me/", {
             headers: {
                 Authorization: `Bearer ${token}`
             }

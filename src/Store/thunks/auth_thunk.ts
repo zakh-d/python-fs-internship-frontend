@@ -1,12 +1,12 @@
 import { authApi } from "../../Api/auth-api";
 import User from "../../Types/UserType";
-import { eraseAuthInfo, loginFailed, loginStarted, loginSuccess, setMe } from "../authSlice";
+import { eraseAuthInfo, loginFailed, loginStarted, loginSuccess, setMe, currentUserWasLoaded } from "../authSlice";
 import { AppDispatch } from "../store";
 
 
 export const getCurrentUser = () => async (dispatch: AppDispatch) => {
-    const token: string | null = localStorage.getItem("token");
 
+    const token: string | null = localStorage.getItem("token");
     if (!token) {
         dispatch(eraseAuthInfo());
         return;
@@ -22,6 +22,7 @@ export const getCurrentUser = () => async (dispatch: AppDispatch) => {
             dispatch(eraseAuthInfo());
         }
     }
+    dispatch(currentUserWasLoaded());
 }
 
 

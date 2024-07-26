@@ -3,6 +3,8 @@ import testReducer from "./testSlice";
 import healthReducer from "./healthSlice";
 import authReducer from "./authSlice";
 import usersReducer from "./userSlice";
+import usersListReducer from "./userListSlice";
+import userProfileReducer from "./user_profile_slice";
 
 const store = configureStore({
     reducer: {
@@ -10,6 +12,8 @@ const store = configureStore({
         health: healthReducer,
         auth: authReducer,
         users: usersReducer,
+        usersList: usersListReducer,
+        userProfile: userProfileReducer,
     }
 });
 
