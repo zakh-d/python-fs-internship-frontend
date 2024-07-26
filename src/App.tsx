@@ -11,6 +11,9 @@ import CompanyProfile from "./Pages/CompanyProfile";
 import Layout from "./Pages/Layout";
 import UserAuthorization from "./Pages/UserAuthorization";
 import UserRegistration from "./Pages/UserRegistration";
+import { useEffect } from "react";
+import { getCurrentUser } from "./Store/thunks/auth_thunk";
+import useAppDispatch from "./Store/hooks/dispatch";
 
 const router = createBrowserRouter([
     {
@@ -57,6 +60,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(getCurrentUser())
+    }, [localStorage.getItem("token")])
     return (
         <RouterProvider router={router}/>
     )
