@@ -10,9 +10,12 @@ import UserUpdateForm from "../Components/UserUpdateForm";
 import ModalWindow from "../Components/ModalWindow";
 import UpdatePasswordForm from "../Components/UpdatePasswordForm";
 import { eraseErrors } from "../Store/user_profile_slice";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const UserProfile = ({editing, changePassword}: {editing: boolean, changePassword?: boolean}) => {
     const {userId} = useParams();
+
+    const {isAuthenticated} = useAuth0();
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -49,9 +52,7 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
        return (
         <div className="container p-5">
             <img className="m-auto d-block" width={250} src="https://www.svgrepo.com/show/384674/account-avatar-profile-user-11.svg" alt={user.first_name + "'s profile picture"}/>
-            <UserUpdateForm user={user} onSubmitAdditionaly={() => {
-
-            }}/>
+            <UserUpdateForm user={user} onSubmitAdditionaly={() => {}}/>
             <ModalWindow isOpen={changePassword || false} onClose={() => {
                 navigate('/users/' + user.id + '/edit');
                 dispatch(eraseErrors());
@@ -60,15 +61,18 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
                 <UpdatePasswordForm user={user} onSubmitAdditionaly={() => {}}/>
             </ModalWindow>
             <div className="row">
+                {
+                !isAuthenticated &&    
                 <div className="alert alert-warning col-lg-4 offset-lg-4 p-2 mt-4">
                     <h3>Update Password</h3>
                     <hr />
                     <p>If you want to update your password, please click the button below</p>
                     <Link to={'/users/' + user.id + '/edit/password'} className="btn btn-warning">Update Password</Link>
                 </div>
+                }
             </div>
             <div className="row">
-                <div className="alert alert-danger col-lg-4 offset-lg-4 p-2 mt-1">
+                <div className="alert alert-danger col-lg-4 offset-lg-4 p-2 mt-4">
                     <h3>Danger Zone</h3>
                     <hr />
                     <p>If you delete your profile there is no way back</p>

@@ -6,9 +6,11 @@ import useAppDispatch from "../Store/hooks/dispatch";
 import { updatePassword } from "../Store/thunks/users_thunk";
 import { useSelector } from "react-redux";
 import { selectErrors, selectPasswordChangeFetching } from "../Store/selectors/user_profile_selectors";
+import { useNavigate } from "react-router-dom";
 
 const UpdatePasswordForm = ({user, onSubmitAdditionaly}: UserFormProps): ReactElement => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const errors = useSelector(selectErrors) || [];
     const errorsListItems = errors.map((error) => <li>{error}</li>);
 
@@ -21,7 +23,9 @@ const UpdatePasswordForm = ({user, onSubmitAdditionaly}: UserFormProps): ReactEl
                 if (!user) {
                     return;
                 }
-                dispatch(updatePassword(user.id, values.old_password, values.new_password));
+                dispatch(updatePassword(user.id, values.old_password, values.new_password, () => {
+                    navigate('/users/' + user.id + '/edit');
+                }));
                 onSubmitAdditionaly();
             }}
             validate={(values) => {

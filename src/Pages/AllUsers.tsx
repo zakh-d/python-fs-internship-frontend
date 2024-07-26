@@ -29,7 +29,7 @@ const AllUsers = () => {
                 :
                 <UserList users={users}/>
             }
-            <Pagination totalItems={1000} itemsPerPage={15} onPageChange={(page: number) => {
+            <Pagination totalItems={100} itemsPerPage={5} onPageChange={(page: number) => {
                 dispatch(getUsers(page));
             }}/>
         </div>

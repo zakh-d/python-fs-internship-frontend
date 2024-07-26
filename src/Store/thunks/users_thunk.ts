@@ -73,14 +73,14 @@ export const updateUser = (userId: string, new_data: UserUpdate) => async (dispa
     }
 }
 
-export const updatePassword = (userId: string, old_password: string, new_password: string) => async (dispatch: AppDispatch) => {
+export const updatePassword = (userId: string, old_password: string, new_password: string, onSuccess: () => void) => async (dispatch: AppDispatch) => {
     dispatch(passwordChangeStarted());
     try {
         await userApi.update({
             new_password: new_password,
             password: old_password
         }, userId);
-        
+        onSuccess();
     } catch (error) {
         if (error instanceof ServerValidationError) {
             dispatch(userProfileFetchFailed(error.errors));
