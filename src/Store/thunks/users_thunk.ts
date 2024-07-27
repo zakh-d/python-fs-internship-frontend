@@ -26,14 +26,13 @@ export const signUp = (user: SignUpSchema) => async (dispatch: AppDispatch) => {
     }
 };
 
-export const getUsers = (page: number) => async (dispatch: AppDispatch) => {
+export const getUsers = (page: number, itemsPerPage: number) => async (dispatch: AppDispatch) => {
     dispatch(userListFetchStarted());
     try {
-        const data = await userApi.list(page);
+        const data = await userApi.list(page, itemsPerPage);
         dispatch(userListFetchSuccess({
             list: data.users,
-            currentPage: 1,
-            totalPages: 1,
+            totalCount: data.total_count,
         }));
     } catch (error) {
         dispatch(userListFetchFailed(["An error occurred. Please try again later."]));
