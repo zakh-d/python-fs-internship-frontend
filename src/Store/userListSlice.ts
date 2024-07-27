@@ -4,16 +4,14 @@ import { createSlice } from "@reduxjs/toolkit";
 type UserListStateType = {
     fetching: boolean,
     list: User[],
-    currentPage: number,
-    totalPages: number,
+    totalCount: number,
     errors?: string[],
 }
 
 const initialState: UserListStateType = {
     fetching: false,
     list: [],
-    currentPage: 1,
-    totalPages: 1,
+    totalCount: 0,
 }
 
 const userListSlice = createSlice({
@@ -26,8 +24,7 @@ const userListSlice = createSlice({
         userListFetchSuccess: (state, action) => {
             state.fetching = false;
             state.list = action.payload.list;
-            state.currentPage = action.payload.currentPage;
-            state.totalPages = action.payload.totalPages;
+            state.totalCount = action.payload.totalCount;
         },
         userListFetchFailed: (state, action) => {
             state.fetching = false;
