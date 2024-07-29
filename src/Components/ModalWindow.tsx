@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReactElement } from "react";
 import FadeBackground from "./FadeBackground";
 
@@ -13,8 +13,16 @@ const ModalWindow = ({ isOpen, onClose, children }: Props): ReactElement => {
 
     const [isModalOpen, setModalOpen] = useState(isOpen);
 
+    useEffect(() => {
+        setModalOpen(isOpen);
+    }, [isOpen]);
+
+    if (!isModalOpen) {
+        return <></>;
+    }
+
     return (
-        <FadeBackground className={isModalOpen ? "" : "d-none"}>
+        <FadeBackground>
             <div className="bg-light rounded p-5">
                 {children}
                 <hr />

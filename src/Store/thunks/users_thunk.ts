@@ -5,11 +5,12 @@ import { AppDispatch } from "../store";
 import { userListFetchFailed, userListFetchStarted, userListFetchSuccess } from "../userListSlice";
 import { signUpFailed, signUpStarted, signUpSuccess } from "../userSlice";
 import { RootState } from "../store";
-import { userProfileFetchStarted, userProfileFetchFailed, userProfileFetchSuccess, deleteFetchiStarted, deleteFetchFinished } from "../user_profile_slice";
+import { userProfileFetchStarted, userProfileFetchFailed, userProfileFetchSuccess, deleteFetchiStarted, deleteFetchFinished, passwordChangeStarted, passwordChangeFinished } from "../user_profile_slice";
 import { selectMe } from "../selectors/auth_selector";
 import { eraseAuthInfo } from "../authSlice";
 import { UserUpdate } from "../../Types/UserType";
 import { getCurrentUser } from "./auth_thunk";
+import { setToast } from "../toast_slice";
 
 export const signUp = (user: SignUpSchema) => async (dispatch: AppDispatch) => {
     dispatch(signUpStarted());
@@ -25,14 +26,13 @@ export const signUp = (user: SignUpSchema) => async (dispatch: AppDispatch) => {
     }
 };
 
-export const getUsers = () => async (dispatch: AppDispatch) => {
+export const getUsers = (page: number, itemsPerPage: number) => async (dispatch: AppDispatch) => {
     dispatch(userListFetchStarted());
     try {
-        const data = await userApi.list();
+        const data = await userApi.list(page, itemsPerPage);
         dispatch(userListFetchSuccess({
             list: data.users,
-            currentPage: 1,
-            totalPages: 1,
+            totalCount: data.total_count,
         }));
     } catch (error) {
         dispatch(userListFetchFailed(["An error occurred. Please try again later."]));
@@ -62,9 +62,42 @@ export const updateUser = (userId: string, new_data: UserUpdate) => async (dispa
             isMe: true, // This is always true because the user is updating their own profile
         }));
         dispatch(getCurrentUser());
+        dispatch(setToast({
+            message: "User updated successfully",
+            type: "success"
+        }));
     } catch (error) {
-        dispatch(userProfileFetchFailed(["An error occurred. Please try again later."]));
+        if (error instanceof ServerValidationError) {
+            dispatch(userProfileFetchFailed(error.errors));
+        }
+        else {
+
+            dispatch(userProfileFetchFailed(['Unknown error occurred. Please try again later.']));
+        }
     }
+}
+
+export const updatePassword = (userId: string, old_password: string, new_password: string, onSuccess: () => void) => async (dispatch: AppDispatch) => {
+    dispatch(passwordChangeStarted());
+    try {
+        await userApi.update({
+            new_password: new_password,
+            password: old_password
+        }, userId);
+        onSuccess();
+        dispatch(setToast({
+            message: "Password updated successfully",
+            type: "success"
+        }));
+    } catch (error) {
+        if (error instanceof ServerValidationError) {
+            dispatch(userProfileFetchFailed(error.errors));
+        }
+        else {
+            dispatch(userProfileFetchFailed(['Unknown error occurred. Please try again later.']));
+        }
+    }
+    dispatch(passwordChangeFinished());
 }
 
 export const deleteUser = (userId: string) => async (dispatch: AppDispatch) => {

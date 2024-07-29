@@ -1,26 +1,30 @@
-import { useParams } from "react-router-dom";
-import { Form as FinalForm} from "react-final-form";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import {withAuthentication} from "../Utils/hoc/auth_redirect";
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentUser, selectDeleteFetching, selectIsFetching, selectIsMe } from "../Store/selectors/user_profile_selectors";
 import useAppDispatch from "../Store/hooks/dispatch";
-import { deleteUser, getUser, updateUser } from "../Store/thunks/users_thunk";
+import { deleteUser, getUser } from "../Store/thunks/users_thunk";
 import Loader from "../Components/Loader";
-import Input from "../Components/Input";
-import { UserUpdate } from "../Types/UserType";
+import UserUpdateForm from "../Components/UserUpdateForm";
+import ModalWindow from "../Components/ModalWindow";
+import UpdatePasswordForm from "../Components/UpdatePasswordForm";
+import { eraseErrors } from "../Store/user_profile_slice";
+import { useAuth0 } from "@auth0/auth0-react";
 
-const UserProfile = () => {
+const UserProfile = ({editing, changePassword}: {editing: boolean, changePassword?: boolean}) => {
     const {userId} = useParams();
 
+    const {isAuthenticated} = useAuth0();
+
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const user = useSelector(selectCurrentUser);
     const fetching = useSelector(selectIsFetching);
     const deleteFetching = useSelector(selectDeleteFetching);
     const isMe = useSelector(selectIsMe);
 
-    const [editing, setEditing] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState(false);
 
     useEffect(() => {
@@ -32,69 +36,61 @@ const UserProfile = () => {
 
     if (fetching) {
         return <Loader/>;
-    }
-
+    }   
+    
     if (!user) {
         return <div className="container pt-4">
             <h3 className="text-center">User not found</h3>
         </div>
     }
-
+    
+    if (editing && !isMe && !fetching) { 
+        return <Navigate to={'/users/' + userId}/>
+    }
+ 
     if (editing) {
        return (
         <div className="container p-5">
             <img className="m-auto d-block" width={250} src="https://www.svgrepo.com/show/384674/account-avatar-profile-user-11.svg" alt={user.first_name + "'s profile picture"}/>
-            <FinalForm
-                onSubmit={(values) => {
-                    const new_data: UserUpdate = {
-                        first_name: values.first_name,
-                        last_name: values.last_name,
-                        username: values.username,
-                    }
-                    dispatch(updateUser(user.id, new_data));
-                    setEditing(false);
-                }}
-                render={({handleSubmit}) => (
-                    <form onSubmit={handleSubmit} className="col-lg-4 offset-lg-4">
-                        <Input name="first_name" value={user.first_name} labelText="First Name" type="text"/>
-                        <Input name="last_name" value={user.last_name} labelText="Last Name" type="text"/>
-                        <Input name="username" value={user.username} labelText="Username" type="text"/>
-                        <Input name="email" value={user.email} labelText="Email" type="email" disabled={true}/>
-
-                        <div className="mt-2 d-flex">
-                            <button onClick={() => {
-                                setEditing(false);
-                                setDeleteConfirm(false);
-                                }} className="btn btn-danger flex-grow-1 me-1">Cancel</button>
-                            <button className="btn btn-primary flex-grow-1 ms-1" type="submit">Save</button>
-                        </div>
-                    </form>
-                )}
-            />
-            {isMe &&
-                <> 
-                <div className="row">
-                    <div className="alert alert-danger col-lg-4 offset-lg-4 p-2 mt-4">
-                        <h3>Danger Zone</h3>
-                        <hr />
-                        <p>If you delete your profile there is no way back</p>
-                        {deleteFetching && <Loader/>}
-
-                        {deleteConfirm ?
-                        <>
-                        <p><b>Are you 100% sure?</b></p>
-                        <button onClick={() => setDeleteConfirm(false)} disabled={deleteFetching} className="btn btn-secondary"> Cancel</button>
-                        <button onClick={() => {
-                            dispatch(deleteUser(user.id));
-                        }} disabled={deleteFetching} className="btn btn-danger ms-1">I'm sure I want to delete</button>
-                        </>
-                        :
-                        <button onClick={() => setDeleteConfirm(true)} className="btn btn-danger">Delete</button>
-                        }
-                    </div>
+            <UserUpdateForm user={user} onSubmitAdditionaly={() => {}}/>
+            <ModalWindow isOpen={changePassword || false} onClose={() => {
+                navigate('/users/' + user.id + '/edit');
+                dispatch(eraseErrors());
+            }}>
+                <h3>Change password</h3>
+                <UpdatePasswordForm user={user} onSubmitAdditionaly={() => {}}/>
+            </ModalWindow>
+            <div className="row">
+                {
+                !isAuthenticated &&    
+                <div className="alert alert-warning col-lg-4 offset-lg-4 p-2 mt-4">
+                    <h3>Update Password</h3>
+                    <hr />
+                    <p>If you want to update your password, please click the button below</p>
+                    <Link to={'/users/' + user.id + '/edit/password'} className="btn btn-warning">Update Password</Link>
                 </div>
-                </>
-            }
+                }
+            </div>
+            <div className="row">
+                <div className="alert alert-danger col-lg-4 offset-lg-4 p-2 mt-4">
+                    <h3>Danger Zone</h3>
+                    <hr />
+                    <p>If you delete your profile there is no way back</p>
+                    {deleteFetching && <Loader/>}
+
+                    {deleteConfirm ?
+                    <>
+                    <p><b>Are you 100% sure?</b></p>
+                    <button onClick={() => setDeleteConfirm(false)} disabled={deleteFetching} className="btn btn-secondary"> Cancel</button>
+                    <button onClick={() => {
+                        dispatch(deleteUser(user.id));
+                    }} disabled={deleteFetching} className="btn btn-danger ms-1">I'm sure I want to delete</button>
+                    </>
+                    :
+                    <button onClick={() => setDeleteConfirm(true)} className="btn btn-danger">Delete</button>
+                    }
+                </div>
+            </div>
         </div>
        ) 
     }
@@ -107,11 +103,11 @@ const UserProfile = () => {
             {isMe && 
                 <div className="row">
 
-                    <button onClick={() => setEditing(true)} className="btn btn-primary col-lg-4 offset-lg-4 my-1">Edit</button>
+                    <Link to={'/users/' + user.id + '/edit'} className="btn btn-primary col-lg-4 offset-lg-4 my-1">Edit</Link>
                 </div>
             }
         </div>
     );
 }
 
-export default withAuthentication(UserProfile);
+export default withAuthentication<{editing: boolean, changePassword?: boolean, key?: Key | null}>(UserProfile);

@@ -2,7 +2,7 @@ import UserListItem from "./UserListItem";
 import User from "../../Types/UserType"
 
 const UserList = ({users}: {users: User[]}) => {
-    const userItems = users.map((user) => <UserListItem user={user}/>);
+    const userItems = users.map((user) => <UserListItem key={user.id} user={user}/>);
     return (
         <table className="table">
             <thead>    

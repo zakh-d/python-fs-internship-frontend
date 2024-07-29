@@ -4,6 +4,7 @@ import { UserDetail } from "../Types/UserType";
 type UserProfileType = {
     fetching: boolean,
     fetchingDelete: boolean,
+    fetchingPasswordChange: boolean,
     user?: UserDetail,
     isMe: boolean,
     errors?: string[],
@@ -12,6 +13,7 @@ type UserProfileType = {
 const initialState: UserProfileType = {
     fetching: false,
     fetchingDelete: false,
+    fetchingPasswordChange: false,
     user: undefined,
     isMe: false,
 }
@@ -37,9 +39,27 @@ const userProfilesSlice = createSlice({
         },
         deleteFetchFinished: (state) => {
             state.fetchingDelete = false;
+        },
+        eraseErrors: (state) => {
+            state.errors = [];
+        },
+        passwordChangeStarted: (state) => {
+            state.fetchingPasswordChange = true;
+        },
+        passwordChangeFinished: (state) => {
+            state.fetchingPasswordChange = false;
         }
     }
 });
 
 export default userProfilesSlice.reducer
-export const { userProfileFetchStarted, userProfileFetchSuccess, userProfileFetchFailed, deleteFetchFinished, deleteFetchiStarted } = userProfilesSlice.actions
+export const { 
+    userProfileFetchStarted,
+    userProfileFetchSuccess,
+    userProfileFetchFailed,
+    deleteFetchFinished,
+    deleteFetchiStarted,
+    eraseErrors,
+    passwordChangeStarted,
+    passwordChangeFinished
+} = userProfilesSlice.actions

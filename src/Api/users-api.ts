@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import ServerValidationError from "../Types/ServerValidationError";
 import SignUpSchema from "../Types/SignUpSchema";
 import { UserUpdate } from "../Types/UserType";
@@ -34,8 +35,8 @@ export const userApi = {
         return response.data;
     },
 
-    list: async () => {
-        const response = await apiBase.get("users/", {
+    list: async (page: number, itemsPerPage: number) => {
+        const response = await apiBase.get(`users/?page=${page}&limit=${itemsPerPage}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
@@ -57,11 +58,23 @@ export const userApi = {
     },
 
     update: async (new_data: UserUpdate, userId: string) => {
-        const response = await apiBase.put(`users/${userId}`, new_data, {headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-        }});
-        if (response.status == 200) {
+        try {
+            const response = await apiBase.put(`users/${userId}`, new_data, {headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }});
+            
             return await response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        throw new ServerValidationError([error.response.data.detail]);
+                    } else if (error.response.status === 422) {
+                        const errors = error.response.data.detail.map((d: HasMessage) => d.msg);
+                        throw new ServerValidationError(errors);
+                    }
+                }
+            }
         }
     },
 
