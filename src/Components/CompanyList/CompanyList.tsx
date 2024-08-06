@@ -7,12 +7,16 @@ const CompanyList = ({companies}: {companies: Company[]}) => {
     });
     return (
         <table className="table">
-            <tr>
-                <th>Name</th>
-                <th>Country</th>
-                <th>Email</th>
-            </tr>
-            {companiesItems}
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Owner</th>
+                    <th>Owner's email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {companiesItems}
+            </tbody>
         </table>
     )
 }

@@ -5,8 +5,8 @@ const CompanyListItem = ({ company }: {company: Company}) => {
     return (
         <tr>
             <td><Link to={`/companies/${company.id}`}>{company.name}</Link></td>
-            <td>{company.country}</td>
-            <td>{company.email}</td>
+            <td>{company.owner.username}</td>
+            <td>{company.owner.email}</td>
         </tr>
     );
 }

@@ -6,6 +6,7 @@ import usersReducer from "./userSlice";
 import usersListReducer from "./userListSlice";
 import userProfileReducer from "./user_profile_slice";
 import toastReducer from "./toast_slice";
+import companyListReducer from "./companyListSlice";
 
 const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
         usersList: usersListReducer,
         userProfile: userProfileReducer,
         toast: toastReducer,
+        companyList: companyListReducer,
     }
 });
 

@@ -1,10 +1,8 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Start from "./Pages/Start";
 import About from "./Pages/About";
-import { companies } from "./Store/DummyData";
 import AllUsers from "./Pages/AllUsers";
 import UserProfile from "./Pages/UserProfile";
-import { companyLoader } from "./Utils/loaders";
 import AllCompanies from "./Pages/AllCompanies";
 import CompanyProfile from "./Pages/CompanyProfile";
 import Layout from "./Pages/Layout";
@@ -47,12 +45,15 @@ const router = createBrowserRouter([
             },
             {
                 path: "companies", 
-                element: <AllCompanies allCompanies={companies}/>
+                element: <AllCompanies showingAllCompanies={true}/>
+            },
+            {
+                path: "companies/my",
+                element: <AllCompanies showingAllCompanies={false}/>
             },
             {
                 path: "companies/:companyId",
                 element: <CompanyProfile/>,
-                loader: companyLoader
             },
             {
                 path: "login",
