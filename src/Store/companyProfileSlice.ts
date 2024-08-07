@@ -5,6 +5,7 @@ import { RootState } from "./store";
 import { selectMe } from "./selectors/auth_selector";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import { customNavigator } from "../Utils/_helper";
 
 const initialState : {
     company: Company | null,
@@ -70,6 +71,7 @@ export const fetchCompanyDelete = createAsyncThunk<
         try {
             await companyApi.deleteComapny(id);
             toast.success('Company deleted');
+            customNavigator.navigate?.('companies/my');
         } catch (error) {
             toast.error('Error deleting company');
             return rejectWithValue('Error deleting company');
