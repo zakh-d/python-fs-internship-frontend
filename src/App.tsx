@@ -53,7 +53,23 @@ const router = createBrowserRouter([
             },
             {
                 path: "companies/:companyId",
-                element: <CompanyProfile/>,
+                element: <CompanyProfile openedTab="info"/>
+            },
+            {
+                path: "companies/:companyId/members",
+                element: <CompanyProfile openedTab="members"/>
+            }, 
+            {
+                path: "companies/:companyId/edit",
+                element: <CompanyProfile openedTab="edit"/>
+            },
+            {
+                path: "companies/:companyId/invites",
+                element: <CompanyProfile openedTab="invites"/>
+            },
+            {
+                path: "companies/:companyId/requests",
+                element: <CompanyProfile openedTab="requests"/>
             },
             {
                 path: "login",

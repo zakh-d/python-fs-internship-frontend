@@ -1,19 +1,72 @@
-import { useLoaderData } from "react-router-dom";
-import Company from "../Types/CompanyType";
+import { Navigate, useParams } from "react-router-dom";
 import {withAuthentication} from "../Utils/hoc/auth_redirect";
+import { useSelector } from "react-redux";
+import { selectCompanyProfileLoading, selectCurrentCompany, selectIsOwnerOfCompany } from "../Store/selectors/company_selector";
+import { Key, useEffect } from "react";
+import useAppDispatch from "../Store/hooks/dispatch";
+import { fetchCompanyById } from "../Store/companyProfileSlice";
+import Loader from "../Components/Loader";
+import CompanyProfileTabSwitch from "../Components/Company/CompanyProfileTabSwitch";
+import ComapnyProfileInfo from "../Components/Company/CompanyProfileInfo";
 
-const CompanyProfile = () => {
-    const company: Company = useLoaderData() as Company;
+type PropsType = {
+    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests';
+}
+
+const CompanyProfile = ({openedTab}: PropsType) => {
+
+    const {companyId} = useParams();
+
+    const dispatch = useAppDispatch();
+    const company = useSelector(selectCurrentCompany);
+    const loading = useSelector(selectCompanyProfileLoading);
+    const isOwer = useSelector(selectIsOwnerOfCompany);
+
+    useEffect(() => {
+        if (companyId)
+        {
+            dispatch(fetchCompanyById(companyId));
+        }
+    }, [companyId])
+
+    if (loading) {
+        return <Loader/>
+    }
+
+    if (company === null) {
+        return <div className="container">
+            <h1>404</h1>
+        </div>
+    }
+
+    if (openedTab in ['edit', 'invites', 'requests'] && !isOwer) {
+        return <Navigate to={'/companies/' + companyId}/>
+    }
+
+    let displayedTab = <ComapnyProfileInfo company={company} />;
+
+    switch (openedTab) {
+        case 'members':
+            displayedTab = <h1>Members are coming soon</h1>
+            break;
+        case 'edit':
+            displayedTab = <h1>Edit</h1>
+            break;
+        case 'invites':
+            displayedTab = <h1>Invites are comming soon</h1>
+            break;
+        case 'requests':
+            displayedTab = <h1>Requests are comming soon</h1>
+            break
+    }
 
     return (
         <div className="container">
-
-            <h2 className="text-center">{company.name}</h2>
-            <p className="text-center">{company.address}</p>
-            <p className="text-center text-muted">{company.city} | {company.country}</p>
-            <p className="text-center">Phone: {company.phone} <br /> Email: {company.email}</p>
-        </div>
+            
+            <CompanyProfileTabSwitch openedTab={openedTab} isOwner={isOwer} companyId={companyId || ''}/>
+            {displayedTab}
+       </div>
     );
 }
 
-export default withAuthentication(CompanyProfile);
+export default withAuthentication<PropsType & {key?: Key}>(CompanyProfile);

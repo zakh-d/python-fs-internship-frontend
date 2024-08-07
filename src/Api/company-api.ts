@@ -7,6 +7,13 @@ const companyApi = {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
+    },
+    getCompanyById: async (id: string) => {
+        return await apiBase.get(`/companies/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
     }
 }
 
