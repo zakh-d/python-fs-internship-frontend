@@ -70,7 +70,6 @@ const AllCompanies = ({showingAllCompanies}: PropsType) => {
                     <h3>Create new company</h3>
                     <hr />
                     <CompanyForm formFunction={(values: any) => {
-                        console.log(values);
                         dispatch(fetchCreateNewCompany(values));
                     } } submitText="Create"/>
                 </div>
