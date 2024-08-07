@@ -8,6 +8,7 @@ import { fetchCompanyById } from "../Store/companyProfileSlice";
 import Loader from "../Components/Loader";
 import CompanyProfileTabSwitch from "../Components/Company/CompanyProfileTabSwitch";
 import ComapnyProfileInfo from "../Components/Company/CompanyProfileInfo";
+import CompanyEditDelete from "../Components/Company/CompanyEditDelete";
 
 type PropsType = {
     openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests';
@@ -39,7 +40,7 @@ const CompanyProfile = ({openedTab}: PropsType) => {
         </div>
     }
 
-    if (openedTab in ['edit', 'invites', 'requests'] && !isOwer) {
+    if (['edit', 'invites', 'requests'].indexOf(openedTab) > -1 && !isOwer) {
         return <Navigate to={'/companies/' + companyId}/>
     }
 
@@ -50,7 +51,7 @@ const CompanyProfile = ({openedTab}: PropsType) => {
             displayedTab = <h1>Members are coming soon</h1>
             break;
         case 'edit':
-            displayedTab = <h1>Edit</h1>
+            displayedTab = <CompanyEditDelete company={company}/>
             break;
         case 'invites':
             displayedTab = <h1>Invites are comming soon</h1>
