@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import ComapnyForm from "./CompanyForm";
 import useAppDispatch from "../../Store/hooks/dispatch";
-import { fetchCompanyUpdate } from "../../Store/companyProfileSlice";
+import { fetchCompanyDelete, fetchCompanyUpdate } from "../../Store/companyProfileSlice";
 import Company from "../../Types/CompanyType";
 
 
@@ -18,7 +18,7 @@ const CompanyEditDelete = ({company}: {company: Company}): ReactElement => {
                 <p>After you delete company, all data will be lost. This action cannot be undone.</p>
                 <button className="btn btn-danger" onClick={() => {
                     if (window.confirm('Are you sure you want to delete this company?')) {
-
+                        dispatch(fetchCompanyDelete(company.id));
                     }
                 }}>Delete</button>
             </div>

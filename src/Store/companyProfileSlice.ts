@@ -60,6 +60,22 @@ export const fetchCompanyUpdate = createAsyncThunk<
     }
 });
 
+export const fetchCompanyDelete = createAsyncThunk<
+    void,
+    string,
+    {rejectValue: string}
+>(
+    'companyProfile/fetchCompanyDelete',
+    async (id, {rejectWithValue}) => {
+        try {
+            await companyApi.deleteComapny(id);
+            toast.success('Company deleted');
+        } catch (error) {
+            toast.error('Error deleting company');
+            return rejectWithValue('Error deleting company');
+        }
+    }
+);
 
 const companyProfileSlice = createSlice({
     name: 'companyProfile',
@@ -94,6 +110,14 @@ const companyProfileSlice = createSlice({
         builder.addCase(fetchCompanyUpdate.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;
+        });
+        builder.addCase(fetchCompanyDelete.pending, (state, _) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(fetchCompanyDelete.fulfilled, (state, _) => {
+            state.loading = false;
+            state.company = null;
         });
     }
 });

@@ -88,8 +88,10 @@ const router = createBrowserRouter([
 function App() {
     const dispatch = useAppDispatch()
 
+
     useEffect(() => {
         dispatch(getCurrentUser())
+    //    navigator.navigate = navigate;
     }, [])
     return (
         <>

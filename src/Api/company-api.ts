@@ -21,6 +21,14 @@ const companyApi = {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
+    },
+
+    deleteComapny: async (id: string) => {
+        return await apiBase.delete(`/companies/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
     }
 }
 
