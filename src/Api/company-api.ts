@@ -8,6 +8,13 @@ const companyApi = {
             }
         });
     },
+    getMyCompanies: async (page: number, limit: number) => {
+        return await apiBase.get(`/companies/my/?page=${page}&limit=${limit}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+    },
     getCompanyById: async (id: string) => {
         return await apiBase.get(`/companies/${id}`, {
             headers: {

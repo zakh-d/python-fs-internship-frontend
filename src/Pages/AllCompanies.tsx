@@ -38,8 +38,8 @@ const AllCompanies = ({showingAllCompanies}: PropsType) => {
     const [createModalOpen, setCreateModalOpen] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchComapnies({page: 1, limit: 10}));
-    }, []);
+        dispatch(fetchComapnies({page: 1, limit: 10, myCompanies: !showingAllCompanies}));
+    }, [showingAllCompanies]);
 
     return (
         <div className="container">

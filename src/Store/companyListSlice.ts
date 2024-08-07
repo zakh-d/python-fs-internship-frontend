@@ -9,13 +9,13 @@ export const fetchComapnies = createAsyncThunk<
         companies: Company[],
         totalCount: number
     },
-    {page: number, limit: number},
+    {page: number, limit: number, myCompanies?: boolean},
     {
         rejectValue: string
     }
-    >("companyList/fetchCompanies", async ({page, limit}, thunkAPI) => {
+    >("companyList/fetchCompanies", async ({page, limit, myCompanies}, thunkAPI) => {
     try {
-        const response = await companyApi.getComanies(page, limit);
+        let response = await (myCompanies ? companyApi.getMyCompanies(page, limit) : companyApi.getComanies(page, limit));
         return {
             companies: response.data.companies,
             totalCount: response.data.total_count
