@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import companyApi from "../Api/company-api";
 import Company from "../Types/CompanyType";
+import { toast } from "react-toastify";
+import { customNavigator } from "../Utils/_helper";
 
 export const fetchComapnies = createAsyncThunk<
     {
@@ -18,6 +20,24 @@ export const fetchComapnies = createAsyncThunk<
             companies: response.data.companies,
             totalCount: response.data.total_count
         };
+    } catch (error) {
+        return thunkAPI.rejectWithValue('error');
+    }
+});
+
+export const fetchCreateNewCompany = createAsyncThunk<
+    Company,
+    {name: string, description: string, hidden: boolean},
+    {
+        rejectValue: string
+    }
+    >("companyList/fetchCreateNewCompany", async ({name, description, hidden}, thunkAPI) => {
+    try {
+        const response = await companyApi.createCompany({name, description, hidden});
+        const newCompany = response.data;
+        toast.success('Company: \'' + newCompany.name +'\' created');
+        customNavigator.navigate?.(`/companies/${newCompany.id}`);
+        return newCompany;
     } catch (error) {
         return thunkAPI.rejectWithValue('error');
     }

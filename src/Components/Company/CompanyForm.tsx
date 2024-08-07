@@ -4,6 +4,7 @@ import Input from "../Input";
 
 type PropsType = {
     formFunction: (values: any) => void;
+    submitText?: string;
     initialValues?: {
         name: string;
         description: string;
@@ -11,9 +12,11 @@ type PropsType = {
     }
 }
 
-const ComapnyForm = ({formFunction, initialValues}: PropsType): ReactElement => {
+const ComapnyForm = ({formFunction, submitText, initialValues}: PropsType): ReactElement => {
     return (
-        <FinalForm onSubmit={formFunction}
+        <FinalForm onSubmit={(values) => {
+            formFunction({...values, hidden: values.hidden || false});
+        }}
             validate={(values) => {
                 const errors: any = {};
                 if (!values.name) {
@@ -25,7 +28,7 @@ const ComapnyForm = ({formFunction, initialValues}: PropsType): ReactElement => 
                 return errors;
             }}
             render={({handleSubmit, submitting}) => (
-                <form className="col-lg-4" onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <Input name="name" labelText="Name" type="text" value={initialValues?.name}/>
                     <Input name="description" labelText="Description" type="text" value={initialValues?.description}/>
                     <Field 
@@ -39,7 +42,7 @@ const ComapnyForm = ({formFunction, initialValues}: PropsType): ReactElement => 
                             </div>
                         )}
                     />
-                    <button className="btn btn-primary" type="submit" disabled={submitting}>Update</button>
+                    <button className="btn btn-primary" type="submit" disabled={submitting}>{submitText || 'Submit'}</button>
                 </form>
             )}
         />

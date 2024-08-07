@@ -8,12 +8,12 @@ import Company from "../../Types/CompanyType";
 const CompanyEditDelete = ({company}: {company: Company}): ReactElement => {
     const dispatch = useAppDispatch();
     return (
-        <>
+        <div className="col-lg-4 col-md-8">
             <ComapnyForm formFunction={(values) => {
                 dispatch(fetchCompanyUpdate({id: company.id, values}))
             }} initialValues={{...company, hidden: false}}/>
 
-            <div className="alert alert-danger mt-4 col-lg-4">
+            <div className="alert alert-danger mt-4">
                 <h3>Delete company</h3>
                 <p>After you delete company, all data will be lost. This action cannot be undone.</p>
                 <button className="btn btn-danger" onClick={() => {
@@ -22,7 +22,7 @@ const CompanyEditDelete = ({company}: {company: Company}): ReactElement => {
                     }
                 }}>Delete</button>
             </div>
-        </>
+        </div>
     )
 }
 
