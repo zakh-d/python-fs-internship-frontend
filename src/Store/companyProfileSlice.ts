@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import Company from "../Types/CompanyType"
+import { CompanyDetail } from "../Types/CompanyType"
 import companyApi from "../Api/company-api";
 import { RootState } from "./store";
 import { selectMe } from "./selectors/auth_selector";
@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 import { customNavigator } from "../Utils/_helper";
 
 const initialState : {
-    company: Company | null,
+    company: CompanyDetail | null,
     loading: boolean,
     isOwner: boolean,
     error: string | null
@@ -21,7 +21,7 @@ const initialState : {
 
 
 export const fetchCompanyById = createAsyncThunk<
-    {company: Company, isOwner: boolean},
+    {company: CompanyDetail, isOwner: boolean},
     string,
     {rejectValue: string}
 >('companyProfile/fetchCompanyById', async (id, {getState, rejectWithValue}) => {
@@ -39,7 +39,7 @@ export const fetchCompanyById = createAsyncThunk<
 
 
 export const fetchCompanyUpdate = createAsyncThunk<    
-    {company: Company, isOwner: boolean},
+    {company: CompanyDetail, isOwner: boolean},
     {id: string, values: {name: string, description: string, hidden: boolean}},
     {rejectValue: string}
 >('companyProfile/fetchCompanyUpdate', async ({id, values}, {getState, rejectWithValue}) => {

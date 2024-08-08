@@ -34,7 +34,7 @@ const ComapnyForm = ({formFunction, submitText, initialValues}: PropsType): Reac
                     <Field 
                         name="hidden"
                         type="checkbox"
-                        checked={initialValues?.hidden}
+                        initialValue={initialValues?.hidden ? "checked" : ""}
                         render={({input}) => (
                             <div className="form-check">
                                 <input className="form-check-input" {...input} type="checkbox" id="hidden_id"/>

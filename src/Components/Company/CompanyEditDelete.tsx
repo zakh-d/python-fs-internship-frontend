@@ -2,16 +2,16 @@ import { ReactElement } from "react";
 import ComapnyForm from "./CompanyForm";
 import useAppDispatch from "../../Store/hooks/dispatch";
 import { fetchCompanyDelete, fetchCompanyUpdate } from "../../Store/companyProfileSlice";
-import Company from "../../Types/CompanyType";
+import { CompanyDetail } from "../../Types/CompanyType";
 
 
-const CompanyEditDelete = ({company}: {company: Company}): ReactElement => {
+const CompanyEditDelete = ({company}: {company: CompanyDetail}): ReactElement => {
     const dispatch = useAppDispatch();
     return (
         <div className="col-lg-4 col-md-8">
             <ComapnyForm formFunction={(values) => {
                 dispatch(fetchCompanyUpdate({id: company.id, values}))
-            }} initialValues={{...company, hidden: false}}/>
+            }} initialValues={{...company}}/>
 
             <div className="alert alert-danger mt-4">
                 <h3>Delete company</h3>

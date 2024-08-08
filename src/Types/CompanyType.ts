@@ -8,6 +8,10 @@ type Company = {
     owner: User;
 }
 
+export interface CompanyDetail extends Company {
+    hidden: boolean;
+}
+
 export type CompanyCreate = {
     name: string;
     description: string;
