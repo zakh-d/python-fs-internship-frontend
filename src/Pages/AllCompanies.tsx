@@ -60,7 +60,7 @@ const AllCompanies = ({showingAllCompanies}: PropsType) => {
                 <CompanyList companies={companies}/>
             }
             <Pagination totalItems={totalCount} itemsPerPage={10} onPageChange={function (page: number, itemsPerPage: number): void {
-                dispatch(fetchComapnies({page, limit: itemsPerPage}));
+                dispatch(fetchComapnies({page, limit: itemsPerPage, myCompanies: !showingAllCompanies}));
             } } />
 
             <ModalWindow isOpen={createModalOpen} onClose={function () {
