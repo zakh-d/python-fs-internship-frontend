@@ -13,7 +13,7 @@ export const getCurrentUser = () => async (dispatch: AppDispatch) => {
     }
 
     try {
-        const data: User = await authApi.me(token);
+        const data: User = await authApi.me();
         dispatch(setMe(data));
     } catch (error) {
         if (error instanceof Error && error.message == 'Not authenticated')
