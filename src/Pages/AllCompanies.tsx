@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import ModalWindow from "../Components/ModalWindow";
 import CompanyForm from "../Components/Company/CompanyForm";
 import styled from "styled-components";
+import { getCompanyListPath, getMyCompanyListPath } from "../Utils/router";
 
 
 const FixedBottomRightButton = styled.button`
@@ -46,10 +47,10 @@ const AllCompanies = ({showingAllCompanies}: PropsType) => {
             <FixedBottomRightButton onClick={() => setCreateModalOpen(true)} className="btn btn-lg btn-primary">+</FixedBottomRightButton>
             <ul className="nav nav-tabs">
                 <li className="nav-item">
-                    <Link to={'/companies/'} className={"nav-link" + (showingAllCompanies ? " active" : "")}>All Companies</Link>
+                    <Link to={getCompanyListPath()} className={"nav-link" + (showingAllCompanies ? " active" : "")}>All Companies</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to={'/companies/my'} className={"nav-link" + (!showingAllCompanies ? " active" : "")}>My Companies</Link>
+                    <Link to={getMyCompanyListPath()} className={"nav-link" + (!showingAllCompanies ? " active" : "")}>My Companies</Link>
                 </li>
                 
             </ul>

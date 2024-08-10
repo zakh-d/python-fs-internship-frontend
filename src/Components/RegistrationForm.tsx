@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateEmail } from "../Utils/validate_email";
+import { getLoginPath } from "../Utils/router";
 
 const RegistrationForm = () : ReactElement => {
     const dispatch = useAppDispatch();
@@ -111,7 +112,7 @@ const RegistrationForm = () : ReactElement => {
                         </div>
                     }
                     <p>
-                        Already have an account? <Link to="/login">Login</Link>
+                        Already have an account? <Link to={getLoginPath()}>Login</Link>
                     </p>
                 </form>    
             )}/>

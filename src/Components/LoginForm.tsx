@@ -10,6 +10,7 @@ import { RootState } from "../Store/store";
 import { useAuth0 } from "@auth0/auth0-react";
 import { loginStarted } from "../Store/authSlice";
 import { validateEmail } from "../Utils/validate_email";
+import { getRegisterPath } from "../Utils/router";
 
 type LoginData = {
     email: string;
@@ -68,7 +69,7 @@ const LoginForm = () : ReactElement => {
                         >Auth0</button>
                     </div> 
                     <p>
-                        Don't have an account? <Link to="/register">Register</Link>
+                        Don't have an account? <Link to={getRegisterPath()}>Register</Link>
                     </p>
                 </form>    
             )}/>
