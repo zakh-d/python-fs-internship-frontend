@@ -26,6 +26,10 @@ const companyApi = {
         return await apiBase.get(`/companies/${id}/members`);
     },
 
+    removeCompanyMember: async (companyId: string, userId: string) => {
+        return await apiBase.delete(`/companies/${companyId}/members/${userId}`);
+    },
+
     getCompanyInvites: async (id: string) => {
         return await apiBase.get(`/companies/${id}/invites`);
     },

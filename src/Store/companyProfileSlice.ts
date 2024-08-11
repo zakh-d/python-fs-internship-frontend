@@ -173,6 +173,26 @@ export const fetchRejectUserRequest = createAsyncThunk<
 });
 
 
+export const fetchRemoveMember = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+    >('companyProfile/fetchRemoveMember', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+        try {
+            await companyApi.removeCompanyMember(companyId, userId);
+            toast.success('Member removed');
+            dispatch(removeMember(userId));
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data.detail || 'Member was not found or deleted');
+                return rejectWithValue(error.response?.data.detail || 'Member was not found or deleted');
+            }
+            toast.error('Unknown error removing member');
+            return rejectWithValue('Error removing member');
+        }
+    }
+);
+
 
 const companyProfileSlice = createSlice({
     name: 'companyProfile',
@@ -184,6 +204,9 @@ const companyProfileSlice = createSlice({
         removeUserRequest: (state, action) => {
             state.requests = state.requests.filter(user => user.id !== action.payload);
         },
+        removeMember: (state, action) => {
+            state.members = state.members.filter(user => user.id !== action.payload);
+        }
     },
     extraReducers: builder => {
         builder.addCase(fetchCompanyById.pending, (state, _) => {
@@ -236,5 +259,5 @@ const companyProfileSlice = createSlice({
     }
 });
 
-const { removeUserInvite, removeUserRequest } = companyProfileSlice.actions;
+const { removeUserInvite, removeUserRequest, removeMember } = companyProfileSlice.actions;
 export default companyProfileSlice.reducer;
