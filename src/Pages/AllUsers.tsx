@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import UserList from "../Components/UserList/UserList";
+import UserList from "../Components/UserList";
 import useAppDispatch from "../Store/hooks/dispatch";
 import {withAuthentication} from "../Utils/hoc/auth_redirect";
 import { selectIsFetching, selectTotalCount, selectUsers } from "../Store/selectors/user_list_selectors";

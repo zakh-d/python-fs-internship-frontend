@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CompanyList from "../Components/CompanyList/CompanyList";
+import CompanyList from "../Components/CompanyList";
 import useAppDispatch from "../Store/hooks/dispatch";
 
 
