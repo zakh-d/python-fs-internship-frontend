@@ -193,6 +193,24 @@ export const fetchRemoveMember = createAsyncThunk<
     }
 );
 
+export const fetchInviteUser = createAsyncThunk<
+    void,
+    {companyId: string, userEmail: string},
+    {rejectValue: string}
+>('companyProfile/fetchInviteUser', async ({companyId, userEmail}, {rejectWithValue}) => {
+    try {
+        await companyApi.inviteUser(companyId, userEmail);
+        toast.success('User invited');
+    } catch (error) {
+        if (error instanceof AxiosError ) {
+            const message = error.response?.data.detail || 'Error inviting user';
+            toast.error(message);
+            return rejectWithValue(message);
+        }
+        toast.error('Error inviting user');
+        return rejectWithValue('Error inviting user');
+    }
+});
 
 const companyProfileSlice = createSlice({
     name: 'companyProfile',

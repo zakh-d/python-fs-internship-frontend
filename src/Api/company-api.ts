@@ -38,6 +38,12 @@ const companyApi = {
         return await apiBase.delete(`/companies/${companyId}/invites/${userId}`);
     },
 
+    inviteUser: async (companyId: string, userEmail: string) => {
+        return await apiBase.post(`/companies/${companyId}/invites/`, {
+            email: userEmail
+        });
+    },
+
     getCompanyRequests: async (id: string) => {
         return await apiBase.get(`/companies/${id}/requests`);
     },
