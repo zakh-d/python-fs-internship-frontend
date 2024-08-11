@@ -30,12 +30,20 @@ const companyApi = {
         return await apiBase.get(`/companies/${id}/invites`);
     },
 
+    cancelUserInvite: async (companyId: string, userId: string) => {
+        return await apiBase.delete(`/companies/${companyId}/invites/${userId}`);
+    },
+
     getCompanyRequests: async (id: string) => {
         return await apiBase.get(`/companies/${id}/requests`);
     },
 
-    cancelUserInvite: async (companyId: string, userId: string) => {
-        return await apiBase.delete(`/companies/${companyId}/invites/${userId}`);
+    acceptUserRequest: async (companyId: string, userId: string) => {
+        return await apiBase.post(`/companies/${companyId}/requests/${userId}`);
+    },
+
+    rejectUserRequest: async (companyId: string, userId: string) => {
+        return await apiBase.delete(`/companies/${companyId}/requests/${userId}`);
     },
 }
 

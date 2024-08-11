@@ -142,13 +142,48 @@ export const fetchCancelUserInvite = createAsyncThunk<
     }
 });
 
+export const fetchAcceptUserRequest = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+>('companyProfile/fetchAcceptUserRequest', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+    try {
+        await companyApi.acceptUserRequest(companyId, userId);
+        dispatch(removeUserRequest(userId));
+        toast.success('User request accepted');
+    } catch (error) {
+        toast.error('Error accepting user request');
+        return rejectWithValue('Error accepting user request');
+    }
+});
+
+export const fetchRejectUserRequest = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+>('companyProfile/fetchAcceptUserRequest', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+    try {
+        await companyApi.rejectUserRequest(companyId, userId);
+        dispatch(removeUserRequest(userId));
+        toast.success('User request rejected');
+    } catch (error) {
+        toast.error('Error rejecting user request');
+        return rejectWithValue('Error accepting user request');
+    }
+});
+
+
+
 const companyProfileSlice = createSlice({
     name: 'companyProfile',
     initialState,
     reducers: {
         removeUserInvite: (state, action) => {
             state.invites = state.invites.filter(user => user.id !== action.payload);
-        }
+        },
+        removeUserRequest: (state, action) => {
+            state.requests = state.requests.filter(user => user.id !== action.payload);
+        },
     },
     extraReducers: builder => {
         builder.addCase(fetchCompanyById.pending, (state, _) => {
@@ -201,5 +236,5 @@ const companyProfileSlice = createSlice({
     }
 });
 
-const { removeUserInvite } = companyProfileSlice.actions;
+const { removeUserInvite, removeUserRequest } = companyProfileSlice.actions;
 export default companyProfileSlice.reducer;

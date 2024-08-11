@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { selectCompanyInvites } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchCancelUserInvite, fetchCompanyInvites } from "../../Store/companyProfileSlice"
-import CompanyInvitesList from "./CompanyInvitesList"
+import UserListWithActionButton from "../UserListWIthActionButton"
 import ModalWindow from "../ModalWindow"
 
 const CompanyInvites = ({company}: {company: CompanyDetail}): ReactElement => {
@@ -18,12 +18,20 @@ const CompanyInvites = ({company}: {company: CompanyDetail}): ReactElement => {
         dispatch(fetchCompanyInvites(company.id));
     }, [company.id]);
 
+    const actions = [
+        {
+            func: (userId: string) => {
+                setConfirmModalShown(true);
+                setSelectedUserId(userId);
+            },
+            text: "Cancel",
+            customClass: "btn-danger"
+        }
+    ]
+
     return (
         <>
-        <CompanyInvitesList users={invites} cancelFunc={(userId) => {
-            setConfirmModalShown(true);
-            setSelectedUserId(userId);
-        }}/>
+        <UserListWithActionButton users={invites} actions={actions}/>
 
         <ModalWindow isOpen={confirmModalShown} onClose={() => {
                 setConfirmModalShown(false);
