@@ -57,8 +57,7 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
             <ModalWindow isOpen={changePassword || false} onClose={() => {
                 navigate('/users/' + user.id + '/edit');
                 dispatch(eraseErrors());
-            }}>
-                <h3>Change password</h3>
+            }} title="Change password">
                 <UpdatePasswordForm user={user} onSubmitAdditionaly={() => {}}/>
             </ModalWindow>
             <div className="row">

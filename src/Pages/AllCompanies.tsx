@@ -66,10 +66,8 @@ const AllCompanies = ({showingAllCompanies}: PropsType) => {
 
             <ModalWindow isOpen={createModalOpen} onClose={function () {
                 setCreateModalOpen(false);
-            }}>
+            }} title="Create new company">
                 <div>
-                    <h3>Create new company</h3>
-                    <hr />
                     <CompanyForm formFunction={(values: any) => {
                         dispatch(fetchCreateNewCompany(values));
                     } } submitText="Create"/>

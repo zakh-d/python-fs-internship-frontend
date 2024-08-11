@@ -24,10 +24,8 @@ const CompanyProfile = ({openedTab}: PropsType) => {
     const isOwer = useSelector(selectIsOwnerOfCompany);
 
     useEffect(() => {
-        if (companyId)
-        {
-            dispatch(fetchCompanyById(companyId));
-        }
+        if (!companyId) return;
+        dispatch(fetchCompanyById(companyId));
     }, [companyId])
 
     if (loading) {
