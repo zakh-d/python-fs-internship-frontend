@@ -7,6 +7,7 @@ import usersListReducer from "./userListSlice";
 import userProfileReducer from "./user_profile_slice";
 import companyListReducer from "./companyListSlice";
 import companyProfileReducer from "./companyProfileSlice";
+import pageReducer from "./pageSlice";
 
 const store = configureStore({
     reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
         usersList: usersListReducer,
         userProfile: userProfileReducer,
         companyList: companyListReducer,
-        companyProfile: companyProfileReducer
+        companyProfile: companyProfileReducer,
+        page: pageReducer,
     }
 });
 
