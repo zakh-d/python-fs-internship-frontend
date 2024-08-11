@@ -9,6 +9,9 @@ import Loader from "../Components/Loader";
 import CompanyProfileTabSwitch from "../Components/Company/CompanyProfileTabSwitch";
 import ComapnyProfileInfo from "../Components/Company/CompanyProfileInfo";
 import CompanyEditDelete from "../Components/Company/CompanyEditDelete";
+import CompanyInvites from "../Components/Company/CompanyInvites";
+import CompanyMembers from "../Components/Company/CompanyMembers";
+import CompanyRequests from "../Components/Company/CompanyRequests";
 
 type PropsType = {
     openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests';
@@ -46,16 +49,16 @@ const CompanyProfile = ({openedTab}: PropsType) => {
 
     switch (openedTab) {
         case 'members':
-            displayedTab = <h1>Members are coming soon</h1>
+            displayedTab = <CompanyMembers company={company}/>
             break;
         case 'edit':
             displayedTab = <CompanyEditDelete company={company}/>
             break;
         case 'invites':
-            displayedTab = <h1>Invites are comming soon</h1>
+            displayedTab = <CompanyInvites company={company}/> 
             break;
         case 'requests':
-            displayedTab = <h1>Requests are comming soon</h1>
+            displayedTab = <CompanyRequests company={company}/>
             break
     }
 

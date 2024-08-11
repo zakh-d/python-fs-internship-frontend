@@ -8,3 +8,7 @@ export const selectCurrentCompany = (state: RootState) => state.companyProfile.c
 export const selectIsOwnerOfCompany = (state: RootState) => state.companyProfile.isOwner;
 export const selectCurrentCompanyError = (state: RootState) => state.companyProfile.error;
 export const selectCompanyProfileLoading = (state: RootState) => state.companyProfile.loading;
+
+export const selectCompanyMembers = (state: RootState) => state.companyProfile.members;
+export const selectCompanyInvites = (state: RootState) => state.companyProfile.invites;
+export const selectCompanyRequests = (state: RootState) => state.companyProfile.requests;

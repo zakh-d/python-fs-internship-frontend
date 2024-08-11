@@ -6,17 +6,24 @@ import { selectMe } from "./selectors/auth_selector";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { customNavigator } from "../Utils/_helper";
+import User from "../Types/UserType";
 
 const initialState : {
     company: CompanyDetail | null,
     loading: boolean,
     isOwner: boolean,
-    error: string | null
+    error: string | null,
+    invites: User[],
+    requests: User[],
+    members: User[],
 } = {
     company: null,
     loading: false,
     isOwner: false,
-    error: null
+    error: null,
+    invites: [],
+    requests: [],
+    members: [],
 }
 
 
@@ -79,11 +86,69 @@ export const fetchCompanyDelete = createAsyncThunk<
     }
 );
 
+export const fetchCompanyInvites = createAsyncThunk<
+    User[],
+    string,
+    {rejectValue: string}
+>('companyProfile/fetchCompanyInvites', async (id, {rejectWithValue}) => {
+    try {
+        const response = await companyApi.getCompanyInvites(id);
+        return response.data.users;
+    } catch (error) {
+        return rejectWithValue('Error fetching invites');
+    }
+});
+
+export const fetchCompanyMembers = createAsyncThunk<
+    User[],
+    string,
+    {rejectValue: string}
+>('companyProfile/fetchCompanyMembers', async (id, {rejectWithValue}) => {
+    try {
+        const response = await companyApi.getCompanyMembers(id);
+        return response.data.users;
+    } catch (error) {
+        return rejectWithValue('Error fetching invites');
+    }
+});
+
+
+export const fetchCompanyRequests = createAsyncThunk<
+    User[],
+    string,
+    {rejectValue: string}
+>('companyProfile/fetchCompanyRequests', async (id, {rejectWithValue}) => {
+    try {
+        const response = await companyApi.getCompanyRequests(id);
+        return response.data.users;
+    } catch (error) {
+        return rejectWithValue('Error fetching invites');
+    }
+});
+
+
+export const fetchCancelUserInvite = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+>('companyProfile/fetchCancelUserInvite', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+    try {
+        await companyApi.cancelUserInvite(companyId, userId);
+        dispatch(removeUserInvite(userId));
+        toast.success('Invite canceled');
+    } catch (error) {
+        toast.error('Error canceling invite');
+        return rejectWithValue('Error canceling invite');
+    }
+});
+
 const companyProfileSlice = createSlice({
     name: 'companyProfile',
     initialState,
     reducers: {
-        
+        removeUserInvite: (state, action) => {
+            state.invites = state.invites.filter(user => user.id !== action.payload);
+        }
     },
     extraReducers: builder => {
         builder.addCase(fetchCompanyById.pending, (state, _) => {
@@ -121,7 +186,20 @@ const companyProfileSlice = createSlice({
             state.loading = false;
             state.company = null;
         });
+
+        builder.addCase(fetchCompanyInvites.fulfilled, (state, action) => {
+            state.invites = action.payload;
+        });
+        
+        builder.addCase(fetchCompanyMembers.fulfilled, (state, action) => {
+            state.members = action.payload;
+        });
+
+        builder.addCase(fetchCompanyRequests.fulfilled, (state, action) => {
+            state.requests = action.payload;
+        });
     }
 });
 
+const { removeUserInvite } = companyProfileSlice.actions;
 export default companyProfileSlice.reducer;

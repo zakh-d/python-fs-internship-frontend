@@ -20,7 +20,23 @@ const companyApi = {
 
     createCompany: async (values: {name: string, description: string, hidden: boolean}) => {
         return await apiBase.post(`/companies`, values);
-    }
+    },
+
+    getCompanyMembers: async (id: string) => {
+        return await apiBase.get(`/companies/${id}/members`);
+    },
+
+    getCompanyInvites: async (id: string) => {
+        return await apiBase.get(`/companies/${id}/invites`);
+    },
+
+    getCompanyRequests: async (id: string) => {
+        return await apiBase.get(`/companies/${id}/requests`);
+    },
+
+    cancelUserInvite: async (companyId: string, userId: string) => {
+        return await apiBase.delete(`/companies/${companyId}/invites/${userId}`);
+    },
 }
 
 export default companyApi;
