@@ -1,57 +1,47 @@
 import { useSelector } from "react-redux";
-import { selectUserInvites } from "../../Store/selectors/company_action_user_selector";
+import { selectUserRequests } from "../../Store/selectors/company_action_user_selector";
 import CompanyListWithActionButtons from "../Company/CompanyListWithActionButtons";
 import { ActionButton } from "../../Types/ActionButton";
 import { useEffect, useState } from "react";
 import useAppDispatch from "../../Store/hooks/dispatch";
-import { fetchAcceptInvite, fetchDeclineInvite, fetchUserInvites } from "../../Store/companyActionUserSlice";
+import { fetchUserRequests, fetchCancelRequest } from "../../Store/companyActionUserSlice";
 import ModalWindow from "../ModalWindow";
 
-const UserInvites = () => {
-    const invites = useSelector(selectUserInvites);
+const UserRequests = () => {
+    const requests = useSelector(selectUserRequests);
     const dispatch = useAppDispatch();
 
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [confirmModalAction, setConfirmModalAction] = useState<(() => void) | null>(null);
 
     useEffect(() => {
-        if (!invites) {
-            dispatch((fetchUserInvites()));
+        if (!requests) {
+            dispatch((fetchUserRequests()));
         }
     }, []);
 
     const actions: ActionButton[] = [
         {
-            text: 'Accept',
-            customClass: 'btn-primary',
-            func: (id: string) => {
-                setConfirmModalOpen(true);
-                setConfirmModalAction(() => () => {
-                    dispatch(fetchAcceptInvite(id));
-                })
-            }
-        },
-        {
-            text: 'Reject',
+            text: 'Cancel',
             customClass: 'btn-danger ms-1',
             func: (id: string) => {
                 setConfirmModalOpen(true);
                 setConfirmModalAction(() => () => {
-                    dispatch(fetchDeclineInvite(id));
+                    dispatch(fetchCancelRequest(id));
                 })
             }
         }
     ]
 
-    if (invites && invites.length === 0) {
+    if (requests && requests.length === 0) {
         return <div className="container">
-            <h3 className="text-center">You don't have any pending invites</h3>
+            <h3 className="text-center">You don't have any pending requests</h3>
         </div>
     }
 
     return (
         <div className="container">
-            <CompanyListWithActionButtons companies={invites || []} actions={actions} />
+            <CompanyListWithActionButtons companies={requests || []} actions={actions} />
             <ModalWindow isOpen={confirmModalOpen} onClose={() =>  {
                 setConfirmModalOpen(false);
                 setConfirmModalAction(null);
@@ -74,4 +64,4 @@ const UserInvites = () => {
     );
 }
 
-export default UserInvites;
+export default UserRequests;

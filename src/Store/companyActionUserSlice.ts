@@ -57,7 +57,6 @@ export const fetchRequestToJoinCompany = createAsyncThunk<
             await userApi.requestToJoin(me.id, company.id);
             dispatch(pageFinishedLoading());
             toast.success('Request sent');
-            dispatch(addRequest(company));
         } catch (error) {
             dispatch(pageFinishedLoading());
             if (error instanceof AxiosError) {
@@ -72,18 +71,18 @@ export const fetchRequestToJoinCompany = createAsyncThunk<
 
 export const fetchCancelRequest = createAsyncThunk<
     void,
-    Company,
+    string,
     {
         rejectValue: string
     }
->('companyActionUser/cancelRequest', async (company, {getState, rejectWithValue, dispatch}) => {
+>('companyActionUser/cancelRequest', async (companyId, {getState, rejectWithValue, dispatch}) => {
     const me = selectMe(getState() as RootState);
     if (!me) return;
     dispatch(pageStartedLoading());
     try {
-        await userApi.cancelRequest(me.id, company.id);
+        await userApi.cancelRequest(me.id, companyId);
         dispatch(pageFinishedLoading());
-        dispatch(removeRequest(company.id));
+        dispatch(removeRequest(companyId));
     } catch (error) {
         dispatch(pageFinishedLoading());
         if (error instanceof AxiosError) {
@@ -185,9 +184,6 @@ const comapnyActionUserSlice = createSlice({
         },
         removeRequest: (state, action) => {
             state.requests = state.requests?.filter((company) => company.id !== action.payload) || null;
-        },
-        addRequest: (state, action) => {
-            state.requests?.push(action.payload);
         }
     },
     extraReducers: (builder) => {
@@ -205,5 +201,5 @@ const comapnyActionUserSlice = createSlice({
     }
 });
 
-export const { removeInvite, removeRequest, addRequest } = comapnyActionUserSlice.actions;
+export const { removeInvite, removeRequest } = comapnyActionUserSlice.actions;
 export default comapnyActionUserSlice.reducer;

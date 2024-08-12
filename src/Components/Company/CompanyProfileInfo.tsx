@@ -26,7 +26,7 @@ const ComapnyProfileInfo = ({company}: {company: CompanyDetail}) => {
                     <button className="btn btn-danger" onClick={() => {
                         setConfirmModalShown(true);
                         setActionFunction(() => () =>{
-                            dispatch(fetchCancelRequest(company));
+                            dispatch(fetchCancelRequest(company.id));
                         });
                     }}>Cancel Request</button>
                 </div>

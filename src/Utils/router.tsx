@@ -9,6 +9,7 @@ import CompanyProfile from "../Pages/CompanyProfile";
 import UserAuthorization from "../Pages/UserAuthorization";
 import UserRegistration from "../Pages/UserRegistration";
 import UserInvites from "../Components/User/UserInvites";
+import UserRequests from "../Components/User/UserRequests";
 
 
 
@@ -122,7 +123,7 @@ const router = createBrowserRouter([
             },
             {
                 path: MY_REQUESTS_PATH,
-                element: <UserAuthorization/>
+                element: <UserRequests/>
             },
             {
                 path: MY_INVITES_PATH,
