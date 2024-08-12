@@ -11,6 +11,7 @@ import ModalWindow from "../Components/ModalWindow";
 import UpdatePasswordForm from "../Components/UpdatePasswordForm";
 import { eraseErrors } from "../Store/user_profile_slice";
 import { useAuth0 } from "@auth0/auth0-react";
+import { getUserProfileEditPasswordPath, getUserProfileEditPath } from "../Utils/router";
 
 const UserProfile = ({editing, changePassword}: {editing: boolean, changePassword?: boolean}) => {
     const {userId} = useParams();
@@ -56,8 +57,7 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
             <ModalWindow isOpen={changePassword || false} onClose={() => {
                 navigate('/users/' + user.id + '/edit');
                 dispatch(eraseErrors());
-            }}>
-                <h3>Change password</h3>
+            }} title="Change password">
                 <UpdatePasswordForm user={user} onSubmitAdditionaly={() => {}}/>
             </ModalWindow>
             <div className="row">
@@ -67,7 +67,7 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
                     <h3>Update Password</h3>
                     <hr />
                     <p>If you want to update your password, please click the button below</p>
-                    <Link to={'/users/' + user.id + '/edit/password'} className="btn btn-warning">Update Password</Link>
+                    <Link to={getUserProfileEditPasswordPath(user.id)} className="btn btn-warning">Update Password</Link>
                 </div>
                 }
             </div>
@@ -103,7 +103,7 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
             {isMe && 
                 <div className="row">
 
-                    <Link to={'/users/' + user.id + '/edit'} className="btn btn-primary col-lg-4 offset-lg-4 my-1">Edit</Link>
+                    <Link to={getUserProfileEditPath(user.id)} className="btn btn-primary col-lg-4 offset-lg-4 my-1">Edit</Link>
                 </div>
             }
         </div>

@@ -18,12 +18,8 @@ export const authApi = {
         return response.data;
     },
 
-    async me (token: string) {
-        const response = await apiBase.get("/users/me/", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+    async me () {
+        const response = await apiBase.get("/users/me/");
 
         if (response.status !== 200) {
             const data = await response.data();

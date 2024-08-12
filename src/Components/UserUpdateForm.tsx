@@ -6,6 +6,7 @@ import { updateUser } from "../Store/thunks/users_thunk";
 import Input from "./Input";
 import UserFormProps from "../Types/UserFormProps";
 import { Link } from "react-router-dom";
+import { getUserProfilePath } from "../Utils/router";
 
 
 const UserUpdateForm = ({user, onSubmitAdditionaly}: UserFormProps): ReactElement => {
@@ -37,7 +38,7 @@ const UserUpdateForm = ({user, onSubmitAdditionaly}: UserFormProps): ReactElemen
                         <Input name="email" value={user.email} labelText="Email" type="email" disabled={true}/>
 
                         <div className="mt-2 d-flex">
-                            <Link to={'/users/' + user.id} className="btn btn-danger flex-grow-1 me-1">Cancel</Link>
+                            <Link to={getUserProfilePath(user.id)} className="btn btn-danger flex-grow-1 me-1">Cancel</Link>
                             <button className="btn btn-primary flex-grow-1 ms-1" type="submit">Save</button>
                         </div>
                     </form>

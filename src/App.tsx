@@ -1,73 +1,14 @@
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import Start from "./Pages/Start";
-import About from "./Pages/About";
-import { companies } from "./Store/DummyData";
-import AllUsers from "./Pages/AllUsers";
-import UserProfile from "./Pages/UserProfile";
-import { companyLoader } from "./Utils/loaders";
-import AllCompanies from "./Pages/AllCompanies";
-import CompanyProfile from "./Pages/CompanyProfile";
-import Layout from "./Pages/Layout";
-import UserAuthorization from "./Pages/UserAuthorization";
-import UserRegistration from "./Pages/UserRegistration";
 import { useEffect } from "react";
 import { getCurrentUser } from "./Store/thunks/auth_thunk";
 import useAppDispatch from "./Store/hooks/dispatch";
-import Toast from "./Components/Toast";
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Layout/>,
-        // errorElement: <PageNotFound/>,
-        children: [
-            {
-                path: "",
-                element: <Start/>
-            },
-            {
-                path: "about",
-                element: <About/>
-            },
-            {
-                path: "users",
-                element: <AllUsers/>,
-            },
-            {
-                path: "users/:userId",
-                element: <UserProfile editing={false}/>,
-            },
-            {
-                path: "users/:userId/edit",
-                element: <UserProfile editing={true}/>,
-            },
-            {
-                path: "users/:userId/edit/password",
-                element: <UserProfile editing={true} changePassword={true}/>,
-            },
-            {
-                path: "companies", 
-                element: <AllCompanies allCompanies={companies}/>
-            },
-            {
-                path: "companies/:companyId",
-                element: <CompanyProfile/>,
-                loader: companyLoader
-            },
-            {
-                path: "login",
-                element: <UserAuthorization/>
-            },
-            {
-                path: "register",
-                element: <UserRegistration/>
-            }
-        ]
-    },
-]);
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { RouterProvider } from "react-router-dom";
+import router from "./Utils/router";
 
 function App() {
     const dispatch = useAppDispatch()
+
 
     useEffect(() => {
         dispatch(getCurrentUser())
@@ -75,7 +16,8 @@ function App() {
     return (
         <>
             <RouterProvider router={router}/>
-            <Toast/>
+            <ToastContainer 
+                position="bottom-left"/>
         </>
     )
 }

@@ -36,22 +36,14 @@ export const userApi = {
     },
 
     list: async (page: number, itemsPerPage: number) => {
-        const response = await apiBase.get(`users/?page=${page}&limit=${itemsPerPage}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        });
+        const response = await apiBase.get(`users/?page=${page}&limit=${itemsPerPage}`);
         if (response.status == 200) {
             return await response.data;
         }
     },
 
     get: async (userId: string) => {
-        const response = await apiBase.get(`users/${userId}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        });
+        const response = await apiBase.get(`users/${userId}`);
         if (response.status == 200) {
             return await response.data;
         }
@@ -59,9 +51,7 @@ export const userApi = {
 
     update: async (new_data: UserUpdate, userId: string) => {
         try {
-            const response = await apiBase.put(`users/${userId}`, new_data, {headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }});
+            const response = await apiBase.put(`users/${userId}`, new_data);
             
             return await response.data;
         } catch (error) {
@@ -79,11 +69,7 @@ export const userApi = {
     },
 
     delete: async (userId: string) => {
-        const response = await apiBase.delete(`users/${userId}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        });
+        const response = await apiBase.delete(`users/${userId}`);
         if (response.status == 200) {
             return await response.data;
         }

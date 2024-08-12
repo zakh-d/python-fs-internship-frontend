@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import { selectIsAuthenticated, selectMe } from "../Store/selectors/auth_selector";
 import LogoutButton from "./LogoutButton";
+import { getAboutPath, getCompanyListPath, getLoginPath, getRegisterPath, getUserListPath, getUserProfilePath } from "../Utils/router";
 
 type HeaderProps = {title: string};
 
@@ -12,7 +13,7 @@ const Header = ({title}: HeaderProps): ReactElement => {
     return (
         <header className="navbar navbar-expand navbar-light shadow mb-4">
             <div className="container-fluid">
-                    {isAuthenticated ? <Link className="navbar-brand mb-0 h1" to={'/users/' + me?.id}>{me?.username}</Link> :
+                    {me ? <Link className="navbar-brand mb-0 h1" to={getUserProfilePath(me.id)}>{me.username}</Link> :
                     <span className="navbar-brand mb-0 h1">
                         {title}
                     </span>
@@ -26,13 +27,13 @@ const Header = ({title}: HeaderProps): ReactElement => {
                                 <NavLink to="/" className="nav-link">Home</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/users" className="nav-link">All Users</NavLink>
+                                <NavLink to={getUserListPath()} className="nav-link">All Users</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/companies" className="nav-link">All companies</NavLink>
+                                <NavLink to={getCompanyListPath()} className="nav-link">All companies</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/about" className="nav-link">About</NavLink>
+                                <NavLink to={getAboutPath()} className="nav-link">About</NavLink>
                             </li>
                             <li className="nav-item">
                                <LogoutButton /> 
@@ -46,10 +47,10 @@ const Header = ({title}: HeaderProps): ReactElement => {
                                 <NavLink to="/" className="nav-link">Home</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/login" className="nav-link">Login</NavLink>
+                                <NavLink to={getLoginPath()} className="nav-link">Login</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/register" className="nav-link">Sign Up</NavLink>
+                                <NavLink to={getRegisterPath()} className="nav-link">Sign Up</NavLink>
                             </li>
                         </>
                     )}

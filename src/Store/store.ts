@@ -5,7 +5,9 @@ import authReducer from "./authSlice";
 import usersReducer from "./userSlice";
 import usersListReducer from "./userListSlice";
 import userProfileReducer from "./user_profile_slice";
-import toastReducer from "./toast_slice";
+import companyListReducer from "./companyListSlice";
+import companyProfileReducer from "./companyProfileSlice";
+import pageReducer from "./pageSlice";
 
 const store = configureStore({
     reducer: {
@@ -15,7 +17,9 @@ const store = configureStore({
         users: usersReducer,
         usersList: usersListReducer,
         userProfile: userProfileReducer,
-        toast: toastReducer,
+        companyList: companyListReducer,
+        companyProfile: companyProfileReducer,
+        page: pageReducer,
     }
 });
 
