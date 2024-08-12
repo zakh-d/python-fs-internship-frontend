@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import User from "../Types/UserType"
-import { getUserProfilePath } from "../Utils/router";
-import Table from "./Table/Table";
+import User from "../../Types/UserType"
+import { getUserProfilePath } from "../../Utils/router";
+import Table from "../Table/Table";
 
 const UserList = ({users}: {users: User[]}) => {
     const userItems = users.map((user) => ({

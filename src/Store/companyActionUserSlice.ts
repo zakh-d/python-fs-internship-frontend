@@ -9,22 +9,24 @@ import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
 
 
 const initialState: {
-    invites: Company[],
-    requests: Company[],
+    invites: Company[] | null,
+    requests: Company[] | null,
 } = {
-    invites: [],
-    requests: [],
+    invites: null,
+    requests: null,
 };
 
-export const getRequests = createAsyncThunk<
+export const fetchUserRequests = createAsyncThunk<
 Company[],
-string,
+undefined,
 {
     rejectValue: string
-}>('companyActionUser/getRequests', async (userId, {rejectWithValue, dispatch}) => {
+}>('companyActionUser/getRequests', async (_, {rejectWithValue, dispatch, getState}) => {
+    const me = selectMe(getState() as RootState);
+    if (!me) return;
     dispatch(pageStartedLoading());
     try {
-        const response = await userApi.getRequests(userId);
+        const response = await userApi.getRequests(me.id);
         dispatch(pageFinishedLoading());
         return response.data.companies
     } catch (error) {
@@ -95,20 +97,46 @@ export const fetchCancelRequest = createAsyncThunk<
 });
 
 
-export const fetchAcceptInvite = createAsyncThunk<
-    void,
-    Company,
+export const fetchUserInvites = createAsyncThunk<
+    Company[],
+    undefined,
     {
         rejectValue: string
     }
->('companyActionUser/acceptInvite', async (company, {getState, rejectWithValue, dispatch}) => {
+>('companyActionUser/getInvites', async (_, {rejectWithValue, dispatch, getState}) => {
     const me = selectMe(getState() as RootState);
     if (!me) return;
     dispatch(pageStartedLoading());
     try {
-        await userApi.acceptInvite(me.id, company.id);
+        const response = await userApi.getInvites(me.id);
         dispatch(pageFinishedLoading());
-        dispatch(removeInvite(company.id));
+        return response.data.companies;
+    } catch (error) {
+        dispatch(pageFinishedLoading());
+        if (error instanceof AxiosError) {
+            const message = error.response?.data.detail;
+            if (message) {
+                toast.error(message);
+            }
+            return rejectWithValue('Error fetching invites');
+        }
+    }
+});
+
+export const fetchAcceptInvite = createAsyncThunk<
+    void,
+    string,
+    {
+        rejectValue: string
+    }
+>('companyActionUser/acceptInvite', async (companyId, {getState, rejectWithValue, dispatch}) => {
+    const me = selectMe(getState() as RootState);
+    if (!me) return;
+    dispatch(pageStartedLoading());
+    try {
+        await userApi.acceptInvite(me.id, companyId);
+        dispatch(pageFinishedLoading());
+        dispatch(removeInvite(companyId));
     } catch (error) {
         dispatch(pageFinishedLoading());
         if (error instanceof AxiosError) {
@@ -124,18 +152,18 @@ export const fetchAcceptInvite = createAsyncThunk<
 
 export const fetchDeclineInvite = createAsyncThunk<
     void,
-    Company,
+    string,
     {
         rejectValue: string
     }
->('companyActionUser/declineInvite', async (company, {getState, rejectWithValue, dispatch}) => {
+>('companyActionUser/declineInvite', async (companyId, {getState, rejectWithValue, dispatch}) => {
     const me = selectMe(getState() as RootState);
     if (!me) return;
     dispatch(pageStartedLoading());
     try {
-        await userApi.rejectInvite(me.id, company.id);
+        await userApi.rejectInvite(me.id, companyId);
         dispatch(pageFinishedLoading());
-        dispatch(removeInvite(company.id));
+        dispatch(removeInvite(companyId));
     } catch (error) {
         dispatch(pageFinishedLoading());
         if (error instanceof AxiosError) {
@@ -153,22 +181,26 @@ const comapnyActionUserSlice = createSlice({
     initialState,
     reducers: {
         removeInvite: (state, action) => {
-            state.invites = state.invites.filter((company) => company.id !== action.payload);
+            state.invites = state.invites?.filter((company) => company.id !== action.payload) || null;
         },
         removeRequest: (state, action) => {
-            state.requests = state.requests.filter((company) => company.id !== action.payload);
+            state.requests = state.requests?.filter((company) => company.id !== action.payload) || null;
         },
         addRequest: (state, action) => {
-            state.requests.push(action.payload);
+            state.requests?.push(action.payload);
         }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchRequestToJoinCompany.fulfilled, (state, action) => {
-            state.requests.push(action.meta.arg);
+            state.requests?.push(action.meta.arg);
         });
 
-        builder.addCase(getRequests.fulfilled, (state, action) => {
+        builder.addCase(fetchUserRequests.fulfilled, (state, action) => {
             state.requests = action.payload;
+        });
+         
+        builder.addCase(fetchUserInvites.fulfilled, (state, action) => {
+            state.invites = action.payload;
         });
     }
 });

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { selectCompanyInvites } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchCancelUserInvite, fetchCompanyInvites, fetchInviteUser } from "../../Store/companyProfileSlice"
-import UserListWithActionButton from "../UserListWIthActionButton"
+import UserListWithActionButton from "../User/UserListWIthActionButton"
 import ModalWindow from "../ModalWindow"
 import {Form as FinalForm} from 'react-final-form'
 import Input from "../Input"

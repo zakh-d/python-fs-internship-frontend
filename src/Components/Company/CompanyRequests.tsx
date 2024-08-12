@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { selectCompanyRequests } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchAcceptUserRequest, fetchCompanyRequests, fetchRejectUserRequest } from "../../Store/companyProfileSlice"
-import UserListWithActionButton from "../UserListWIthActionButton"
+import UserListWithActionButton from "../User/UserListWIthActionButton"
 import ModalWindow from "../ModalWindow"
 
 const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {

@@ -1,15 +1,11 @@
-import Table from "./Table/Table";
+import Table from "../Table/Table";
 import { Link } from "react-router-dom";
-import { getUserProfilePath } from "../Utils/router";
-import User from "../Types/UserType";
+import { getUserProfilePath } from "../../Utils/router";
+import User from "../../Types/UserType";
+import { ActionButton } from "../../Types/ActionButton";
 
 
-type Action = {
-    func: (userId: string) => void,
-    text: string,
-    customClass: string
-}
-const UserListWithActionButton = ({users, actions}: {users: User[], actions: Action[]}) => {
+const UserListWithActionButton = ({users, actions}: {users: User[], actions: ActionButton[]}) => {
     const userItems = users.map((user) => ({
         id: user.id,
         items: [

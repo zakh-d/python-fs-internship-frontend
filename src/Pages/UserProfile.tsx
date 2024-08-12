@@ -6,9 +6,9 @@ import { selectCurrentUser, selectDeleteFetching, selectIsFetching, selectIsMe }
 import useAppDispatch from "../Store/hooks/dispatch";
 import { deleteUser, getUser } from "../Store/thunks/users_thunk";
 import Loader from "../Components/Loader";
-import UserUpdateForm from "../Components/UserUpdateForm";
+import UserUpdateForm from "../Components/User/UserUpdateForm";
 import ModalWindow from "../Components/ModalWindow";
-import UpdatePasswordForm from "../Components/UpdatePasswordForm";
+import UpdatePasswordForm from "../Components/User/UpdatePasswordForm";
 import { eraseErrors } from "../Store/user_profile_slice";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getUserProfileEditPasswordPath, getUserProfileEditPath } from "../Utils/router";

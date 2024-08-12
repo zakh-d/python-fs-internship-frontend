@@ -38,13 +38,13 @@ const ComapnyProfileInfo = ({company}: {company: CompanyDetail}) => {
                     <button className="btn btn-primary" onClick={() => {
                         setConfirmModalShown(true);
                         setActionFunction(() => () => {
-                            dispatch(fetchAcceptInvite(company));
+                            dispatch(fetchAcceptInvite(company.id));
                         });
                     }}>Accept Invite</button>
                     <button className="btn btn-danger ms-1" onClick={() => {
                         setConfirmModalShown(true);
                         setActionFunction(() => () => {
-                            dispatch(fetchDeclineInvite(company));
+                            dispatch(fetchDeclineInvite(company.id));
                         });
                     }}>Decline</button>
                 </div>

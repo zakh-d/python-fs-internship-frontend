@@ -84,7 +84,7 @@ export const userApi = {
     },
 
     getInvites: async (userId: string) => {
-        return await apiBase.get(`users/${userId}/invites`);   
+        return await apiBase.get(`users/${userId}/invites/`);   
     },
 
     requestToJoin: async (userId: string, companyId: string) => {

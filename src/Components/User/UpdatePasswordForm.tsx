@@ -1,11 +1,11 @@
 import { ReactElement } from "react";
 import { Form as FinalForm } from "react-final-form";
-import Input from "./Input";
-import UserFormProps from "../Types/UserFormProps";
-import useAppDispatch from "../Store/hooks/dispatch";
-import { updatePassword } from "../Store/thunks/users_thunk";
+import Input from "../Input";
+import UserFormProps from "../../Types/UserFormProps";
+import useAppDispatch from "../../Store/hooks/dispatch";
+import { updatePassword } from "../../Store/thunks/users_thunk";
 import { useSelector } from "react-redux";
-import { selectErrors, selectPasswordChangeFetching } from "../Store/selectors/user_profile_selectors";
+import { selectErrors, selectPasswordChangeFetching } from "../../Store/selectors/user_profile_selectors";
 import { useNavigate } from "react-router-dom";
 
 const UpdatePasswordForm = ({user, onSubmitAdditionaly}: UserFormProps): ReactElement => {

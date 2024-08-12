@@ -1,12 +1,12 @@
 import { ReactElement, useEffect, useState } from "react"
-import UserList from "../UserList"
+import UserList from "../User/UserList"
 import { CompanyDetail } from "../../Types/CompanyType"
 import { useSelector } from "react-redux"
 import { selectCompanyMembers } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchCompanyMembers, fetchRemoveMember } from "../../Store/companyProfileSlice"
 import { selectMe } from "../../Store/selectors/auth_selector"
-import UserListWithActionButton from "../UserListWIthActionButton"
+import UserListWithActionButton from "../User/UserListWIthActionButton"
 import ModalWindow from "../ModalWindow"
 
 const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
