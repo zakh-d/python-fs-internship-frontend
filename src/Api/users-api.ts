@@ -73,6 +73,30 @@ export const userApi = {
         if (response.status == 200) {
             return await response.data;
         }
-    }
+    },
+
+    acceptInvite: async (userId: string, companyId: string) => {
+        return await apiBase.post(`users/${userId}/invites/${companyId}`);
+    },
+
+    rejectInvite: async (userId: string, companyId: string) => {
+        return await apiBase.delete(`users/${userId}/invites/${companyId}`);
+    },
+
+    getInvites: async (userId: string) => {
+        return await apiBase.get(`users/${userId}/invites`);   
+    },
+
+    requestToJoin: async (userId: string, companyId: string) => {
+        return await apiBase.post(`users/${userId}/requests/${companyId}`);
+    },
+
+    cancelRequest: async (userId: string, companyId: string) => {
+        return await apiBase.delete(`users/${userId}/requests/${companyId}`);
+    },
+
+    getRequests: async (userId: string) => {
+        return await apiBase.get(`users/${userId}/requests`);
+    },
 
 }

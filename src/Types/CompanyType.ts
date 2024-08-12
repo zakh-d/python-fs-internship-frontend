@@ -10,6 +10,7 @@ type Company = {
 
 export interface CompanyDetail extends Company {
     hidden: boolean;
+    is_member: 'yes' | 'no' | 'pending_request' | 'pending_invite';
 }
 
 export type CompanyCreate = {
