@@ -16,9 +16,8 @@ const Layout = (): ReactElement => {
     return (
         <div>
             <Header title="FE Internship"/>
-            {isLoading ?
-            <Loader/> :
-            <Outlet/>}
+            {isLoading && <Loader/> }
+            <Outlet/>
         </div>
     )
 };

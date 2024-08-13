@@ -15,9 +15,7 @@ const UserRequests = () => {
     const [confirmModalAction, setConfirmModalAction] = useState<(() => void) | null>(null);
 
     useEffect(() => {
-        if (!requests) {
-            dispatch((fetchUserRequests()));
-        }
+        dispatch((fetchUserRequests()));
     }, []);
 
     const actions: ActionButton[] = [
@@ -33,7 +31,7 @@ const UserRequests = () => {
         }
     ]
 
-    if (requests && requests.length === 0) {
+    if (requests.length === 0) {
         return <div className="container">
             <h3 className="text-center">You don't have any pending requests</h3>
         </div>
@@ -41,7 +39,8 @@ const UserRequests = () => {
 
     return (
         <div className="container">
-            <CompanyListWithActionButtons companies={requests || []} actions={actions} />
+            <h3>Pending requests</h3>
+            <CompanyListWithActionButtons companies={requests} actions={actions} />
             <ModalWindow isOpen={confirmModalOpen} onClose={() =>  {
                 setConfirmModalOpen(false);
                 setConfirmModalAction(null);

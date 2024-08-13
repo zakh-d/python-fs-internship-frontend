@@ -9,11 +9,11 @@ import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
 
 
 const initialState: {
-    invites: Company[] | null,
-    requests: Company[] | null,
+    invites: Company[],
+    requests: Company[],
 } = {
-    invites: null,
-    requests: null,
+    invites: [],
+    requests: [],
 };
 
 export const fetchUserRequests = createAsyncThunk<

@@ -78,7 +78,7 @@ const CompanyInvites = ({company}: {company: CompanyDetail}): ReactElement => {
                 render={({handleSubmit}) => (
                     <form className="d-flex flex-column" onSubmit={handleSubmit}>
                         <Input labelText={"Email"} name={"email"} type={"text"}/>
-                        <button type="submit" className="btn btn-primary">Invite</button>
+                        <button type="submit" className="btn btn-primary mt-1">Invite</button>
                     </form>
                 )}/>
                

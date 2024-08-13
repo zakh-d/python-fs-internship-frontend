@@ -17,7 +17,7 @@ const CompanyListWithActionButtons = ({companies, actions}: {companies: Company[
     }));
     return (
         <Table 
-            theadData={['Name', 'Owner', 'Actions']} tbodyData={companiesItems}
+            theadData={['Company Name', 'Owner', 'Actions']} tbodyData={companiesItems}
         />
     )
 }

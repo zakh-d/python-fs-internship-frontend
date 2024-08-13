@@ -15,9 +15,7 @@ const UserInvites = () => {
     const [confirmModalAction, setConfirmModalAction] = useState<(() => void) | null>(null);
 
     useEffect(() => {
-        if (!invites) {
-            dispatch((fetchUserInvites()));
-        }
+        dispatch((fetchUserInvites()));
     }, []);
 
     const actions: ActionButton[] = [
@@ -43,7 +41,7 @@ const UserInvites = () => {
         }
     ]
 
-    if (invites && invites.length === 0) {
+    if (invites.length === 0) {
         return <div className="container">
             <h3 className="text-center">You don't have any pending invites</h3>
         </div>
@@ -51,7 +49,8 @@ const UserInvites = () => {
 
     return (
         <div className="container">
-            <CompanyListWithActionButtons companies={invites || []} actions={actions} />
+            <h3>Pending Invites</h3>
+            <CompanyListWithActionButtons companies={invites} actions={actions} />
             <ModalWindow isOpen={confirmModalOpen} onClose={() =>  {
                 setConfirmModalOpen(false);
                 setConfirmModalAction(null);
