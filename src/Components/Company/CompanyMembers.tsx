@@ -4,10 +4,11 @@ import { CompanyDetail } from "../../Types/CompanyType"
 import { useSelector } from "react-redux"
 import { selectCompanyMembers } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
-import { fetchCompanyMembers, fetchRemoveMember } from "../../Store/companyProfileSlice"
+import { fetchAddAdmin, fetchCompanyMembers, fetchRemoveMember } from "../../Store/companyProfileSlice"
 import { selectMe } from "../../Store/selectors/auth_selector"
 import UserListWithActionButton from "../User/UserListWIthActionButton"
 import ModalWindow from "../ModalWindow"
+import { ActionButton } from "../../Types/ActionButton"
 
 const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
     
@@ -28,7 +29,14 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
         )
     }
 
-    const actions = [
+    const actions: ActionButton[] = [
+        {
+            func: function (id: string): void {
+                dispatch(fetchAddAdmin({companyId: company.id, userId: id}));
+            },
+            text: "Assign as Admin",
+            customClass: "btn-primary me-1"
+        },
         {
             text: 'Remove',
             func: (userId: string) => {
