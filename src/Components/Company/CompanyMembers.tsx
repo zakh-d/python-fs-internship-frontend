@@ -9,6 +9,7 @@ import { selectMe } from "../../Store/selectors/auth_selector"
 import UserListWithActionButton from "../User/UserListWIthActionButton"
 import ModalWindow from "../ModalWindow"
 import { ActionButton } from "../../Types/ActionButton"
+import {UserInCompany} from "../../Types/UserType"
 
 const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
     
@@ -47,9 +48,24 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
         }
     ]
 
+    const actionsDisabled = [
+        {
+            key: (item: UserInCompany) => item.role === 'owner',
+            actionIndex: 0
+        },
+        {
+            key: (item: UserInCompany) => item.role === 'owner',
+            actionIndex: 1
+        },
+        {
+            key: (item: UserInCompany) => item.role === 'admin',
+            actionIndex: 0
+        }
+    ]
+
     return ( 
         <>
-            <UserListWithActionButton users={members} actions={actions}/>
+            <UserListWithActionButton users={members} actions={actions} actionsDisabled={actionsDisabled}/>
 
         <ModalWindow isOpen={confirmModalShown} onClose={() => {
                 setConfirmModalShown(false);

@@ -30,7 +30,6 @@ const CompanyAdmins = ({company}: {company: CompanyType}) => {
         <>
             <h2>Admins</h2>
             <UserListWithActionButton users={admins} actions={actions}/>
-            <button className="btn btn-primary">Add</button>
         </>
     )
 }

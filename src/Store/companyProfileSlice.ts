@@ -6,7 +6,7 @@ import { selectMe } from "./selectors/auth_selector";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { customNavigator } from "../Utils/_helper";
-import User from "../Types/UserType";
+import User, { UserInCompany } from "../Types/UserType";
 
 const initialState : {
     company: CompanyDetail | null,
@@ -15,7 +15,7 @@ const initialState : {
     error: string | null,
     invites: User[],
     requests: User[],
-    members: User[],
+    members: UserInCompany[],
     admins: User[]
 } = {
     company: null,
@@ -44,7 +44,7 @@ export const fetchAdmins = createAsyncThunk<
 
 
 export const fetchAddAdmin = createAsyncThunk<
-    void,
+    string,
     {companyId: string, userId: string},
     {rejectValue: string}
 >('companyProfile/fetchAddAdmin', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
@@ -52,6 +52,7 @@ export const fetchAddAdmin = createAsyncThunk<
         await companyApi.addAdmin(companyId, userId);
         toast.success('Admin added');
         dispatch(fetchAdmins(companyId));
+        return userId;
     } catch (error) {
         if (error instanceof AxiosError) {
             toast.error(error.response?.data.detail || 'Error adding admin');
@@ -154,7 +155,7 @@ export const fetchCompanyInvites = createAsyncThunk<
 });
 
 export const fetchCompanyMembers = createAsyncThunk<
-    User[],
+    UserInCompany[],
     string,
     {rejectValue: string}
 >('companyProfile/fetchCompanyMembers', async (id, {rejectWithValue}) => {
@@ -281,9 +282,6 @@ const companyProfileSlice = createSlice({
         },
         removeAdmin: (state, action) => {
             state.admins = state.admins.filter(user => user.id !== action.payload);
-        },
-        addAdmin: (state, action) => {
-            state.admins.push(action.payload);
         }
     },
     extraReducers: builder => {
@@ -337,6 +335,10 @@ const companyProfileSlice = createSlice({
 
         builder.addCase(fetchAdmins.fulfilled, (state, action) => {
             state.admins = action.payload;
+        });
+
+        builder.addCase(fetchAddAdmin.fulfilled, (state, action) => {
+            state.members.find(user => user.id === action.payload)!.role = 'admin';
         });
     }
 });
