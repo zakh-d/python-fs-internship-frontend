@@ -1,9 +1,9 @@
 import { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyRequestsPath } from "../../Utils/router";
+import { getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyProfileAdminsPath, getCompanyRequestsPath } from "../../Utils/router";
 
-type PropsType = {
-    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests';
+export type PropsType = {
+    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins';
     isOwner: boolean;
     companyId: string;
 }
@@ -21,6 +21,9 @@ const CompanyProfileTabSwitch = ({openedTab, isOwner, companyId}: PropsType): Re
                {
                 isOwner &&
                 <>
+                <li className="nav-item">
+                    <Link to={getCompanyProfileAdminsPath(companyId)} className={"nav-link" + (openedTab == 'admins' ? ' active' : '')}>Admins</Link>
+                </li>
                 <li className="nav-item">
                     <Link to={getCompanyEditPath(companyId)} className={"nav-link" + (openedTab == 'edit' ? ' active' : '')}>Edit</Link>
                 </li>

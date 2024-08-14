@@ -12,12 +12,13 @@ import CompanyEditDelete from "../Components/Company/CompanyEditDelete";
 import CompanyInvites from "../Components/Company/CompanyInvites";
 import CompanyMembers from "../Components/Company/CompanyMembers";
 import CompanyRequests from "../Components/Company/CompanyRequests";
+import CompanyAdmins from "../Components/Company/CompanyAdmins";
 
-type PropsType = {
-    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests';
+type TabProps = {
+    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins';
 }
 
-const CompanyProfile = ({openedTab}: PropsType) => {
+const CompanyProfile = ({openedTab}: TabProps) => {
 
     const {companyId} = useParams();
 
@@ -59,7 +60,9 @@ const CompanyProfile = ({openedTab}: PropsType) => {
             break;
         case 'requests':
             displayedTab = <CompanyRequests company={company}/>
-            break
+            break;
+        case 'admins':
+            displayedTab = <CompanyAdmins company={company}/>
     }
 
     return (
@@ -71,4 +74,4 @@ const CompanyProfile = ({openedTab}: PropsType) => {
     );
 }
 
-export default withAuthentication<PropsType & {key?: Key}>(CompanyProfile);
+export default withAuthentication<TabProps & {key?: Key}>(CompanyProfile);

@@ -55,6 +55,18 @@ const companyApi = {
     rejectUserRequest: async (companyId: string, userId: string) => {
         return await apiBase.delete(`/companies/${companyId}/requests/${userId}`);
     },
+
+    getAdminList: async (companyId: string) => {
+        return await apiBase.get(`/companies/${companyId}/admins`);
+    },
+
+    addAdmin: async (companyId: string, userId: string) => {
+        return await apiBase.post(`/companies/${companyId}/admins/`, {user_id: userId});
+    },
+
+    removeAdmin: async (companyId: string, userId: string) => {
+        return await apiBase.delete(`/companies/${companyId}/admins/${userId}`);
+    }
 }
 
 export default companyApi;

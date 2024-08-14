@@ -6,7 +6,7 @@ import { selectMe } from "./selectors/auth_selector";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { customNavigator } from "../Utils/_helper";
-import User from "../Types/UserType";
+import User, { UserInCompany } from "../Types/UserType";
 
 const initialState : {
     company: CompanyDetail | null,
@@ -15,7 +15,8 @@ const initialState : {
     error: string | null,
     invites: User[],
     requests: User[],
-    members: User[],
+    members: UserInCompany[],
+    admins: User[]
 } = {
     company: null,
     loading: false,
@@ -24,8 +25,62 @@ const initialState : {
     invites: [],
     requests: [],
     members: [],
+    admins: []
 }
 
+
+export const fetchAdmins = createAsyncThunk<
+    User[],
+    string,
+    {rejectValue: string}
+>('companyProfile/fetchAdmins', async (id, {rejectWithValue}) => {
+    try {
+        const response = await companyApi.getAdminList(id);
+        return response.data.users;
+    } catch (error) {
+        return rejectWithValue('Error fetching admins');
+    }
+});
+
+
+export const fetchAddAdmin = createAsyncThunk<
+    string,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+>('companyProfile/fetchAddAdmin', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+    try {
+        await companyApi.addAdmin(companyId, userId);
+        toast.success('Admin added');
+        dispatch(fetchAdmins(companyId));
+        return userId;
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            toast.error(error.response?.data.detail || 'Error adding admin');
+            return rejectWithValue(error.response?.data.detail || 'Error adding admin');
+        }
+        toast.error('Error adding admin');
+        return rejectWithValue('Error adding admin');
+    }
+});
+
+export const fetchRemoveAdmin = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+>('companyProfile/fetchRemoveAdmin', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+    try {
+        await companyApi.removeAdmin(companyId, userId);
+        toast.success('Admin removed');
+        dispatch(removeAdmin(userId));
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            toast.error(error.response?.data.detail || 'Error removing admin');
+            return rejectWithValue(error.response?.data.detail || 'Error removing admin');
+        }
+        toast.error('Error removing admin');
+        return rejectWithValue('Error removing admin');
+    }
+});
 
 export const fetchCompanyById = createAsyncThunk<
     {company: CompanyDetail, isOwner: boolean},
@@ -100,7 +155,7 @@ export const fetchCompanyInvites = createAsyncThunk<
 });
 
 export const fetchCompanyMembers = createAsyncThunk<
-    User[],
+    UserInCompany[],
     string,
     {rejectValue: string}
 >('companyProfile/fetchCompanyMembers', async (id, {rejectWithValue}) => {
@@ -224,6 +279,9 @@ const companyProfileSlice = createSlice({
         },
         removeMember: (state, action) => {
             state.members = state.members.filter(user => user.id !== action.payload);
+        },
+        removeAdmin: (state, action) => {
+            state.admins = state.admins.filter(user => user.id !== action.payload);
         }
     },
     extraReducers: builder => {
@@ -274,8 +332,16 @@ const companyProfileSlice = createSlice({
         builder.addCase(fetchCompanyRequests.fulfilled, (state, action) => {
             state.requests = action.payload;
         });
+
+        builder.addCase(fetchAdmins.fulfilled, (state, action) => {
+            state.admins = action.payload;
+        });
+
+        builder.addCase(fetchAddAdmin.fulfilled, (state, action) => {
+            state.members.find(user => user.id === action.payload)!.role = 'admin';
+        });
     }
 });
 
-const { removeUserInvite, removeUserRequest, removeMember } = companyProfileSlice.actions;
+const { removeUserInvite, removeUserRequest, removeMember, removeAdmin } = companyProfileSlice.actions;
 export default companyProfileSlice.reducer;

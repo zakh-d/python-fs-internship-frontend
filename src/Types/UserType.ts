@@ -9,7 +9,10 @@ type User = {
 export interface UserDetail extends User {
     first_name: string;
     last_name: string;
+}
 
+export interface UserInCompany extends User {
+    role: 'owner' | 'admin' | 'member';
 }
 
 export type UserUpdate = {

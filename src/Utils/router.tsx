@@ -28,6 +28,7 @@ const COMPANY_LIST_PATH = "/companies";
 const MY_COMPANY_LIST_PATH = "/companies/my";
 const COMPANY_PROFILE_PATH = "/companies/:companyId";
 const COMPANY_PROFILE_EDIT_PATH = "/companies/:companyId/edit";
+const COMPANY_PROFILE_ADMINS_PATH = "/companies/:companyId/admins";
 const COMPANY_PROFILE_MEMBERS_PATH = "/companies/:companyId/members";
 const COMPANY_PROFILE_INVITES_PATH = "/companies/:companyId/invites";
 const COMPANY_PROFILE_REQUESTS_PATH = "/companies/:companyId/requests";
@@ -36,6 +37,7 @@ export const getCompanyListPath = () => COMPANY_LIST_PATH;
 export const getMyCompanyListPath = () => MY_COMPANY_LIST_PATH;
 export const getCompanyPath = (companyId: string) => COMPANY_PROFILE_PATH.replace(":companyId", companyId);
 export const getCompanyEditPath = (companyId: string) => COMPANY_PROFILE_EDIT_PATH.replace(":companyId", companyId);
+export const getCompanyProfileAdminsPath = (companyId: string) => COMPANY_PROFILE_ADMINS_PATH.replace(":companyId", companyId);
 export const getCompanyMembersPath = (companyId: string) => COMPANY_PROFILE_MEMBERS_PATH.replace(":companyId", companyId);
 export const getCompanyInvitesPath = (companyId: string) => COMPANY_PROFILE_INVITES_PATH.replace(":companyId", companyId);
 export const getCompanyRequestsPath = (companyId: string) => COMPANY_PROFILE_REQUESTS_PATH.replace(":companyId", companyId);
@@ -96,6 +98,10 @@ const router = createBrowserRouter([
             {
                 path: COMPANY_PROFILE_PATH,
                 element: <CompanyProfile openedTab="info"/>
+            },
+            {
+                path: COMPANY_PROFILE_ADMINS_PATH,
+                element: <CompanyProfile openedTab="admins"/>
             },
             {
                 path: COMPANY_PROFILE_MEMBERS_PATH,
