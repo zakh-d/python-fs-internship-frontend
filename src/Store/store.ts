@@ -8,6 +8,7 @@ import userProfileReducer from "./user_profile_slice";
 import companyListReducer from "./companyListSlice";
 import companyProfileReducer from "./companyProfileSlice";
 import pageReducer from "./pageSlice";
+import companyActionUserReducer from "./companyActionUserSlice";
 
 const store = configureStore({
     reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
         companyList: companyListReducer,
         companyProfile: companyProfileReducer,
         page: pageReducer,
+        companyActionUser: companyActionUserReducer,
     }
 });
 

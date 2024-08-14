@@ -8,6 +8,8 @@ import AllCompanies from "../Pages/AllCompanies";
 import CompanyProfile from "../Pages/CompanyProfile";
 import UserAuthorization from "../Pages/UserAuthorization";
 import UserRegistration from "../Pages/UserRegistration";
+import UserInvites from "../Components/User/UserInvites";
+import UserRequests from "../Components/User/UserRequests";
 
 
 
@@ -46,6 +48,12 @@ const ABOUT_PATH = "/about";
 export const getLoginPath = () => LOGIN_PATH;
 export const getRegisterPath = () => REGISTER_PATH;
 export const getAboutPath = () => ABOUT_PATH;
+
+const MY_REQUESTS_PATH = "/requests";
+const MY_INVITES_PATH = "/invites";
+
+export const getMyRequestsPath = () => MY_REQUESTS_PATH;
+export const getMyInvitesPath = () => MY_INVITES_PATH;
 
 const router = createBrowserRouter([
     {
@@ -112,6 +120,14 @@ const router = createBrowserRouter([
             {
                 path: REGISTER_PATH,
                 element: <UserRegistration/>
+            },
+            {
+                path: MY_REQUESTS_PATH,
+                element: <UserRequests/>
+            },
+            {
+                path: MY_INVITES_PATH,
+                element: <UserInvites/>
             }
         ]
     },

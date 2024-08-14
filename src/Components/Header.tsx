@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import { selectIsAuthenticated, selectMe } from "../Store/selectors/auth_selector";
 import LogoutButton from "./LogoutButton";
-import { getAboutPath, getCompanyListPath, getLoginPath, getRegisterPath, getUserListPath, getUserProfilePath } from "../Utils/router";
+import { getAboutPath, getCompanyListPath, getLoginPath, getMyInvitesPath, getMyRequestsPath, getRegisterPath, getUserListPath, getUserProfilePath } from "../Utils/router";
 
 type HeaderProps = {title: string};
 
@@ -29,8 +29,16 @@ const Header = ({title}: HeaderProps): ReactElement => {
                             <li className="nav-item">
                                 <NavLink to={getUserListPath()} className="nav-link">All Users</NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink to={getCompanyListPath()} className="nav-link">All companies</NavLink>
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Compaies
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <li><NavLink className="dropdown-item" to={getCompanyListPath()}>All Comapnies</NavLink></li>
+                                    <li><hr className="dropdown-divider"/></li>
+                                    <li><NavLink className="dropdown-item" to={getMyInvitesPath()}>Invites</NavLink></li>
+                                    <li><NavLink className="dropdown-item" to={getMyRequestsPath()}>Requests</NavLink></li>
+                                </ul>
                             </li>
                             <li className="nav-item">
                                 <NavLink to={getAboutPath()} className="nav-link">About</NavLink>

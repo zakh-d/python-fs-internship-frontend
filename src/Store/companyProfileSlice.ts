@@ -6,17 +6,24 @@ import { selectMe } from "./selectors/auth_selector";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { customNavigator } from "../Utils/_helper";
+import User from "../Types/UserType";
 
 const initialState : {
     company: CompanyDetail | null,
     loading: boolean,
     isOwner: boolean,
-    error: string | null
+    error: string | null,
+    invites: User[],
+    requests: User[],
+    members: User[],
 } = {
     company: null,
     loading: false,
     isOwner: false,
-    error: null
+    error: null,
+    invites: [],
+    requests: [],
+    members: [],
 }
 
 
@@ -79,11 +86,145 @@ export const fetchCompanyDelete = createAsyncThunk<
     }
 );
 
+export const fetchCompanyInvites = createAsyncThunk<
+    User[],
+    string,
+    {rejectValue: string}
+>('companyProfile/fetchCompanyInvites', async (id, {rejectWithValue}) => {
+    try {
+        const response = await companyApi.getCompanyInvites(id);
+        return response.data.users;
+    } catch (error) {
+        return rejectWithValue('Error fetching invites');
+    }
+});
+
+export const fetchCompanyMembers = createAsyncThunk<
+    User[],
+    string,
+    {rejectValue: string}
+>('companyProfile/fetchCompanyMembers', async (id, {rejectWithValue}) => {
+    try {
+        const response = await companyApi.getCompanyMembers(id);
+        return response.data.users;
+    } catch (error) {
+        return rejectWithValue('Error fetching invites');
+    }
+});
+
+
+export const fetchCompanyRequests = createAsyncThunk<
+    User[],
+    string,
+    {rejectValue: string}
+>('companyProfile/fetchCompanyRequests', async (id, {rejectWithValue}) => {
+    try {
+        const response = await companyApi.getCompanyRequests(id);
+        return response.data.users;
+    } catch (error) {
+        return rejectWithValue('Error fetching invites');
+    }
+});
+
+
+export const fetchCancelUserInvite = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+>('companyProfile/fetchCancelUserInvite', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+    try {
+        await companyApi.cancelUserInvite(companyId, userId);
+        dispatch(removeUserInvite(userId));
+        toast.success('Invite canceled');
+    } catch (error) {
+        toast.error('Error canceling invite');
+        return rejectWithValue('Error canceling invite');
+    }
+});
+
+export const fetchAcceptUserRequest = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+>('companyProfile/fetchAcceptUserRequest', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+    try {
+        await companyApi.acceptUserRequest(companyId, userId);
+        dispatch(removeUserRequest(userId));
+        toast.success('User request accepted');
+    } catch (error) {
+        toast.error('Error accepting user request');
+        return rejectWithValue('Error accepting user request');
+    }
+});
+
+export const fetchRejectUserRequest = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+>('companyProfile/fetchAcceptUserRequest', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+    try {
+        await companyApi.rejectUserRequest(companyId, userId);
+        dispatch(removeUserRequest(userId));
+        toast.success('User request rejected');
+    } catch (error) {
+        toast.error('Error rejecting user request');
+        return rejectWithValue('Error accepting user request');
+    }
+});
+
+
+export const fetchRemoveMember = createAsyncThunk<
+    void,
+    {companyId: string, userId: string},
+    {rejectValue: string}
+    >('companyProfile/fetchRemoveMember', async ({companyId, userId}, {rejectWithValue, dispatch}) => {
+        try {
+            await companyApi.removeCompanyMember(companyId, userId);
+            toast.success('Member removed');
+            dispatch(removeMember(userId));
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data.detail || 'Member was not found or deleted');
+                return rejectWithValue(error.response?.data.detail || 'Member was not found or deleted');
+            }
+            toast.error('Unknown error removing member');
+            return rejectWithValue('Error removing member');
+        }
+    }
+);
+
+export const fetchInviteUser = createAsyncThunk<
+    void,
+    {companyId: string, userEmail: string},
+    {rejectValue: string}
+>('companyProfile/fetchInviteUser', async ({companyId, userEmail}, {rejectWithValue}) => {
+    try {
+        await companyApi.inviteUser(companyId, userEmail);
+        toast.success('User invited');
+    } catch (error) {
+        if (error instanceof AxiosError ) {
+            const message = error.response?.data.detail || 'Error inviting user';
+            toast.error(message);
+            return rejectWithValue(message);
+        }
+        toast.error('Error inviting user');
+        return rejectWithValue('Error inviting user');
+    }
+});
+
 const companyProfileSlice = createSlice({
     name: 'companyProfile',
     initialState,
     reducers: {
-        
+        removeUserInvite: (state, action) => {
+            state.invites = state.invites.filter(user => user.id !== action.payload);
+        },
+        removeUserRequest: (state, action) => {
+            state.requests = state.requests.filter(user => user.id !== action.payload);
+        },
+        removeMember: (state, action) => {
+            state.members = state.members.filter(user => user.id !== action.payload);
+        }
     },
     extraReducers: builder => {
         builder.addCase(fetchCompanyById.pending, (state, _) => {
@@ -121,7 +262,20 @@ const companyProfileSlice = createSlice({
             state.loading = false;
             state.company = null;
         });
+
+        builder.addCase(fetchCompanyInvites.fulfilled, (state, action) => {
+            state.invites = action.payload;
+        });
+        
+        builder.addCase(fetchCompanyMembers.fulfilled, (state, action) => {
+            state.members = action.payload;
+        });
+
+        builder.addCase(fetchCompanyRequests.fulfilled, (state, action) => {
+            state.requests = action.payload;
+        });
     }
 });
 
+const { removeUserInvite, removeUserRequest, removeMember } = companyProfileSlice.actions;
 export default companyProfileSlice.reducer;

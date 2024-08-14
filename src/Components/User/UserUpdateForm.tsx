@@ -1,12 +1,12 @@
 import { ReactElement } from "react";
 import {Form as FinalForm} from "react-final-form";
-import { UserUpdate } from "../Types/UserType";
-import useAppDispatch from "../Store/hooks/dispatch";
-import { updateUser } from "../Store/thunks/users_thunk";
-import Input from "./Input";
-import UserFormProps from "../Types/UserFormProps";
+import { UserUpdate } from "../../Types/UserType";
+import useAppDispatch from "../../Store/hooks/dispatch";
+import { updateUser } from "../../Store/thunks/users_thunk";
+import Input from "../Input";
+import UserFormProps from "../../Types/UserFormProps";
 import { Link } from "react-router-dom";
-import { getUserProfilePath } from "../Utils/router";
+import { getUserProfilePath } from "../../Utils/router";
 
 
 const UserUpdateForm = ({user, onSubmitAdditionaly}: UserFormProps): ReactElement => {
