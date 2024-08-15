@@ -13,9 +13,10 @@ import CompanyInvites from "../Components/Company/CompanyInvites";
 import CompanyMembers from "../Components/Company/CompanyMembers";
 import CompanyRequests from "../Components/Company/CompanyRequests";
 import CompanyAdmins from "../Components/Company/CompanyAdmins";
+import QuizzForm from "../Components/Quizz/QuizzForm";
 
 type TabProps = {
-    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins';
+    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins' | 'quizzAdd';
 }
 
 const CompanyProfile = ({openedTab}: TabProps) => {
@@ -63,6 +64,10 @@ const CompanyProfile = ({openedTab}: TabProps) => {
             break;
         case 'admins':
             displayedTab = <CompanyAdmins company={company}/>
+            break;
+        case 'quizzAdd':
+            displayedTab = <QuizzForm/>
+            break;
     }
 
     return (

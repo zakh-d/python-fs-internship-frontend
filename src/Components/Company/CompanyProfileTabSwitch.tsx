@@ -1,9 +1,9 @@
 import { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyProfileAdminsPath, getCompanyRequestsPath } from "../../Utils/router";
+import { getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyProfileAdminsPath, getCompanyQuizzAddPath, getCompanyRequestsPath } from "../../Utils/router";
 
 export type PropsType = {
-    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins';
+    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins' | 'quizzAdd';
     isOwner: boolean;
     companyId: string;
 }
@@ -30,8 +30,11 @@ const CompanyProfileTabSwitch = ({openedTab, isOwner, companyId}: PropsType): Re
                  <li className="nav-item">
                     <Link to={getCompanyInvitesPath(companyId)} className={"nav-link" + (openedTab == 'invites' ? ' active' : '')}>Invites</Link>
                 </li>
-                  <li className="nav-item">
+                <li className="nav-item">
                     <Link to={getCompanyRequestsPath(companyId)} className={"nav-link" + (openedTab == 'requests' ? ' active' : '')}>Requests</Link>
+                </li>
+                <li className="nav-item">
+                    <Link to={getCompanyQuizzAddPath(companyId)} className={"nav-link" + (openedTab == 'requests' ? ' active' : '')}>Quizzes</Link>
                 </li>
               </>
                } 
