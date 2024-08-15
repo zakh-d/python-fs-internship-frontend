@@ -3,10 +3,13 @@ import QuestionInForm from "./QuestionInForm";
 import { useSelector } from "react-redux";
 import { selectQuizzBeingCreated } from "../../Store/selectors/quizzSelector";
 import useAppDispatch from "../../Store/hooks/dispatch";
-import { addEmptyQuestion, setQuizzDescription, setQuizzFrequency, setQuizzTitle } from "../../Store/quizzSlice";
+import { addEmptyQuestion, createQuizz, setQuizzDescription, setQuizzFrequency, setQuizzTitle } from "../../Store/quizzSlice";
+import { quizzCreateValidator } from "../../Utils/quizz_validator";
+import { toast } from "react-toastify";
+import Company from "../../Types/CompanyType";
 
 
-const QuizzForm = (): ReactElement => {
+const QuizzForm = ({company}: {company: Company}): ReactElement => {
     
     useEffect(() => {
         // window.onbeforeunload = () => "Unsaved changes will be lost. Are you sure you want to leave?";
@@ -21,7 +24,15 @@ const QuizzForm = (): ReactElement => {
     const quizz = useSelector(selectQuizzBeingCreated);
 
     return (
-        <div className="form">
+        <form className="form" onSubmit={(e) => {
+            e.preventDefault();
+            const error = quizzCreateValidator(quizz);
+            if (error) {
+                toast.error(error);
+                return;
+            }
+            dispatch(createQuizz(company.id));
+        }}>
             <div className="form-group">
                 <label className="form-label" htmlFor="title">Title</label>
                 <input className="form-control" type="text" id="title" name="title" value={quizz.title} onChange={(e) => {
@@ -54,7 +65,7 @@ const QuizzForm = (): ReactElement => {
             </div>
             <hr />
             <button className="btn btn-outline-primary">Submit</button>
-        </div>
+        </form>
     )
 }
 

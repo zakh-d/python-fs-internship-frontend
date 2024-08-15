@@ -1,6 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { QuizzCreate } from "../Types/QuizzTypes";
 import { toast } from "react-toastify";
+import quizzApi from "../Api/quizz-api";
+import { selectQuizzBeingCreated } from "./selectors/quizzSelector";
+import { RootState } from "./store";
+import { AxiosError } from "axios";
 
 type StateType = {
     quizzBeingCreated: QuizzCreate;
@@ -28,6 +32,26 @@ const initialState: StateType = {
         ],
     }
 }
+
+
+export const createQuizz = createAsyncThunk<
+void,
+string,
+{
+    rejectValue: string
+}
+>('quizz/createQuizz', async (companyId: string, {rejectWithValue, getState}) => {
+    try {
+        const quizz = selectQuizzBeingCreated(getState() as RootState);
+        await quizzApi.createQuizz(quizz, companyId);
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error creating quizz');
+        }
+        return rejectWithValue('Error creating quizz');
+    }
+});
 
 const quizzSlice = createSlice({
     name: "quizz",

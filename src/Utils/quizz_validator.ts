@@ -14,15 +14,16 @@ export const quizzCreateValidator = (quizz: QuizzCreate): string | null => {
         return 'Questions are required';
     }
 
-    if (quizz.questions.filter((question) => question.answers.length < 2)) {
+    if (quizz.questions.filter((question) => question.answers.length < 2).length > 0) {
+        console.log(quizz.questions.filter((question) => question.answers.length < 2))
         return 'Questions must have at least 2 answers';
     }
 
-    if (quizz.questions.filter((question) => question.answers.length > 4)) {
+    if (quizz.questions.filter((question) => question.answers.length > 4).length > 0) {
         return 'Questions must have at most 4 answers';
     }
 
-    if (quizz.questions.filter((question) => question.answers.filter((answer) => answer.is_correct).length < 1)) {
+    if (quizz.questions.filter((question) => question.answers.filter((answer) => answer.is_correct).length < 1).length > 0) {
         return 'Questions must have exactly at least correct answer';
     }
 

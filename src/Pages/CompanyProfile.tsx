@@ -66,7 +66,7 @@ const CompanyProfile = ({openedTab}: TabProps) => {
             displayedTab = <CompanyAdmins company={company}/>
             break;
         case 'quizzAdd':
-            displayedTab = <QuizzForm/>
+            displayedTab = <QuizzForm company={company}/>
             break;
     }
 

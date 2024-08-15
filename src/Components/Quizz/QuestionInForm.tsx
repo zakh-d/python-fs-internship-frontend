@@ -15,13 +15,13 @@ const QuestionInForm = ({question, index, removable}: {question: QuestionCreate,
                 </div>
                 <input className="form-control" type="text" id={`question_text_${index}`} value={question.text} onChange={(e) => {
                     dispatch(setQuestionText({questionIndex: index, text: e.target.value}));
-                }} placeholder={'Question text'}/>
+                }} placeholder={'Question text'} required/>
                 {removable && <button className="btn btn-danger" type="button" onClick={() => {
                     dispatch(removeQuestion(index));
                 }}>Remove</button>}
             </div>
-            <div className="form-group">
-                <span className="h3 me-4">Answers</span>
+            <div className="form-group p-4">
+                
                 {question.answers.map((answer, i) => <AnswerInForm answer={answer} questionIndex={index} index={i} removable={question.answers.length > 2}/>)}
                 
                 {question.answers.length < 4 && <button className="btn btn-secondary" type="button" onClick={() => {

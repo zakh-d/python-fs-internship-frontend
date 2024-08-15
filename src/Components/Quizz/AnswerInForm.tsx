@@ -17,7 +17,7 @@ const AnswerInForm = ({ answer, questionIndex, index, removable }: {answer: Answ
             </div>
             <input type="text" className="form-control" value={answer.text} onChange={(e) => {
                 dispatch(setAnswerText({questionIndex, answerIndex: index, text: e.target.value}));
-            }} aria-label="Text input with checkbox" placeholder={`Option ${index + 1}`}/>
+            }} aria-label="Text input with checkbox" placeholder={`Option ${index + 1}`} required/>
             {removable && <button className="btn btn-outline-danger" type="button" onClick={() => {
                 dispatch(removeAnswer({questionIndex, answerIndex: index}));
             }}>Remove</button>}
