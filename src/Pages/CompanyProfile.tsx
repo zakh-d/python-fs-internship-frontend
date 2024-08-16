@@ -13,10 +13,11 @@ import CompanyInvites from "../Components/Company/CompanyInvites";
 import CompanyMembers from "../Components/Company/CompanyMembers";
 import CompanyRequests from "../Components/Company/CompanyRequests";
 import CompanyAdmins from "../Components/Company/CompanyAdmins";
+import CompanyQuizzes from "../Components/Company/CompanyQuizzes";
 import QuizzForm from "../Components/Quizz/QuizzForm";
 
 type TabProps = {
-    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins' | 'quizzAdd';
+    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins' | 'quizzes' | 'quizzAdd';
 }
 
 const CompanyProfile = ({openedTab}: TabProps) => {
@@ -30,6 +31,7 @@ const CompanyProfile = ({openedTab}: TabProps) => {
 
     useEffect(() => {
         if (!companyId) return;
+        if (company && company.id === companyId) return;
         dispatch(fetchCompanyById(companyId));
     }, [companyId])
 
@@ -65,6 +67,9 @@ const CompanyProfile = ({openedTab}: TabProps) => {
         case 'admins':
             displayedTab = <CompanyAdmins company={company}/>
             break;
+        case 'quizzes':
+            displayedTab = <CompanyQuizzes company={company}/>
+            break;
         case 'quizzAdd':
             displayedTab = <QuizzForm company={company}/>
             break;
@@ -73,7 +78,7 @@ const CompanyProfile = ({openedTab}: TabProps) => {
     return (
         <div className="container">
             
-            <CompanyProfileTabSwitch openedTab={openedTab} isOwner={isOwer} companyId={companyId || ''}/>
+            <CompanyProfileTabSwitch isOwner={isOwer} companyId={companyId || ''}/>
             {displayedTab}
        </div>
     );

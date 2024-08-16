@@ -39,17 +39,24 @@ const Pagination = ({totalItems, itemsPerPage, onPageChange}: PaginationProps): 
             <ul className="pagination">
                 {paginationLinks}
             </ul>
-            <span>Items per page: </span>
-            <input type="number"  value={itemsPerPageValue} onChange={(e) => {
-                if (parseInt(e.target.value) < 1) {
+            <div className="input-group" style={{width: 250}}>
+
+            <span className="input-group-text">Items per page: </span>
+            <input className="form-control" style={{width: 100}} type="number"  value={itemsPerPageValue} onChange={(e) => {
+                const n = parseInt(e.target.value);
+                if (n < 1) {
                     return;
                 }
-                if (parseInt(e.target.value) > 25) {
+                if (n > 25) {
                     return;
                 }
-                setItemsPerPageValue(parseInt(e.target.value));
+                setItemsPerPageValue(n);
+                if (isNaN(n)) {
+                    return;
+                }
                 onPageChange(currentPage, parseInt(e.target.value));
             }}/>
+            </div>
         </div>
     )
 }

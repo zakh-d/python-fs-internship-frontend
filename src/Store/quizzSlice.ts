@@ -1,13 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { QuizzCreate } from "../Types/QuizzTypes";
+import { Quizz, QuizzCreate, QuizzWithoutQuestions } from "../Types/QuizzTypes";
 import { toast } from "react-toastify";
 import quizzApi from "../Api/quizz-api";
 import { selectQuizzBeingCreated } from "./selectors/quizzSelector";
 import { RootState } from "./store";
 import { AxiosError } from "axios";
+import { customNavigator } from "../Utils/_helper";
+import { getCompanyQuizzPath } from "../Utils/router";
+import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
 
 type StateType = {
     quizzBeingCreated: QuizzCreate;
+    quizzList: QuizzWithoutQuestions[];
+    quizzTotalCount: number;
 }
 
 const initialState: StateType = {
@@ -30,7 +35,9 @@ const initialState: StateType = {
                 ]
             }
         ],
-    }
+    },
+    quizzList: [],
+    quizzTotalCount: 0
 }
 
 
@@ -40,11 +47,15 @@ string,
 {
     rejectValue: string
 }
->('quizz/createQuizz', async (companyId: string, {rejectWithValue, getState}) => {
+>('quizz/createQuizz', async (companyId: string, {rejectWithValue, getState, dispatch}) => {
+    dispatch(pageStartedLoading());
     try {
         const quizz = selectQuizzBeingCreated(getState() as RootState);
         await quizzApi.createQuizz(quizz, companyId);
+        dispatch(pageFinishedLoading());
+        customNavigator.navigate?.(getCompanyQuizzPath(companyId));
     } catch (e) {
+        dispatch(pageFinishedLoading());
         if (e instanceof AxiosError) {
             e.response?.data.detail && toast.error(e.response.data.detail);
             return rejectWithValue('Error creating quizz');
@@ -53,10 +64,78 @@ string,
     }
 });
 
+export const getQuizz = createAsyncThunk<
+Quizz,
+string,
+{
+    rejectValue: string
+}
+>('quizz/getQuizz', async (quizzId: string, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.getQuizz(quizzId);
+        return response.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error getting quizz');
+        }
+        return rejectWithValue('Error getting quizz');
+    }
+});
+
+export const getCompanyQuizzes = createAsyncThunk<
+{quizzes: Quizz[],
+total_count: number
+},
+{
+    companyId: string,
+    page: number,
+    itemsPerPage: number
+},
+{
+    rejectValue: string
+}>('quizz/getCompanyQuizzes', async ({companyId, page, itemsPerPage}, {rejectWithValue, dispatch}) => {
+    dispatch(pageStartedLoading());
+    try {
+        const response = await quizzApi.getCompanyQuizzes(companyId, itemsPerPage, page);
+        dispatch(pageFinishedLoading());
+        return response.data;
+    } catch (e) {
+        dispatch(pageFinishedLoading());
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error getting quizzes');
+        }
+        return rejectWithValue('Error getting quizzes');
+    }
+});
+
 const quizzSlice = createSlice({
     name: "quizz",
     initialState,
     reducers: {
+        clearQuizzForm: (state) => {
+            state.quizzBeingCreated = {
+                title: '',
+                description: '',
+                frequency: 0,
+                questions: [
+                    {
+                        text: "",
+                        answers: [
+                            {
+                                text: "",
+                                is_correct: true
+                            },
+                            {
+                                text: "",
+                                is_correct: false
+                            }
+                        ]
+                    }
+                ],
+            };
+        },
         addEmptyQuestion: (state) => {
             state.quizzBeingCreated.questions.push({text: '', answers: [
                 {
@@ -120,6 +199,12 @@ const quizzSlice = createSlice({
             state.quizzBeingCreated.questions[action.payload.questionIndex].answers[action.payload.answerIndex].is_correct = action.payload.isCorrect;
         },
     },
+    extraReducers: builder => {
+        builder.addCase(getCompanyQuizzes.fulfilled, (state, action) => {
+            state.quizzList = action.payload.quizzes;
+            state.quizzTotalCount = action.payload.total_count;
+        });
+    }
 });
 
 export const { 
@@ -132,6 +217,7 @@ export const {
     setQuizzFrequency,
     setQuizzTitle,
     removeAnswer,
-    removeQuestion
+    removeQuestion,
+    clearQuizzForm
 } = quizzSlice.actions;
 export default quizzSlice.reducer;
