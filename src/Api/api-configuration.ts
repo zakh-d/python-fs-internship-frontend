@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { API_HOST } from "../Config/config";
+import store from "../Store/store";
+import { eraseAuthInfo } from "../Store/authSlice";
 
 const apiBase: AxiosInstance = axios.create({
     baseURL: 'http://' + API_HOST + '/',
@@ -14,6 +16,19 @@ apiBase.interceptors.request.use(
         return config;
     },
     error => {
+        return Promise.reject(error);
+    }
+);
+
+apiBase.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        if (error.response.status === 401) {
+            localStorage.removeItem('token');
+            store.dispatch(eraseAuthInfo());
+        }
         return Promise.reject(error);
     }
 );

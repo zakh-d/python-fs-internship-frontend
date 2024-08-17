@@ -10,6 +10,7 @@ import UserAuthorization from "../Pages/UserAuthorization";
 import UserRegistration from "../Pages/UserRegistration";
 import UserInvites from "../Components/User/UserInvites";
 import UserRequests from "../Components/User/UserRequests";
+import QuizzEditPage from "../Pages/QuizzEditPage";
 
 
 
@@ -46,6 +47,10 @@ export const getCompanyRequestsPath = (companyId: string) => COMPANY_PROFILE_REQ
 export const getCompanyQuizzPath = (companyId: string) => COMPANY_PROFILE_QUIZZ_PATH.replace(":companyId", companyId);
 export const getCompanyQuizzAddPath = (companyId: string) => COMPANY_PROFILE_QUIZZ_ADD_PATH.replace(":companyId", companyId);
 
+
+const QUIZZ_PATH = "/quizz/:quizzId";
+
+export const getQuizzPath = (quizzId: string) => QUIZZ_PATH.replace(":quizzId", quizzId);
 
 const LOGIN_PATH = "/login";
 const REGISTER_PATH = "/register";
@@ -130,6 +135,10 @@ const router = createBrowserRouter([
             {
                 path: COMPANY_PROFILE_QUIZZ_ADD_PATH,
                 element: <CompanyProfile openedTab="quizzAdd"/>
+            },
+            {
+                path: QUIZZ_PATH,
+                element: <QuizzEditPage/>
             },
             {
                 path: LOGIN_PATH,

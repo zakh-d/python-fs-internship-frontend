@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Quizz, QuizzCreate, QuizzWithoutQuestions } from "../Types/QuizzTypes";
+import { AnswerCreate, Quizz, QuizzCreate, QuizzWithoutQuestions } from "../Types/QuizzTypes";
 import { toast } from "react-toastify";
 import quizzApi from "../Api/quizz-api";
 import { selectQuizzBeingCreated } from "./selectors/quizzSelector";
@@ -9,10 +9,12 @@ import { customNavigator } from "../Utils/_helper";
 import { getCompanyQuizzPath } from "../Utils/router";
 import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
 
+
 type StateType = {
     quizzBeingCreated: QuizzCreate;
     quizzList: QuizzWithoutQuestions[];
     quizzTotalCount: number;
+    quizzBeingEdited: Quizz | null;
 }
 
 const initialState: StateType = {
@@ -37,7 +39,8 @@ const initialState: StateType = {
         ],
     },
     quizzList: [],
-    quizzTotalCount: 0
+    quizzTotalCount: 0,
+    quizzBeingEdited: null,
 }
 
 
@@ -64,7 +67,7 @@ string,
     }
 });
 
-export const getQuizz = createAsyncThunk<
+export const fetchQuizzWithCorrectAnswers = createAsyncThunk<
 Quizz,
 string,
 {
@@ -72,7 +75,7 @@ string,
 }
 >('quizz/getQuizz', async (quizzId: string, {rejectWithValue}) => {
     try {
-        const response = await quizzApi.getQuizz(quizzId);
+        const response = await quizzApi.getQuizzWithCorrectAnswers(quizzId);
         return response.data;
     } catch (e) {
         if (e instanceof AxiosError) {
@@ -110,6 +113,113 @@ total_count: number
     }
 });
 
+export const updateQuestion = createAsyncThunk<
+Quizz,
+{
+    quizzId: string,
+    questionId: string,
+    text: string
+},
+{
+    rejectValue: string
+}>('quizz/updateQuestion', async ({quizzId, questionId, text}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.updateQuestion(quizzId, questionId, text);
+        return response.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error updating question');
+        }
+        return rejectWithValue('Error updating question');
+    }
+});
+
+export const deleteQuestion = createAsyncThunk<
+Quizz,
+{
+    quizzId: string,
+    questionId: string
+},
+{
+    rejectValue: string
+}>('quizz/deleteQuestion', async ({quizzId, questionId}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.deleteQuestion(quizzId, questionId);
+        return response.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error deleting question');
+        }
+        return rejectWithValue('Error deleting question');
+    }
+});
+
+export const updateAnswer = createAsyncThunk<
+Quizz,
+AnswerCreate & {
+    quizzId: string,
+    answerId: string
+},
+{
+    rejectValue: string
+}>('quizz/updateAnswer', async ({quizzId, answerId, text, is_correct}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.updateAnswer(quizzId, answerId, {text, is_correct});
+        return response.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error updating answer');
+        }
+        return rejectWithValue('Error updating answer');
+    }
+});
+
+export const fetchDeleteAnswer = createAsyncThunk<
+Quizz,
+{
+    quizzId: string,
+    answerId: string
+},
+{
+    rejectValue: string
+}>('quizz/deleteAnswer', async ({quizzId, answerId}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.deleteAnswer(quizzId,  answerId);
+        return response.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error deleting answer');
+        }
+        return rejectWithValue('Error deleting answer');
+    }
+});
+
+export const fetchAddAnswer = createAsyncThunk<
+Quizz,
+{
+    quizzId: string,
+    questionId: string,
+    answerData: AnswerCreate
+},
+{
+    rejectValue: string
+}>('quizz/addAnswer', async ({quizzId, questionId, answerData}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.addAnswerToQuestion(quizzId, questionId, answerData);
+        return response.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error adding answer');
+        }
+        return rejectWithValue('Error adding answer');
+    }
+});
+
 const quizzSlice = createSlice({
     name: "quizz",
     initialState,
@@ -135,6 +245,9 @@ const quizzSlice = createSlice({
                     }
                 ],
             };
+        },
+        clearCurrentQuizz: (state) => {
+            state.quizzBeingEdited = null;
         },
         addEmptyQuestion: (state) => {
             state.quizzBeingCreated.questions.push({text: '', answers: [
@@ -198,11 +311,56 @@ const quizzSlice = createSlice({
             ) return;
             state.quizzBeingCreated.questions[action.payload.questionIndex].answers[action.payload.answerIndex].is_correct = action.payload.isCorrect;
         },
+        setEditingQuizzTitle: (state, action: {payload: string}) => {
+            if (!state.quizzBeingEdited) return;
+            state.quizzBeingEdited.title = action.payload;
+        },
+        setEditingQuizzDescription: (state, action: {payload: string}) => {
+            if (!state.quizzBeingEdited) return;
+            state.quizzBeingEdited.description = action.payload;
+        },
+        setEditingQuizzFrequency: (state, action: {payload: number}) => {
+            if (!state.quizzBeingEdited) return;
+            state.quizzBeingEdited.frequency = action.payload;
+        },
+        setEditingQuestionText: (state, action: {payload: {questionIndex: number, text: string}}) => {
+            if (!state.quizzBeingEdited) return;
+            state.quizzBeingEdited.questions[action.payload.questionIndex].text = action.payload.text;
+        },
+        setEditingAnswerText: (state, action: {payload: {questionIndex: number, answerIndex: number, text: string}}) => {
+            if (!state.quizzBeingEdited) return;
+            state.quizzBeingEdited.questions[action.payload.questionIndex].answers[action.payload.answerIndex].text = action.payload.text;
+        },
     },
     extraReducers: builder => {
+
         builder.addCase(getCompanyQuizzes.fulfilled, (state, action) => {
             state.quizzList = action.payload.quizzes;
             state.quizzTotalCount = action.payload.total_count;
+        });
+
+        builder.addCase(fetchQuizzWithCorrectAnswers.fulfilled, (state, action) => {
+            state.quizzBeingEdited = action.payload;
+        });
+
+        builder.addCase(updateQuestion.fulfilled, (state, action) => {
+            state.quizzBeingEdited = action.payload;
+        });
+
+        builder.addCase(updateAnswer.fulfilled, (state, action) => {
+            state.quizzBeingEdited = action.payload;
+        });
+
+        builder.addCase(deleteQuestion.fulfilled, (state, action) => {
+            state.quizzBeingEdited = action.payload;
+        });
+
+        builder.addCase(fetchAddAnswer.fulfilled, (state, action) => {
+            state.quizzBeingEdited = action.payload;
+        });
+
+        builder.addCase(fetchDeleteAnswer.fulfilled, (state, action) => {
+            state.quizzBeingEdited = action.payload;
         });
     }
 });
@@ -218,6 +376,12 @@ export const {
     setQuizzTitle,
     removeAnswer,
     removeQuestion,
-    clearQuizzForm
+    clearQuizzForm,
+    clearCurrentQuizz,
+    setEditingAnswerText,
+    setEditingQuizzDescription,
+    setEditingQuizzFrequency,
+    setEditingQuizzTitle,
+    setEditingQuestionText
 } = quizzSlice.actions;
 export default quizzSlice.reducer;
