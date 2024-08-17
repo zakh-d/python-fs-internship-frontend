@@ -32,11 +32,11 @@ const CompanyProfileTabSwitch = ({isOwner, companyId}: PropsType): ReactElement 
                 <li className="nav-item">
                     <NavLink to={getCompanyRequestsPath(companyId)} className={"nav-link"}>Requests</NavLink>
                 </li>
+              </>
+               } 
                 <li className="nav-item">
                     <NavLink to={getCompanyQuizzPath(companyId)} className={"nav-link"}>Quizzes</NavLink>
                 </li>
-              </>
-               } 
             </ul>
         
 

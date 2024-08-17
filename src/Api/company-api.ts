@@ -10,6 +10,9 @@ const companyApi = {
     getCompanyById: async (id: string) => {
         return await apiBase.get(`/companies/${id}`);
     },
+    getMyRoleInCompany: async (id: string) => {
+        return await apiBase.get(`/companies/${id}/role/`);
+    },
     updateCompany: async (id: string, values: {name: string, description: string, hidden: boolean}) => {
         return await apiBase.put(`/companies/${id}`, values);
     },
