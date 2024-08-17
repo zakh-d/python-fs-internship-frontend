@@ -241,6 +241,31 @@ Quizz,
     }
 });
 
+export const fetchDeleteQuizz = createAsyncThunk<
+{
+    quizzId: string
+},
+{
+    quizzId: string
+},
+{
+    rejectValue: string
+}>('quizz/deleteQuizz', async ({quizzId}, {rejectWithValue, dispatch}) => {
+    dispatch(pageStartedLoading());
+    try {
+        await quizzApi.deleteQuizz(quizzId);
+        dispatch(pageFinishedLoading());
+        return {quizzId};
+    } catch (e) {
+        dispatch(pageFinishedLoading());
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error deleting quizz');
+        }
+        return rejectWithValue('Error deleting quizz');
+    }
+});
+
 const quizzSlice = createSlice({
     name: "quizz",
     initialState,
@@ -437,6 +462,10 @@ const quizzSlice = createSlice({
 
         builder.addCase(fetchAddQuestion.fulfilled, (state, action) => {
             state.quizzBeingEdited = action.payload;
+        });
+
+        builder.addCase(fetchDeleteQuizz.fulfilled, (state, action) => {
+            state.quizzList = state.quizzList.filter(quizz => quizz.id !== action.payload.quizzId);
         });
     }
 });
