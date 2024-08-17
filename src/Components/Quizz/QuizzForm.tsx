@@ -3,7 +3,7 @@ import QuestionInForm from "./QuestionInForm";
 import { useSelector } from "react-redux";
 import { selectQuizzBeingCreated } from "../../Store/selectors/quizzSelector";
 import useAppDispatch from "../../Store/hooks/dispatch";
-import { addEmptyQuestion, clearQuizzForm, createQuizz, setQuizzDescription, setQuizzFrequency, setQuizzTitle } from "../../Store/quizzSlice";
+import { addEmptyQuestion, clearQuizzForm, fetchCreateQuizz, setQuizzDescription, setQuizzFrequency, setQuizzTitle } from "../../Store/quizzSlice";
 import { quizzCreateValidator } from "../../Utils/quizz_validator";
 import { toast } from "react-toastify";
 import Company from "../../Types/CompanyType";
@@ -12,7 +12,7 @@ import Company from "../../Types/CompanyType";
 const QuizzForm = ({company}: {company: Company}): ReactElement => {
     
     const dispatch = useAppDispatch();
-    
+
     useEffect(() => {
         window.onbeforeunload = () => "Unsaved changes will be lost. Are you sure you want to leave?";
         dispatch(clearQuizzForm());
@@ -32,7 +32,7 @@ const QuizzForm = ({company}: {company: Company}): ReactElement => {
                 toast.error(error);
                 return;
             }
-            dispatch(createQuizz(company.id));
+            dispatch(fetchCreateQuizz(company.id));
         }}>
             <div className="form-group">
                 <label className="form-label" htmlFor="title">Title</label>

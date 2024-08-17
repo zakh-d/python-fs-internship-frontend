@@ -44,7 +44,7 @@ const initialState: StateType = {
 }
 
 
-export const createQuizz = createAsyncThunk<
+export const fetchCreateQuizz = createAsyncThunk<
 void,
 string,
 {
@@ -86,7 +86,7 @@ string,
     }
 });
 
-export const getCompanyQuizzes = createAsyncThunk<
+export const fetchCompanyQuizzes = createAsyncThunk<
 {quizzes: Quizz[],
 total_count: number
 },
@@ -113,7 +113,7 @@ total_count: number
     }
 });
 
-export const updateQuestion = createAsyncThunk<
+export const fetchUpdateQuestion = createAsyncThunk<
 Quizz,
 {
     quizzId: string,
@@ -135,7 +135,7 @@ Quizz,
     }
 });
 
-export const deleteQuestion = createAsyncThunk<
+export const fetchDeleteQuestion = createAsyncThunk<
 Quizz,
 {
     quizzId: string,
@@ -156,7 +156,7 @@ Quizz,
     }
 });
 
-export const updateAnswer = createAsyncThunk<
+export const fetchUpdateAnswer = createAsyncThunk<
 Quizz,
 AnswerCreate & {
     quizzId: string,
@@ -334,7 +334,7 @@ const quizzSlice = createSlice({
     },
     extraReducers: builder => {
 
-        builder.addCase(getCompanyQuizzes.fulfilled, (state, action) => {
+        builder.addCase(fetchCompanyQuizzes.fulfilled, (state, action) => {
             state.quizzList = action.payload.quizzes;
             state.quizzTotalCount = action.payload.total_count;
         });
@@ -343,15 +343,15 @@ const quizzSlice = createSlice({
             state.quizzBeingEdited = action.payload;
         });
 
-        builder.addCase(updateQuestion.fulfilled, (state, action) => {
+        builder.addCase(fetchUpdateQuestion.fulfilled, (state, action) => {
             state.quizzBeingEdited = action.payload;
         });
 
-        builder.addCase(updateAnswer.fulfilled, (state, action) => {
+        builder.addCase(fetchUpdateAnswer.fulfilled, (state, action) => {
             state.quizzBeingEdited = action.payload;
         });
 
-        builder.addCase(deleteQuestion.fulfilled, (state, action) => {
+        builder.addCase(fetchDeleteQuestion.fulfilled, (state, action) => {
             state.quizzBeingEdited = action.payload;
         });
 

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { selectQuizzList, selectQuizzTotalCount } from "../../Store/selectors/quizzSelector";
 import useAppDispatch from "../../Store/hooks/dispatch";
 import Company from "../../Types/CompanyType";
-import { getCompanyQuizzes } from "../../Store/quizzSlice";
+import { fetchCompanyQuizzes } from "../../Store/quizzSlice";
 import QuizzCardList from "../Quizz/QuizzCardList";
 import Pagination from "../Pagination";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ const CompanyQuizzes = ({company}: {company: Company}): ReactElement => {
     const totalCount = useSelector(selectQuizzTotalCount);
 
     useEffect(() => {
-        dispatch(getCompanyQuizzes({companyId: company.id, page: 1, itemsPerPage: 5}));
+        dispatch(fetchCompanyQuizzes({companyId: company.id, page: 1, itemsPerPage: 5}));
     }, [company.id]);
 
     return (
@@ -25,7 +25,7 @@ const CompanyQuizzes = ({company}: {company: Company}): ReactElement => {
         <QuizzCardList quizzes={quizzes}/>
         <br />
         <Pagination totalItems={totalCount} itemsPerPage={5} onPageChange={function (page: number, itemsPerPage: number): void {
-            dispatch(getCompanyQuizzes({companyId: company.id, page: page, itemsPerPage: itemsPerPage}));
+            dispatch(fetchCompanyQuizzes({companyId: company.id, page: page, itemsPerPage: itemsPerPage}));
         }}/>
     </div>
     )

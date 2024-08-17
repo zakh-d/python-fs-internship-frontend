@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { Question } from "../../Types/QuizzTypes";
 import useAppDispatch from "../../Store/hooks/dispatch";
-import { deleteQuestion, fetchAddAnswer, setEditingQuestionText, updateQuestion} from "../../Store/quizzSlice";
+import { fetchDeleteQuestion, fetchAddAnswer, setEditingQuestionText, fetchUpdateQuestion} from "../../Store/quizzSlice";
 import SwitchInput from "./SwitchInput";
 import AnswerEdit from "./AnswerEdit";
 
@@ -17,10 +17,10 @@ const QuestionInForm = ({question, index, removable, quizzId}: {question: Questi
                 <SwitchInput value={question.text} changeHandler={(value) => {
                     dispatch(setEditingQuestionText({questionIndex: index, text: value}));
                 }} save={() => {
-                    dispatch(updateQuestion({quizzId: quizzId, questionId: question.id, text: question.text}));
+                    dispatch(fetchUpdateQuestion({quizzId: quizzId, questionId: question.id, text: question.text}));
                 }}/>
                 {removable && <button className="btn btn-danger" type="button" onClick={() => {
-                    dispatch(deleteQuestion({quizzId, questionId: question.id}));
+                    dispatch(fetchDeleteQuestion({quizzId, questionId: question.id}));
                 }}>Delete</button>}
             </div>
             <div className="form-group p-4">
