@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AnswerCreate, Quizz, QuizzCreate, QuizzWithoutQuestions } from "../Types/QuizzTypes";
+import { AnswerCreate, QuestionCreate, Quizz, QuizzCreate, QuizzWithoutQuestions } from "../Types/QuizzTypes";
 import { toast } from "react-toastify";
 import quizzApi from "../Api/quizz-api";
 import { selectQuizzBeingCreated } from "./selectors/quizzSelector";
@@ -220,6 +220,27 @@ Quizz,
     }
 });
 
+export const fetchAddQuestion = createAsyncThunk<
+Quizz,
+{
+    quizzId: string,
+    questionData: QuestionCreate
+},
+{
+    rejectValue: string
+}>('quizz/addQuestion', async ({quizzId, questionData}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.addQuestionToQuizz(quizzId, questionData);
+        return response.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error adding question');
+        }
+        return rejectWithValue('Error adding question');
+    }
+});
+
 const quizzSlice = createSlice({
     name: "quizz",
     initialState,
@@ -331,6 +352,57 @@ const quizzSlice = createSlice({
             if (!state.quizzBeingEdited) return;
             state.quizzBeingEdited.questions[action.payload.questionIndex].answers[action.payload.answerIndex].text = action.payload.text;
         },
+        setEditingAnswerCorrect: (state, action: {payload: {questionIndex: number, answerIndex: number, isCorrect: boolean}}) => {
+            if (!state.quizzBeingEdited) return;
+            if (
+                !action.payload.isCorrect 
+                && state.quizzBeingEdited.questions[action.payload.questionIndex].answers.filter(answer => answer.is_correct).length === 1
+            ) return;
+            state.quizzBeingEdited.questions[action.payload.questionIndex].answers[action.payload.answerIndex].is_correct = action.payload.isCorrect;
+        },
+        addEditingEmptyAnswer: (state, action: {payload: {questionIndex: number}}) => {
+            if (!state.quizzBeingEdited) return;
+            if (state.quizzBeingEdited?.questions[action.payload.questionIndex].answers.length >= 4) {
+                return;
+            }
+            state.quizzBeingEdited?.questions[action.payload.questionIndex].answers.push({id: '', text: '', is_correct: false});
+        },
+        removeEditingAnswer: (state, action: {payload: {questionIndex: number, answerIndex: number}}) => {
+            if (!state.quizzBeingEdited) return;
+            if (state.quizzBeingEdited.questions[action.payload.questionIndex].answers.length <= 2) {
+                return;
+            }
+
+            if (state.quizzBeingEdited.questions[action.payload.questionIndex].answers.filter(answer => answer.is_correct).length === 1
+                && state.quizzBeingEdited.questions[action.payload.questionIndex].answers[action.payload.answerIndex].is_correct) {
+                toast.error('Cannot remove the only correct answer');
+                return;
+            }
+            state.quizzBeingEdited.questions[action.payload.questionIndex].answers.splice(action.payload.answerIndex, 1);
+        },
+        addNewQuestion: (state) => {
+            state.quizzBeingEdited?.questions.push({
+                text: '',
+                answers: [
+                    {
+                        text: '',
+                        is_correct: true,
+                        id: "new_answer"
+                    },
+                    {
+                        text: '',
+                        is_correct: false,
+                        id: "new_answer"
+                    }
+                ],
+                id: "new_question"
+            });
+        },
+        removeUnsavedQuestion: (state) => {
+            if (!state.quizzBeingEdited) return;
+
+            state.quizzBeingEdited.questions = state.quizzBeingEdited.questions.filter(question => question.id !== 'new_question');
+        }
     },
     extraReducers: builder => {
 
@@ -362,6 +434,10 @@ const quizzSlice = createSlice({
         builder.addCase(fetchDeleteAnswer.fulfilled, (state, action) => {
             state.quizzBeingEdited = action.payload;
         });
+
+        builder.addCase(fetchAddQuestion.fulfilled, (state, action) => {
+            state.quizzBeingEdited = action.payload;
+        });
     }
 });
 
@@ -379,9 +455,14 @@ export const {
     clearQuizzForm,
     clearCurrentQuizz,
     setEditingAnswerText,
+    setEditingAnswerCorrect,
     setEditingQuizzDescription,
     setEditingQuizzFrequency,
     setEditingQuizzTitle,
-    setEditingQuestionText
+    setEditingQuestionText,
+    addNewQuestion,
+    addEditingEmptyAnswer,
+    removeEditingAnswer,
+    removeUnsavedQuestion
 } = quizzSlice.actions;
 export default quizzSlice.reducer;

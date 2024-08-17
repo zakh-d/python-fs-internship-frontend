@@ -1,4 +1,4 @@
-import { AnswerCreate, QuizzCreate } from "../Types/QuizzTypes";
+import { AnswerCreate, QuestionCreate, QuizzCreate } from "../Types/QuizzTypes";
 import apiBase from "./api-configuration";
 
 const quizzApi = {
@@ -22,6 +22,9 @@ const quizzApi = {
     },
     addAnswerToQuestion: async (quizzId: string, questionId: string, answerData: AnswerCreate) => {
         return await apiBase.post(`/quizzes/${quizzId}/question/${questionId}/answer/`, answerData);
+    },
+    addQuestionToQuizz: async (quizzId: string, question: QuestionCreate) => {
+        return await apiBase.post(`/quizzes/${quizzId}/question/`, question);
     },
     deleteQuizz: async (quizzId: string) => {
         return await apiBase.delete(`/quizzes/${quizzId}/`);
