@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AnswerCreate, QuestionCreate, Quizz, QuizzCreate, QuizzWithoutQuestions } from "../Types/QuizzTypes";
+import { AnswerCreate, QuestionCreate, Quizz, QuizzCreate, QuizzUpdateType, QuizzWithoutQuestions } from "../Types/QuizzTypes";
 import { toast } from "react-toastify";
 import quizzApi from "../Api/quizz-api";
 import { selectQuizzBeingCreated } from "./selectors/quizzSelector";
@@ -266,6 +266,27 @@ export const fetchDeleteQuizz = createAsyncThunk<
     }
 });
 
+export const fetchUpdateQuizz = createAsyncThunk<
+Quizz,
+{
+    quizzId: string,
+    data: QuizzUpdateType
+},
+{
+    rejectValue: string
+}>('quizz/updateQuizz', async ({quizzId, data}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.updateQuizz(quizzId, data);
+        return response.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            e.response?.data.detail && toast.error(e.response.data.detail);
+            return rejectWithValue('Error updating quizz');
+        }
+        return rejectWithValue('Error updating quizz');
+    }
+});
+
 const quizzSlice = createSlice({
     name: "quizz",
     initialState,
@@ -466,6 +487,13 @@ const quizzSlice = createSlice({
 
         builder.addCase(fetchDeleteQuizz.fulfilled, (state, action) => {
             state.quizzList = state.quizzList.filter(quizz => quizz.id !== action.payload.quizzId);
+        });
+
+        builder.addCase(fetchUpdateQuizz.fulfilled, (state, action) => {
+            state.quizzBeingEdited = {
+                ...state.quizzBeingEdited,
+                ...action.payload
+            };
         });
     }
 });

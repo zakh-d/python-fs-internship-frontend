@@ -4,31 +4,43 @@ import SwitchInput from "./SwitchInput";
 import SwitchTextArea from "./SwitchTextArea";
 import QuestionEdit from "./QuestionEdit";
 import useAppDispatch from "../../Store/hooks/dispatch";
-import { addNewQuestion } from "../../Store/quizzSlice";
+import { addNewQuestion, fetchUpdateQuizz, setEditingQuizzDescription, setEditingQuizzFrequency, setEditingQuizzTitle } from "../../Store/quizzSlice";
 import UnsavedQuestion from "./UnsavedQuestion";
 
 const QuizzEdit = ({quizz}: {quizz: Quizz}): ReactElement => {
 
     const dispatch = useAppDispatch();
 
+    const saveQuizz = () => {
+        dispatch(fetchUpdateQuizz({
+            quizzId: quizz.id,
+            data: {
+                title: quizz.title,
+                description: quizz.description,
+                frequency: quizz.frequency
+            }
+        }));
+    }
+
     return (
         <div>
-            <p className="text-muted">Double click on value to start editing</p>
             <div className="input-group mb-2">
                 <label className="input-group-text" style={{width: 150}}>Title</label>
-                <SwitchInput value={quizz.title} changeHandler={(value) => console.log(value)} save={() => {
-
-                }}/>
+                <SwitchInput value={quizz.title} changeHandler={(value) => {
+                    dispatch(setEditingQuizzTitle(value));
+                }} save={() => saveQuizz()}/>
             </div>
             <div className="input-group mb-2">
                 <label className="input-group-text" style={{width: 150}}>Description</label>
-                <SwitchTextArea value={quizz.description} changeHandler={(value) => console.log(value)}/>
+                <SwitchTextArea value={quizz.description} changeHandler={(value) => {
+                    dispatch(setEditingQuizzDescription(value));
+                }} save={() => saveQuizz()}/>
             </div>
             <div className="input-group">
                 <label className="input-group-text" style={{width: 150}}>Frequency</label>
-                <SwitchInput value={quizz.frequency.toString()} changeHandler={(value) => console.log(value)} save={() => {
-
-                }}/>
+                <SwitchInput value={quizz.frequency.toString()} changeHandler={(value) => {
+                    dispatch(setEditingQuizzFrequency(parseInt(value)));
+                }} save={() => saveQuizz()}/>
             </div>
             
             <h3 className="my-4">Questions</h3>

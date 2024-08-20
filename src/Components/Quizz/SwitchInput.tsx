@@ -5,21 +5,25 @@ const SwitchInput = ({value, changeHandler, save}: {value: string, changeHandler
     
     if (editing) {
         return (
-            <input className="form-control" autoFocus type="text" value={value} onBlur={() => {
-                setEditing(false);
-                save();
-            }}
+            <>
+            <input className="form-control" autoFocus type="text" value={value}
                 onChange={(e) => {
                     changeHandler(e.target.value); 
                 }}
             />
+            <button className="btn btn-success" onClick={() => {
+                setEditing(false);
+                save();
+            }}>Save</button>
+            </>
         )
     }
 
     return (
-    
-           <div className="form-control" style={{backgroundColor: '#e9ecef'}} onDoubleClick={() => setEditing(true)}>{value}</div>
-
+           <>
+           <input className="form-control" disabled value={value}/>
+           <button className="btn btn-primary" onClick={() => setEditing(true)}>Edit</button>
+            </>
     )
 }
 

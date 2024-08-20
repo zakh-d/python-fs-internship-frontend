@@ -15,6 +15,12 @@ export type QuizzCreate = {
     questions: QuestionCreate[];
 }
 
+export type QuizzUpdateType = {
+    title: string;
+    description: string;
+    frequency: number;
+}
+
 export type Answer = {
     id: string;
     text: string;

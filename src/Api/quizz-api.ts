@@ -1,4 +1,4 @@
-import { AnswerCreate, QuestionCreate, QuizzCreate } from "../Types/QuizzTypes";
+import { AnswerCreate, QuestionCreate, QuizzCreate, QuizzUpdateType } from "../Types/QuizzTypes";
 import apiBase from "./api-configuration";
 
 const quizzApi = {
@@ -13,6 +13,9 @@ const quizzApi = {
     },
     getCompanyQuizzes: async (companyId: string, itemsPerPage: number, page: number) => {
         return await apiBase.get(`/companies/${companyId}/quizzes/?page=${page}&limit=${itemsPerPage}`);
+    },
+    updateQuizz: async (quizzId: string, data: QuizzUpdateType) => {
+        return await apiBase.put(`/quizzes/${quizzId}/`, data);
     },
     updateQuestion: async (quizzId: string, questionId: string, text: string) => {
         return await apiBase.put(`/quizzes/${quizzId}/question/${questionId}/`, {text});

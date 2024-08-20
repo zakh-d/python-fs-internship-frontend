@@ -19,7 +19,7 @@ const AnswerEdit = ({ answer, questionIndex, quizzId, index, removable }: {answe
             } } save={() => {
                 dispatch(fetchUpdateAnswer({text: answer.text, is_correct: answer.is_correct, quizzId, answerId: answer.id}));
             }}/>
-            {removable && <button className="btn btn-outline-danger" type="button" onClick={() => {
+            {removable && <button className="btn btn-danger" type="button" onClick={() => {
                 dispatch(fetchDeleteAnswer({quizzId, answerId: answer.id}));
             }}>Delete</button>}
         </div>
