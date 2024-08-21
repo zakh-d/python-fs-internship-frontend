@@ -4,8 +4,9 @@ import QuizzCard from "./QuizzCard";
 import ModalWindow from "../ModalWindow";
 import { fetchDeleteQuizz } from "../../Store/quizzSlice";
 import useAppDispatch from "../../Store/hooks/dispatch";
+import Company from "../../Types/CompanyType";
 
-const QuizzCardList = ({quizzes}: {quizzes: QuizzWithoutQuestions[]}):ReactElement => {
+const QuizzCardList = ({quizzes, company}: {quizzes: QuizzWithoutQuestions[], company: Company}):ReactElement => {
 
     const [confirmWindowOpen, setConfirmWindowOpen] = useState(false);
     const [choosenQuizzId, setChoosenQuizzId] = useState<string | null>(null);
@@ -19,7 +20,7 @@ const QuizzCardList = ({quizzes}: {quizzes: QuizzWithoutQuestions[]}):ReactEleme
                     <QuizzCard deleteQuizz={(quizzId: string) => {
                         setConfirmWindowOpen(true);
                         setChoosenQuizzId(quizzId);
-                    }} key={quizz.id} quizz={quizz}/>
+                    }} key={quizz.id} quizz={quizz} company={company}/>
                 </div>
             ))}
         </div>

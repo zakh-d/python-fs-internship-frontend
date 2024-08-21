@@ -3,8 +3,9 @@ import { QuizzWithoutQuestions } from "../../Types/QuizzTypes";
 import { getQuizzPath } from "../../Utils/router";
 import { selectRole } from "../../Store/selectors/company_selector";
 import { useSelector } from "react-redux";
+import Company from "../../Types/CompanyType";
 
-const QuizzCard = ({ quizz, deleteQuizz }: { quizz: QuizzWithoutQuestions, deleteQuizz: (quizzId: string) => void }) => {
+const QuizzCard = ({ quizz, deleteQuizz, company}: { quizz: QuizzWithoutQuestions, deleteQuizz: (quizzId: string) => void, company: Company}) => {
     const userRole = useSelector(selectRole);
 
     return (
@@ -15,7 +16,7 @@ const QuizzCard = ({ quizz, deleteQuizz }: { quizz: QuizzWithoutQuestions, delet
                 <p className="card-text">{quizz.description}</p>
                 {(userRole === 'owner' || userRole === 'admin') &&
                 <>
-                <Link className="btn btn-outline-primary me-1" to={getQuizzPath(quizz.id)}>Edit</Link>
+                <Link className="btn btn-outline-primary me-1" to={getQuizzPath(company.id, quizz.id)}>Edit</Link>
                 <button className="btn btn-outline-danger" onClick={() => {
                     deleteQuizz(quizz.id);
                 }}>Delete</button>

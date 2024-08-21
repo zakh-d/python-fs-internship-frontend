@@ -35,6 +35,7 @@ const COMPANY_PROFILE_INVITES_PATH = "/companies/:companyId/invites";
 const COMPANY_PROFILE_REQUESTS_PATH = "/companies/:companyId/requests";
 const COMPANY_PROFILE_QUIZZ_PATH = "/companies/:companyId/quizz/";
 const COMPANY_PROFILE_QUIZZ_ADD_PATH = "/companies/:companyId/quizz/add";
+const COMPANY_QUIZZ_PATH = "/company/:companyId/quizz/:quizzId";
 
 export const getCompanyListPath = () => COMPANY_LIST_PATH;
 export const getMyCompanyListPath = () => MY_COMPANY_LIST_PATH;
@@ -46,11 +47,10 @@ export const getCompanyInvitesPath = (companyId: string) => COMPANY_PROFILE_INVI
 export const getCompanyRequestsPath = (companyId: string) => COMPANY_PROFILE_REQUESTS_PATH.replace(":companyId", companyId);
 export const getCompanyQuizzPath = (companyId: string) => COMPANY_PROFILE_QUIZZ_PATH.replace(":companyId", companyId);
 export const getCompanyQuizzAddPath = (companyId: string) => COMPANY_PROFILE_QUIZZ_ADD_PATH.replace(":companyId", companyId);
+export const getQuizzPath = (companyId:string, quizzId: string) => COMPANY_QUIZZ_PATH.replace(":companyId", companyId).replace(":quizzId", quizzId);
 
 
-const QUIZZ_PATH = "/quizz/:quizzId";
 
-export const getQuizzPath = (quizzId: string) => QUIZZ_PATH.replace(":quizzId", quizzId);
 
 const LOGIN_PATH = "/login";
 const REGISTER_PATH = "/register";
@@ -137,7 +137,7 @@ const router = createBrowserRouter([
                 element: <CompanyProfile openedTab="quizzAdd"/>
             },
             {
-                path: QUIZZ_PATH,
+                path: COMPANY_QUIZZ_PATH,
                 element: <QuizzEditPage/>
             },
             {

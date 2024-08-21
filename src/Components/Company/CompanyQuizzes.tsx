@@ -22,7 +22,7 @@ const CompanyQuizzes = ({company}: {company: Company}): ReactElement => {
     <div>
         <Link className="btn btn-primary" to={getCompanyQuizzAddPath(company.id)}>Add Quizz</Link>
         <br /><br />
-        <QuizzCardList quizzes={quizzes}/>
+        <QuizzCardList company={company} quizzes={quizzes}/>
         <br />
         <Pagination totalItems={totalCount} itemsPerPage={5} onPageChange={function (page: number, itemsPerPage: number): void {
             dispatch(fetchCompanyQuizzes({companyId: company.id, page: page, itemsPerPage: itemsPerPage}));
