@@ -40,7 +40,7 @@ const QuizzEdit = ({quizz}: {quizz: Quizz}): ReactElement => {
                 <label className="input-group-text" style={{width: 150}}>Frequency</label>
                 <SwitchInput value={quizz.frequency.toString()} changeHandler={(value) => {
                     dispatch(setEditingQuizzFrequency(parseInt(value)));
-                }} save={() => saveQuizz()}/>
+                }} save={() => saveQuizz()} type="number"/>
             </div>
             
             <h3 className="my-4">Questions</h3>

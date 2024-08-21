@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-const SwitchInput = ({value, changeHandler, save}: {value: string, changeHandler: (value:string) => void, save: () => void}) => {
+const SwitchInput = ({value, changeHandler, save, type}: {value: string, changeHandler: (value:string) => void, save: () => void, type?: string}) => {
     const [editing, setEditing] = useState(false);
     
     if (editing) {
         return (
             <>
-            <input className="form-control" autoFocus type="text" value={value}
+            <input className="form-control" autoFocus value={value}
+                type={type || "text"}
                 onChange={(e) => {
                     changeHandler(e.target.value); 
                 }}
