@@ -24,13 +24,16 @@ export type QuizzUpdateType = {
 export type Answer = {
     id: string;
     text: string;
+}
+
+export interface AnswerWithIsCorrect extends Answer {
     is_correct: boolean;
 }
 
-export type Question = {
+export type Question<T extends Answer> = {
     id: string;
     text: string;
-    answers: Answer[];
+    answers: T[];
 }
 
 export type QuizzWithoutQuestions = {
@@ -40,6 +43,21 @@ export type QuizzWithoutQuestions = {
     frequency: number;
 }
 
+export interface QuizzForAdminOwner extends QuizzWithoutQuestions {
+    questions: Question<AnswerWithIsCorrect>[];
+}
+
+
 export interface Quizz extends QuizzWithoutQuestions {
-    questions: Question[];
+    questions: Question<Answer>[];
+}
+
+export type QuizzResponse = {
+    quizz_id: string;
+    questions: 
+    {
+            question_id: string;
+            answer_ids: string[]
+        }[]
+    
 }

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AnswerCreate, QuestionCreate, Quizz, QuizzCreate, QuizzUpdateType, QuizzWithoutQuestions } from "../Types/QuizzTypes";
+import { AnswerCreate, QuestionCreate, QuizzForAdminOwner, QuizzCreate, QuizzUpdateType, QuizzWithoutQuestions } from "../Types/QuizzTypes";
 import { toast } from "react-toastify";
 import quizzApi from "../Api/quizz-api";
 import { selectQuizzBeingCreated } from "./selectors/quizzSelector";
@@ -14,7 +14,7 @@ type StateType = {
     quizzBeingCreated: QuizzCreate;
     quizzList: QuizzWithoutQuestions[];
     quizzTotalCount: number;
-    quizzBeingEdited: Quizz | null;
+    quizzBeingEdited: QuizzForAdminOwner | null;
 }
 
 const initialState: StateType = {
@@ -68,7 +68,7 @@ string,
 });
 
 export const fetchQuizzWithCorrectAnswers = createAsyncThunk<
-Quizz,
+QuizzForAdminOwner,
 string,
 {
     rejectValue: string
@@ -87,7 +87,7 @@ string,
 });
 
 export const fetchCompanyQuizzes = createAsyncThunk<
-{quizzes: Quizz[],
+{quizzes: QuizzForAdminOwner[],
 total_count: number
 },
 {
@@ -114,7 +114,7 @@ total_count: number
 });
 
 export const fetchUpdateQuestion = createAsyncThunk<
-Quizz,
+QuizzForAdminOwner,
 {
     quizzId: string,
     questionId: string,
@@ -136,7 +136,7 @@ Quizz,
 });
 
 export const fetchDeleteQuestion = createAsyncThunk<
-Quizz,
+QuizzForAdminOwner,
 {
     quizzId: string,
     questionId: string
@@ -157,7 +157,7 @@ Quizz,
 });
 
 export const fetchUpdateAnswer = createAsyncThunk<
-Quizz,
+QuizzForAdminOwner,
 AnswerCreate & {
     quizzId: string,
     answerId: string
@@ -178,7 +178,7 @@ AnswerCreate & {
 });
 
 export const fetchDeleteAnswer = createAsyncThunk<
-Quizz,
+QuizzForAdminOwner,
 {
     quizzId: string,
     answerId: string
@@ -199,7 +199,7 @@ Quizz,
 });
 
 export const fetchAddAnswer = createAsyncThunk<
-Quizz,
+QuizzForAdminOwner,
 {
     quizzId: string,
     questionId: string,
@@ -221,7 +221,7 @@ Quizz,
 });
 
 export const fetchAddQuestion = createAsyncThunk<
-Quizz,
+QuizzForAdminOwner,
 {
     quizzId: string,
     questionData: QuestionCreate
@@ -267,7 +267,7 @@ export const fetchDeleteQuizz = createAsyncThunk<
 });
 
 export const fetchUpdateQuizz = createAsyncThunk<
-Quizz,
+QuizzForAdminOwner,
 {
     quizzId: string,
     data: QuizzUpdateType

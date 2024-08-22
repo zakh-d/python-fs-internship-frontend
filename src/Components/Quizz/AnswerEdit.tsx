@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
-import { Answer } from "../../Types/QuizzTypes";
+import { AnswerWithIsCorrect } from "../../Types/QuizzTypes";
 import useAppDispatch from "../../Store/hooks/dispatch";
 import { fetchDeleteAnswer, setEditingAnswerText, fetchUpdateAnswer } from "../../Store/quizzSlice";
 import SwitchInput from "./SwitchInput";
 
-const AnswerEdit = ({ answer, questionIndex, quizzId, index, removable }: {answer: Answer, questionIndex: number, quizzId: string, index: number, removable: boolean}): ReactElement => {
+const AnswerEdit = ({ answer, questionIndex, quizzId, index, removable }: {answer: AnswerWithIsCorrect, questionIndex: number, quizzId: string, index: number, removable: boolean}): ReactElement => {
     const dispatch = useAppDispatch();
     
     return (
