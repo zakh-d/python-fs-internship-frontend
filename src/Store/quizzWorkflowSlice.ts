@@ -52,7 +52,7 @@ const quizzWorkflowSlice = createSlice({
                 }
             }
         },
-        saveAnswer: (state, action: {payload: string}) => {
+        checkAnswer: (state, action: {payload: string}) => {
             if (!state.quizzResponse || !state.quizzToPass) {
                 return;
             }
@@ -65,7 +65,7 @@ const quizzWorkflowSlice = createSlice({
                 state.quizzResponse.questions[state.currentQuestionIndex].answer_ids.push(action.payload);
             }
         },
-        removeAnswer: (state, action: {payload: string}) => {
+        uncheckAnswer: (state, action: {payload: string}) => {
             if (!state.quizzResponse || !state.quizzToPass) {
                 return;
             }
@@ -93,7 +93,7 @@ const quizzWorkflowSlice = createSlice({
 
 export const {
     nextQuestion,
-    saveAnswer,
-    removeAnswer
+    checkAnswer,
+    uncheckAnswer
 } = quizzWorkflowSlice.actions;
 export default quizzWorkflowSlice.reducer;

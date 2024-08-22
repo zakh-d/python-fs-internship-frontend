@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { QuizzWithoutQuestions } from "../../Types/QuizzTypes";
-import { getQuizzPath } from "../../Utils/router";
+import { getQuizzPath, getTakeQuizzPath } from "../../Utils/router";
 import { selectRole } from "../../Store/selectors/company_selector";
 import { useSelector } from "react-redux";
 import Company from "../../Types/CompanyType";
@@ -21,7 +21,8 @@ const QuizzCard = ({ quizz, deleteQuizz, company}: { quizz: QuizzWithoutQuestion
                     deleteQuizz(quizz.id);
                 }}>Delete</button>
                 </>
-            }
+                }
+                <Link to={getTakeQuizzPath(company.id, quizz.id)} className="btn btn-primary">Take</Link>
             </div>
         </div>
     )
