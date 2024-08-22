@@ -2,13 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Quizz, QuizzResponse } from "../Types/QuizzTypes";
 import quizzApi from "../Api/quizz-api";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 
 type StateType = {
     currentQuestionIndex: number,
     quizzToPass: Quizz | null,
     quizzResponse: QuizzResponse | null,
-    status: 'not_started' | 'in_progress' | 'finished'
+    status: 'not_started' | 'in_progress' | 'finished',
+    score?: number
 }
 
 const initialState: StateType = {
@@ -35,6 +37,29 @@ Quizz,
         } catch (error) {
             if (error instanceof AxiosError) {
                 
+            }
+        }
+    }
+);
+
+export const fetchCompleteQuizz = createAsyncThunk<
+{
+    score: number
+},
+{
+    data: QuizzResponse
+},
+{
+    rejectValue: string
+}>(
+    'quizzWorkflow/fetchCompleteQuizz',
+    async ({data}) => {
+        try {
+            const response = await quizzApi.completeQuizz(data);
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                error.response?.data.detail && toast.error(error.response.data.detail);
             }
         }
     }
@@ -87,6 +112,14 @@ const quizzWorkflowSlice = createSlice({
 
         builder.addCase(fetchQuizzToPass.rejected, (state) => {
             state.status = 'not_started';
+        });
+
+        builder.addCase(fetchCompleteQuizz.fulfilled, (state, action) => {
+            state.status = 'finished';
+            state.score = action.payload.score;
+            state.quizzToPass = null;
+            state.quizzResponse = null;
+            state.currentQuestionIndex = 0;
         });
     }
 });

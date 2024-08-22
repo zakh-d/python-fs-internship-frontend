@@ -1,4 +1,4 @@
-import { AnswerCreate, QuestionCreate, QuizzCreate, QuizzUpdateType } from "../Types/QuizzTypes";
+import { AnswerCreate, QuestionCreate, QuizzCreate, QuizzResponse, QuizzUpdateType } from "../Types/QuizzTypes";
 import apiBase from "./api-configuration";
 
 const quizzApi = {
@@ -38,6 +38,9 @@ const quizzApi = {
     deleteAnswer: async (quizzId: string, answerId: string) => {
         return await apiBase.delete(`/quizzes/${quizzId}/answer/${answerId}/`);
     },
+    completeQuizz: async (data: QuizzResponse) => {
+        return await apiBase.post(`/quizzes/complete/`, data);
+    }
 }
 
 export default quizzApi;

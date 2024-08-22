@@ -13,3 +13,5 @@ export const selectIsLastQuestion = (state: RootState) => {
     const lastQuestionIndex = quizz.questions.length - 1;
     return currentQuestionIndex === lastQuestionIndex;
 }
+export const selectQuizzResponse = (state: RootState) => state.quizzWorkflow.quizzResponse;
+export const selectScore = (state: RootState) => state.quizzWorkflow.score;

@@ -3,18 +3,21 @@ import {
   selectCurrentQuestion,
   selectCurrentQuestionAnswers,
   selectIsLastQuestion,
+  selectQuizzResponse,
 } from "../../Store/selectors/quizz_workflow_selector";
 import useAppDispatch from "../../Store/hooks/dispatch";
 import {
   nextQuestion,
   uncheckAnswer,
   checkAnswer,
+  fetchCompleteQuizz,
 } from "../../Store/quizzWorkflowSlice";
 
 const QuestionTake = () => {
   const question = useSelector(selectCurrentQuestion);
   const selectedAnswers = useSelector(selectCurrentQuestionAnswers);
   const lastQuestion = useSelector(selectIsLastQuestion);
+  const quizzResponse = useSelector(selectQuizzResponse);
 
   const dispatch = useAppDispatch();
 
@@ -53,13 +56,16 @@ const QuestionTake = () => {
             </div>
             ))}
         </div>
-        {lastQuestion && <button className="btn btn-primary">Finish</button>}
+        {lastQuestion && <button className="btn btn-primary" onClick={() => {
+            if (!quizzResponse) return;
+            dispatch(fetchCompleteQuizz({data: quizzResponse}));
+        }} disabled={selectedAnswers.length === 0}>Finish</button>}
         {!lastQuestion && (
             <>
                 <button className="btn btn-primary" onClick={() => dispatch(nextQuestion())} disabled={selectedAnswers.length === 0}>Next Question</button>
-                {selectedAnswers.length === 0 && <div className="text-warning">Please select at least one answer</div>}
             </>
         )}
+        {selectedAnswers.length === 0 && <div className="text-warning">Please select at least one answer</div>}
     </div>
   );
 };
