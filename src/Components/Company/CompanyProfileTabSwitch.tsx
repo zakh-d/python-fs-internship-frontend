@@ -1,14 +1,16 @@
 import { ReactElement } from "react";
 import { NavLink } from "react-router-dom";
 import { getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyProfileAdminsPath, getCompanyQuizzPath, getCompanyRequestsPath } from "../../Utils/router";
+import { useSelector } from "react-redux";
+import { selectRole } from "../../Store/selectors/company_selector";
 
 export type PropsType = {
-    isOwner: boolean;
     companyId: string;
 }
 
 
-const CompanyProfileTabSwitch = ({isOwner, companyId}: PropsType): ReactElement => {
+const CompanyProfileTabSwitch = ({companyId}: PropsType): ReactElement => {
+    const role = useSelector(selectRole);
     return(
             <ul className="nav nav-tabs mb-4">
                 <li className="nav-item">
@@ -18,7 +20,7 @@ const CompanyProfileTabSwitch = ({isOwner, companyId}: PropsType): ReactElement 
                     <NavLink to={getCompanyMembersPath(companyId)} className={"nav-link"}>Members</NavLink>
                 </li>
                {
-                isOwner &&
+                role === 'owner' &&
                 <>
                 <li className="nav-item">
                     <NavLink to={getCompanyProfileAdminsPath(companyId)} className={"nav-link"}>Admins</NavLink>
@@ -33,10 +35,13 @@ const CompanyProfileTabSwitch = ({isOwner, companyId}: PropsType): ReactElement 
                     <NavLink to={getCompanyRequestsPath(companyId)} className={"nav-link"}>Requests</NavLink>
                 </li>
               </>
-               } 
+               }
+               {
+                role !== 'none' &&
                 <li className="nav-item">
                     <NavLink to={getCompanyQuizzPath(companyId)} className={"nav-link"}>Quizzes</NavLink>
                 </li>
+                }
             </ul>
         
 
