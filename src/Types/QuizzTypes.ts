@@ -34,6 +34,7 @@ export type Question<T extends Answer> = {
     id: string;
     text: string;
     answers: T[];
+    multiple?: boolean;
 }
 
 export type QuizzWithoutQuestions = {

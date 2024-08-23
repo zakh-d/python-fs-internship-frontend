@@ -17,7 +17,7 @@ const QuizzCard = ({ quizz, deleteQuizz, company}: { quizz: QuizzWithoutQuestion
                 {(userRole === 'owner' || userRole === 'admin') &&
                 <>
                 <Link className="btn btn-outline-primary me-1" to={getQuizzPath(company.id, quizz.id)}>Edit</Link>
-                <button className="btn btn-outline-danger" onClick={() => {
+                <button className="btn btn-outline-danger me-1" onClick={() => {
                     deleteQuizz(quizz.id);
                 }}>Delete</button>
                 </>

@@ -35,7 +35,8 @@ const QuestionTake = () => {
                 <div className="input-group-text">
                     <input
                     className="form-check-input"
-                    type="checkbox"
+                    type={question.multiple ? "checkbox" : "radio"}
+                    name={question.id}
                     checked={selectedAnswers.includes(answer.id)}
                     onChange={(e) => {
                         if (e.target.checked) {
