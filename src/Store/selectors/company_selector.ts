@@ -6,6 +6,7 @@ export const selectTotalCompanies = (state: RootState) => state.companyList.tota
 
 export const selectCurrentCompany = (state: RootState) => state.companyProfile.company;
 export const selectIsOwnerOfCompany = (state: RootState) => state.companyProfile.isOwner;
+export const selectRole = (state: RootState) => state.companyProfile.role;
 export const selectCurrentCompanyError = (state: RootState) => state.companyProfile.error;
 export const selectCompanyProfileLoading = (state: RootState) => state.companyProfile.loading;
 

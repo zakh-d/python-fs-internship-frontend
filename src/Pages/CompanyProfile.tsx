@@ -1,7 +1,7 @@
 import { Navigate, useParams } from "react-router-dom";
 import {withAuthentication} from "../Utils/hoc/auth_redirect";
 import { useSelector } from "react-redux";
-import { selectCompanyProfileLoading, selectCurrentCompany, selectIsOwnerOfCompany } from "../Store/selectors/company_selector";
+import { selectCompanyProfileLoading, selectCurrentCompany, selectIsOwnerOfCompany, selectRole } from "../Store/selectors/company_selector";
 import { Key, useEffect } from "react";
 import useAppDispatch from "../Store/hooks/dispatch";
 import { fetchCompanyById } from "../Store/companyProfileSlice";
@@ -13,9 +13,12 @@ import CompanyInvites from "../Components/Company/CompanyInvites";
 import CompanyMembers from "../Components/Company/CompanyMembers";
 import CompanyRequests from "../Components/Company/CompanyRequests";
 import CompanyAdmins from "../Components/Company/CompanyAdmins";
+import CompanyQuizzes from "../Components/Company/CompanyQuizzes";
+import QuizzForm from "../Components/Quizz/QuizzForm";
+import { getCompanyPath } from "../Utils/router";
 
 type TabProps = {
-    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins';
+    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins' | 'quizzes' | 'quizzAdd';
 }
 
 const CompanyProfile = ({openedTab}: TabProps) => {
@@ -26,9 +29,11 @@ const CompanyProfile = ({openedTab}: TabProps) => {
     const company = useSelector(selectCurrentCompany);
     const loading = useSelector(selectCompanyProfileLoading);
     const isOwer = useSelector(selectIsOwnerOfCompany);
+    const role = useSelector(selectRole);
 
     useEffect(() => {
         if (!companyId) return;
+        if (company && company.id === companyId) return;
         dispatch(fetchCompanyById(companyId));
     }, [companyId])
 
@@ -43,7 +48,15 @@ const CompanyProfile = ({openedTab}: TabProps) => {
     }
 
     if (['edit', 'invites', 'requests'].indexOf(openedTab) > -1 && !isOwer) {
-        return <Navigate to={'/companies/' + companyId}/>
+        return <Navigate to={getCompanyPath(company.id)}/>
+    }
+
+    if (openedTab === 'quizzes' && role === 'none') {
+        return <Navigate to={getCompanyPath(company.id)}/>
+    }
+
+    if (openedTab === 'quizzAdd' && role === 'none' || role === 'member') {
+        return <Navigate to={getCompanyPath(company.id)}/>
     }
 
     let displayedTab = <ComapnyProfileInfo company={company} />;
@@ -63,12 +76,18 @@ const CompanyProfile = ({openedTab}: TabProps) => {
             break;
         case 'admins':
             displayedTab = <CompanyAdmins company={company}/>
+            break;
+        case 'quizzes':
+            displayedTab = <CompanyQuizzes company={company}/>
+            break;
+        case 'quizzAdd':
+            displayedTab = <QuizzForm company={company}/>
+            break;
     }
 
     return (
         <div className="container">
-            
-            <CompanyProfileTabSwitch openedTab={openedTab} isOwner={isOwer} companyId={companyId || ''}/>
+            <CompanyProfileTabSwitch companyId={company.id}/>
             {displayedTab}
        </div>
     );

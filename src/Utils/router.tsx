@@ -10,6 +10,7 @@ import UserAuthorization from "../Pages/UserAuthorization";
 import UserRegistration from "../Pages/UserRegistration";
 import UserInvites from "../Components/User/UserInvites";
 import UserRequests from "../Components/User/UserRequests";
+import QuizzEditPage from "../Pages/QuizzEditPage";
 
 
 
@@ -32,6 +33,9 @@ const COMPANY_PROFILE_ADMINS_PATH = "/companies/:companyId/admins";
 const COMPANY_PROFILE_MEMBERS_PATH = "/companies/:companyId/members";
 const COMPANY_PROFILE_INVITES_PATH = "/companies/:companyId/invites";
 const COMPANY_PROFILE_REQUESTS_PATH = "/companies/:companyId/requests";
+const COMPANY_PROFILE_QUIZZ_PATH = "/companies/:companyId/quizz/";
+const COMPANY_PROFILE_QUIZZ_ADD_PATH = "/companies/:companyId/quizz/add";
+const COMPANY_QUIZZ_PATH = "/company/:companyId/quizz/:quizzId";
 
 export const getCompanyListPath = () => COMPANY_LIST_PATH;
 export const getMyCompanyListPath = () => MY_COMPANY_LIST_PATH;
@@ -41,6 +45,11 @@ export const getCompanyProfileAdminsPath = (companyId: string) => COMPANY_PROFIL
 export const getCompanyMembersPath = (companyId: string) => COMPANY_PROFILE_MEMBERS_PATH.replace(":companyId", companyId);
 export const getCompanyInvitesPath = (companyId: string) => COMPANY_PROFILE_INVITES_PATH.replace(":companyId", companyId);
 export const getCompanyRequestsPath = (companyId: string) => COMPANY_PROFILE_REQUESTS_PATH.replace(":companyId", companyId);
+export const getCompanyQuizzPath = (companyId: string) => COMPANY_PROFILE_QUIZZ_PATH.replace(":companyId", companyId);
+export const getCompanyQuizzAddPath = (companyId: string) => COMPANY_PROFILE_QUIZZ_ADD_PATH.replace(":companyId", companyId);
+export const getQuizzPath = (companyId:string, quizzId: string) => COMPANY_QUIZZ_PATH.replace(":companyId", companyId).replace(":quizzId", quizzId);
+
+
 
 
 const LOGIN_PATH = "/login";
@@ -118,6 +127,18 @@ const router = createBrowserRouter([
             {
                 path: COMPANY_PROFILE_REQUESTS_PATH,
                 element: <CompanyProfile openedTab="requests"/>
+            },
+            {
+                path: COMPANY_PROFILE_QUIZZ_PATH,
+                element: <CompanyProfile openedTab="quizzes"/>
+            },
+            {
+                path: COMPANY_PROFILE_QUIZZ_ADD_PATH,
+                element: <CompanyProfile openedTab="quizzAdd"/>
+            },
+            {
+                path: COMPANY_QUIZZ_PATH,
+                element: <QuizzEditPage/>
             },
             {
                 path: LOGIN_PATH,

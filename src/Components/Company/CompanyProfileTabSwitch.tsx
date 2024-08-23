@@ -1,40 +1,47 @@
 import { ReactElement } from "react";
-import { Link } from "react-router-dom";
-import { getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyProfileAdminsPath, getCompanyRequestsPath } from "../../Utils/router";
+import { NavLink } from "react-router-dom";
+import { getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyProfileAdminsPath, getCompanyQuizzPath, getCompanyRequestsPath } from "../../Utils/router";
+import { useSelector } from "react-redux";
+import { selectRole } from "../../Store/selectors/company_selector";
 
 export type PropsType = {
-    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins';
-    isOwner: boolean;
     companyId: string;
 }
 
 
-const CompanyProfileTabSwitch = ({openedTab, isOwner, companyId}: PropsType): ReactElement => {
+const CompanyProfileTabSwitch = ({companyId}: PropsType): ReactElement => {
+    const role = useSelector(selectRole);
     return(
             <ul className="nav nav-tabs mb-4">
                 <li className="nav-item">
-                    <Link to={getCompanyPath(companyId)} className={"nav-link" + (openedTab == 'info' ? ' active' : '')}>Company Info</Link>
+                    <NavLink end to={getCompanyPath(companyId)} className={"nav-link "}>Company Info</NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={getCompanyMembersPath(companyId)} className={"nav-link" + (openedTab == 'members' ? ' active' : '')}>Members</Link>
+                    <NavLink to={getCompanyMembersPath(companyId)} className={"nav-link"}>Members</NavLink>
                 </li>
                {
-                isOwner &&
+                role === 'owner' &&
                 <>
                 <li className="nav-item">
-                    <Link to={getCompanyProfileAdminsPath(companyId)} className={"nav-link" + (openedTab == 'admins' ? ' active' : '')}>Admins</Link>
+                    <NavLink to={getCompanyProfileAdminsPath(companyId)} className={"nav-link"}>Admins</NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={getCompanyEditPath(companyId)} className={"nav-link" + (openedTab == 'edit' ? ' active' : '')}>Edit</Link>
+                    <NavLink to={getCompanyEditPath(companyId)} className={"nav-link"}>Edit</NavLink>
                 </li>
                  <li className="nav-item">
-                    <Link to={getCompanyInvitesPath(companyId)} className={"nav-link" + (openedTab == 'invites' ? ' active' : '')}>Invites</Link>
+                    <NavLink to={getCompanyInvitesPath(companyId)} className={"nav-link"}>Invites</NavLink>
                 </li>
-                  <li className="nav-item">
-                    <Link to={getCompanyRequestsPath(companyId)} className={"nav-link" + (openedTab == 'requests' ? ' active' : '')}>Requests</Link>
+                <li className="nav-item">
+                    <NavLink to={getCompanyRequestsPath(companyId)} className={"nav-link"}>Requests</NavLink>
                 </li>
               </>
-               } 
+               }
+               {
+                role !== 'none' &&
+                <li className="nav-item">
+                    <NavLink to={getCompanyQuizzPath(companyId)} className={"nav-link"}>Quizzes</NavLink>
+                </li>
+                }
             </ul>
         
 

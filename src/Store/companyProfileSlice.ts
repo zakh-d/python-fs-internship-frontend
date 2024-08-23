@@ -15,12 +15,14 @@ const initialState : {
     error: string | null,
     invites: User[],
     requests: User[],
+    role: 'none' | 'admin' | 'member' | 'owner',
     members: UserInCompany[],
     admins: User[]
 } = {
     company: null,
     loading: false,
     isOwner: false,
+    role: 'none',
     error: null,
     invites: [],
     requests: [],
@@ -83,16 +85,18 @@ export const fetchRemoveAdmin = createAsyncThunk<
 });
 
 export const fetchCompanyById = createAsyncThunk<
-    {company: CompanyDetail, isOwner: boolean},
+    {company: CompanyDetail, isOwner: boolean, role: 'none' | 'admin' | 'member' | 'owner'},
     string,
     {rejectValue: string}
 >('companyProfile/fetchCompanyById', async (id, {getState, rejectWithValue}) => {
     try {
         const response = await companyApi.getCompanyById(id);
+        const role = (await companyApi.getMyRoleInCompany(id)).data;
         const currentUser = selectMe(getState() as RootState);
         return {
             company: response.data,
-            isOwner: response.data.owner.id === currentUser?.id
+            isOwner: response.data.owner.id === currentUser?.id,
+            role
         }
     } catch (error) {
         return rejectWithValue('Error fetching company');
@@ -293,10 +297,12 @@ const companyProfileSlice = createSlice({
             state.loading = false;
             state.company = action.payload.company;
             state.isOwner = action.payload.isOwner;
+            state.role = action.payload.role;
         });
         builder.addCase(fetchCompanyById.rejected, (state, action) => {
             state.company = null;
             state.loading = false;
+            state.role = 'none';
             state.error = action.payload as string;
         });
         builder.addCase(fetchCompanyUpdate.pending, (state, _) => {
