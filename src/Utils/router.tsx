@@ -11,6 +11,7 @@ import UserRegistration from "../Pages/UserRegistration";
 import UserInvites from "../Components/User/UserInvites";
 import UserRequests from "../Components/User/UserRequests";
 import QuizzEditPage from "../Pages/QuizzEditPage";
+import TakeQuizzPage from "../Pages/TakeQuizzPage";
 
 
 
@@ -36,6 +37,7 @@ const COMPANY_PROFILE_REQUESTS_PATH = "/companies/:companyId/requests";
 const COMPANY_PROFILE_QUIZZ_PATH = "/companies/:companyId/quizz/";
 const COMPANY_PROFILE_QUIZZ_ADD_PATH = "/companies/:companyId/quizz/add";
 const COMPANY_QUIZZ_PATH = "/company/:companyId/quizz/:quizzId";
+const COMPANY_TAKE_QUIZZ_PATH = "/company/:companyId/quizz/:quizzId/take";
 
 export const getCompanyListPath = () => COMPANY_LIST_PATH;
 export const getMyCompanyListPath = () => MY_COMPANY_LIST_PATH;
@@ -48,7 +50,7 @@ export const getCompanyRequestsPath = (companyId: string) => COMPANY_PROFILE_REQ
 export const getCompanyQuizzPath = (companyId: string) => COMPANY_PROFILE_QUIZZ_PATH.replace(":companyId", companyId);
 export const getCompanyQuizzAddPath = (companyId: string) => COMPANY_PROFILE_QUIZZ_ADD_PATH.replace(":companyId", companyId);
 export const getQuizzPath = (companyId:string, quizzId: string) => COMPANY_QUIZZ_PATH.replace(":companyId", companyId).replace(":quizzId", quizzId);
-
+export const getTakeQuizzPath = (companyId:string, quizzId: string) => COMPANY_TAKE_QUIZZ_PATH.replace(":companyId", companyId).replace(":quizzId", quizzId);
 
 
 
@@ -139,6 +141,10 @@ const router = createBrowserRouter([
             {
                 path: COMPANY_QUIZZ_PATH,
                 element: <QuizzEditPage/>
+            },
+            {
+                path: COMPANY_TAKE_QUIZZ_PATH,
+                element: <TakeQuizzPage/>
             },
             {
                 path: LOGIN_PATH,

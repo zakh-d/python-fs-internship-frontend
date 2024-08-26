@@ -1,8 +1,7 @@
-import { UUID } from "crypto";
 import User from "./UserType";
 
 type Company = {
-    id: UUID;
+    id: string;
     name: string;
     description: string;
     owner: User;

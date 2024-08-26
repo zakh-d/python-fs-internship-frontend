@@ -10,6 +10,7 @@ import companyProfileReducer from "./companyProfileSlice";
 import pageReducer from "./pageSlice";
 import companyActionUserReducer from "./companyActionUserSlice";
 import quizzReducer from "./quizzSlice";
+import quizzWorkflowReducer from "./quizzWorkflowSlice";
 
 const store = configureStore({
     reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
         page: pageReducer,
         companyActionUser: companyActionUserReducer,
         quizz: quizzReducer,
+        quizzWorkflow: quizzWorkflowReducer
     }
 });
 

@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Quizz } from "../../Types/QuizzTypes";
+import { QuizzForAdminOwner } from "../../Types/QuizzTypes";
 import SwitchInput from "./SwitchInput";
 import SwitchTextArea from "./SwitchTextArea";
 import QuestionEdit from "./QuestionEdit";
@@ -7,7 +7,7 @@ import useAppDispatch from "../../Store/hooks/dispatch";
 import { addNewQuestion, fetchUpdateQuizz, setEditingQuizzDescription, setEditingQuizzFrequency, setEditingQuizzTitle } from "../../Store/quizzSlice";
 import UnsavedQuestion from "./UnsavedQuestion";
 
-const QuizzEdit = ({quizz}: {quizz: Quizz}): ReactElement => {
+const QuizzEdit = ({quizz}: {quizz: QuizzForAdminOwner}): ReactElement => {
 
     const dispatch = useAppDispatch();
 

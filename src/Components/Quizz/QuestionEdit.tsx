@@ -1,11 +1,11 @@
 import { ReactElement } from "react";
-import { Question } from "../../Types/QuizzTypes";
+import { AnswerWithIsCorrect, Question } from "../../Types/QuizzTypes";
 import useAppDispatch from "../../Store/hooks/dispatch";
 import { fetchDeleteQuestion, fetchAddAnswer, setEditingQuestionText, fetchUpdateQuestion} from "../../Store/quizzSlice";
 import SwitchInput from "./SwitchInput";
 import AnswerEdit from "./AnswerEdit";
 
-const QuestionInForm = ({question, index, removable, quizzId}: {question: Question, index: number, removable: boolean, quizzId: string}): ReactElement => {
+const QuestionInForm = ({question, index, removable, quizzId}: {question: Question<AnswerWithIsCorrect>, index: number, removable: boolean, quizzId: string}): ReactElement => {
     const dispatch = useAppDispatch();
     return (
         <div className="form-group">

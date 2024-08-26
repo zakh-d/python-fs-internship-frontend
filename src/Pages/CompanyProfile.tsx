@@ -55,7 +55,7 @@ const CompanyProfile = ({openedTab}: TabProps) => {
         return <Navigate to={getCompanyPath(company.id)}/>
     }
 
-    if (openedTab === 'quizzAdd' && role === 'none' || role === 'member') {
+    if (openedTab === 'quizzAdd' && (role === 'none' || role === 'member')) {
         return <Navigate to={getCompanyPath(company.id)}/>
     }
 
