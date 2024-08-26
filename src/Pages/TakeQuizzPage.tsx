@@ -19,7 +19,6 @@ const TakeQuizzPage = (): ReactElement => {
     const score = useSelector(selectScore);
     
     useEffect(() => {
-        if (status === 'in_progress') return;
         if (!companyId || !quizzId) return;
         if (company?.id !== companyId) {
             dispatch(fetchCompanyById(companyId));
