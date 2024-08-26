@@ -1,5 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserDetail } from "../Types/UserType";
+import { QuizzCompletionInfo } from "../Types/QuizzTypes";
+import { userApi } from "../Api/users-api";
+import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
 
 type UserProfileType = {
     fetching: boolean,
@@ -8,6 +11,7 @@ type UserProfileType = {
     user?: UserDetail,
     isMe: boolean,
     errors?: string[],
+    completions?: QuizzCompletionInfo[]
 }
 
 const initialState: UserProfileType = {
@@ -17,6 +21,22 @@ const initialState: UserProfileType = {
     user: undefined,
     isMe: false,
 }
+
+export const fetchUserLastestQuizzCompletions = createAsyncThunk<
+QuizzCompletionInfo[],
+{userId: string},
+{rejectValue: string}
+>('userProfiles/fetchUserLastestQuizzCompletions', async ({userId}, {rejectWithValue, dispatch}) => {
+    try {
+        dispatch(pageStartedLoading());
+        const response = await userApi.getLastestQuizzCompletions(userId);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue("Failed to fetch user's quizz completions");
+    } finally {
+        dispatch(pageFinishedLoading());
+    }
+});
 
 const userProfilesSlice = createSlice({
     name: "userProfile",
@@ -49,6 +69,11 @@ const userProfilesSlice = createSlice({
         passwordChangeFinished: (state) => {
             state.fetchingPasswordChange = false;
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchUserLastestQuizzCompletions.fulfilled, (state, action) => {
+            state.completions = action.payload;
+        });
     }
 });
 

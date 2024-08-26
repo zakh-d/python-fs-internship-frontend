@@ -4,7 +4,7 @@ import healthReducer from "./healthSlice";
 import authReducer from "./authSlice";
 import usersReducer from "./userSlice";
 import usersListReducer from "./userListSlice";
-import userProfileReducer from "./user_profile_slice";
+import userProfileReducer from "./userProfileSlice";
 import companyListReducer from "./companyListSlice";
 import companyProfileReducer from "./companyProfileSlice";
 import pageReducer from "./pageSlice";

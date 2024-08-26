@@ -99,4 +99,8 @@ export const userApi = {
         return await apiBase.get(`users/${userId}/requests`);
     },
 
+    getLastestQuizzCompletions: async (userId: string) => {
+        return await apiBase.get(`/users/${userId}/quizzes/latest/`);
+    }
+
 }

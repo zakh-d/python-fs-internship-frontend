@@ -62,3 +62,9 @@ export type QuizzResponse = {
         }[]
     
 }
+
+export type QuizzCompletionInfo = {
+    quizz_id: string;
+    quizz_title: string;
+    completion_time: string;
+}
