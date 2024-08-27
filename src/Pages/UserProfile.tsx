@@ -14,6 +14,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { getUserProfileEditPasswordPath, getUserProfileEditPath } from "../Utils/router";
 import QuizzCompletionList from "../Components/Quizz/QuizzCompletionList";
 import { Rating } from "react-simple-star-rating";
+import AvereageScoreByQuizz from "../Components/User/AverageScoreByQuizz";
 
 const UserProfile = ({editing, changePassword}: {editing: boolean, changePassword?: boolean}) => {
     const {userId} = useParams();
@@ -128,6 +129,10 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
 
                     <h3 className="text-center mt-4">Latest Quizz Completions</h3>
                     <QuizzCompletionList completions={completions || []}/>
+
+                    <br /><br /><br />
+                    <AvereageScoreByQuizz user={user} />
+                    <br /><br /><br />
                 </div>
             }
         </div>

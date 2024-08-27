@@ -77,3 +77,12 @@ export type AverageScoreOfUsers = {
     }[],
     date: string;
 }
+
+export type AverageScoreByQuizes = {
+    results: {
+        score: number;
+        quizz_title: string;
+        quizz_id: string
+    }[],
+    date: string;
+}

@@ -105,5 +105,9 @@ export const userApi = {
 
     getUserRating: async (userId: string) => {
         return await apiBase.get(`/users/${userId}/quizzes/average/`);
+    },
+
+    getUserScoreByQuizzes: async (userId: string) => {
+        return await apiBase.get(`/users/${userId}/quizzes/average/by/quizzes/?interval=days`);
     }
 }
