@@ -68,3 +68,12 @@ export type QuizzCompletionInfo = {
     quizz_title: string;
     completion_time: string;
 }
+
+
+export type AverageScoreOfUsers = {
+    results: {
+        score: number;
+        user_email: string;
+    }[],
+    date: string;
+}

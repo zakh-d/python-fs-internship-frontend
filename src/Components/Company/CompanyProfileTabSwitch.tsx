@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { NavLink } from "react-router-dom";
-import { getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyProfileAdminsPath, getCompanyQuizzPath, getCompanyRequestsPath } from "../../Utils/router";
+import { getCompanyAverageMembersScoresPath, getCompanyEditPath, getCompanyInvitesPath, getCompanyMembersPath, getCompanyPath, getCompanyProfileAdminsPath, getCompanyQuizzPath, getCompanyRequestsPath } from "../../Utils/router";
 import { useSelector } from "react-redux";
 import { selectRole } from "../../Store/selectors/company_selector";
 
@@ -36,6 +36,11 @@ const CompanyProfileTabSwitch = ({companyId}: PropsType): ReactElement => {
                 </li>
               </>
                }
+               {[ 'owner', 'admin'].indexOf(role) > -1 && <>
+                <li className="nav-item">
+                    <NavLink to={getCompanyAverageMembersScoresPath(companyId)} className={"nav-link"}>Analytics</NavLink>
+                </li>
+               </>}
                {
                 role !== 'none' &&
                 <li className="nav-item">
