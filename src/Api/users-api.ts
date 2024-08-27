@@ -101,6 +101,9 @@ export const userApi = {
 
     getLastestQuizzCompletions: async (userId: string) => {
         return await apiBase.get(`/users/${userId}/quizzes/latest/`);
-    }
+    },
 
+    getUserRating: async (userId: string) => {
+        return await apiBase.get(`/users/${userId}/quizzes/average/`);
+    }
 }

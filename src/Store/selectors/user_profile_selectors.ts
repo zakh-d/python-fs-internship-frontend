@@ -7,3 +7,4 @@ export const selectPasswordChangeFetching = (state: RootState) => state.userProf
 export const selectIsMe = (state: RootState) => state.userProfile.isMe;
 export const selectErrors = (state: RootState) => state.userProfile.errors;
 export const selectCompletions = (state: RootState) => state.userProfile.completions;
+export const selectUserCumulativeRating = (state: RootState) => state.userProfile.cumulativeRating;

@@ -10,6 +10,7 @@ type UserProfileType = {
     fetchingPasswordChange: boolean,
     user?: UserDetail,
     isMe: boolean,
+    cumulativeRating: number,
     errors?: string[],
     completions?: QuizzCompletionInfo[]
 }
@@ -19,6 +20,7 @@ const initialState: UserProfileType = {
     fetchingDelete: false,
     fetchingPasswordChange: false,
     user: undefined,
+    cumulativeRating: 0,
     isMe: false,
 }
 
@@ -36,6 +38,17 @@ QuizzCompletionInfo[],
     } finally {
         dispatch(pageFinishedLoading());
     }
+});
+
+export const fetchUserRating = createAsyncThunk<
+number,
+{userId: string},
+{}>
+('userProfiles/fetchUserRating', async ({userId}, {dispatch}) => {
+    dispatch(pageStartedLoading());
+    const response = await userApi.getUserRating(userId);
+    dispatch(pageFinishedLoading());
+    return response.data.score;
 });
 
 const userProfilesSlice = createSlice({
@@ -73,6 +86,10 @@ const userProfilesSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchUserLastestQuizzCompletions.fulfilled, (state, action) => {
             state.completions = action.payload;
+        });
+
+        builder.addCase(fetchUserRating.fulfilled, (state, action) => {
+            state.cumulativeRating = action.payload;
         });
     }
 });
