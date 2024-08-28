@@ -13,6 +13,7 @@ export interface UserDetail extends User {
 
 export interface UserInCompany extends User {
     role: 'owner' | 'admin' | 'member';
+    lastest_quizz_comleted_at: string;
 }
 
 export type UserUpdate = {

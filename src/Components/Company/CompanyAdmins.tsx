@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { selectCompanyAdmins } from "../../Store/selectors/company_selector";
 import UserListWithActionButton from "../User/UserListWIthActionButton";
 import { ActionButton } from "../../Types/ActionButton";
+import User from "../../Types/UserType";
+import { usernameEmailDataGetters } from "../../Utils/userList";
 
 const CompanyAdmins = ({company}: {company: CompanyType}) => {
     const dispatch = useAppDispatch();
@@ -29,7 +31,7 @@ const CompanyAdmins = ({company}: {company: CompanyType}) => {
     return (
         <>
             <h2>Admins</h2>
-            <UserListWithActionButton users={admins} actions={actions}/>
+            <UserListWithActionButton<User> users={admins} actions={actions} dataGetters={usernameEmailDataGetters}/>
         </>
     )
 }
