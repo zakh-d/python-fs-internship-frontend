@@ -40,6 +40,9 @@ const quizzApi = {
     },
     completeQuizz: async (data: QuizzResponse) => {
         return await apiBase.post(`/quizzes/complete/`, data);
+    },
+    downloadUserResponse: async (quizzId: string, userId: string, format: 'json' | 'csv' = 'csv') => {
+        return await apiBase.get(`/quizzes/${quizzId}/responses/${userId}/?format=${format}`, {responseType: 'blob'});
     }
 }
 

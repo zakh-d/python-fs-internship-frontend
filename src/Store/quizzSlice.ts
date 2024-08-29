@@ -498,6 +498,44 @@ const quizzSlice = createSlice({
     }
 });
 
+
+export const downloadUserResponse = createAsyncThunk
+<
+void,
+{
+    quizzId: string,
+    userId: string,
+    format: 'json' | 'csv'
+},
+{
+    rejectValue: string
+}
+>('quizz/downloadUserResponse', async ({quizzId, userId, format}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.downloadUserResponse(quizzId, userId, format);
+        const href = URL.createObjectURL(response.data);
+
+        // create "a" HTML element with href to file & click
+        const link = document.createElement('a');
+        link.href = href;
+        link.setAttribute('download', 'response.' + format);
+        document.body.appendChild(link);
+        link.click();
+
+        // clean up "a" element & remove ObjectURL
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404) {
+                toast.error('Response is not available');
+            }
+        }
+        return rejectWithValue('Error downloading response');
+    }
+});
+
 export const { 
     addEmptyQuestion,
     addEmptyAnswer,
