@@ -286,6 +286,11 @@ const companyProfileSlice = createSlice({
         },
         removeAdmin: (state, action) => {
             state.admins = state.admins.filter(user => user.id !== action.payload);
+        },
+        setIsMember: (state, action: {payload:'yes' | 'no' | 'pending_request' | 'pending_invite'}) => {
+            if (state.company) {
+                state.company.is_member = action.payload;
+            }
         }
     },
     extraReducers: builder => {
@@ -349,5 +354,5 @@ const companyProfileSlice = createSlice({
     }
 });
 
-const { removeUserInvite, removeUserRequest, removeMember, removeAdmin } = companyProfileSlice.actions;
+export const { removeUserInvite, removeUserRequest, removeMember, removeAdmin, setIsMember } = companyProfileSlice.actions;
 export default companyProfileSlice.reducer;
