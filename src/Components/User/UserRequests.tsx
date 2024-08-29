@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
 import { selectUserRequests } from "../../Store/selectors/company_action_user_selector";
-import CompanyListWithActionButtons from "../Company/CompanyListWithActionButtons";
 import { ActionButton } from "../../Types/ActionButton";
 import { useEffect, useState } from "react";
 import useAppDispatch from "../../Store/hooks/dispatch";
 import { fetchUserRequests, fetchCancelRequest } from "../../Store/companyActionUserSlice";
 import ModalWindow from "../ModalWindow";
+import TableWithActionButton from "../Table/TableWithActionButton";
+import { companyNameOwnerDataGetters } from "../../Utils/list_utils";
+import Company from "../../Types/CompanyType";
 
 const UserRequests = () => {
     const requests = useSelector(selectUserRequests);
@@ -40,7 +42,7 @@ const UserRequests = () => {
     return (
         <div className="container">
             <h3>Pending requests</h3>
-            <CompanyListWithActionButtons companies={requests} actions={actions} />
+            <TableWithActionButton<Company> items={requests} actions={actions} dataGetters={companyNameOwnerDataGetters} />
             <ModalWindow isOpen={confirmModalOpen} onClose={() =>  {
                 setConfirmModalOpen(false);
                 setConfirmModalAction(null);

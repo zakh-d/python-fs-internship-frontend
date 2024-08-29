@@ -1,22 +1,26 @@
-import Table from "../Table/Table";
-import User from "../../Types/UserType";
+import Table from "./Table";
 import { ActionButton } from "../../Types/ActionButton";
 import { ReactElement } from "react";
 
 
-type ActionDisabled = {
-    key: (item: any) => boolean;
+interface HasId {
+    id: string;
+}
+
+type ActionDisabled<T extends HasId> = {
+    key: (item: T) => boolean;
     actionIndex: number;
 }
 
-type PropsType<T extends User> = {
-    users: T[];
+
+type PropsType<T extends HasId> = {
+    items: T[];
     actions: ActionButton[];
-    actionsDisabled?: ActionDisabled[];
+    actionsDisabled?: ActionDisabled<T>[];
     dataGetters: ((item: T | null) => JSX.Element | string)[];
 }
 
-const UserListWithActionButton = <T extends User>({users, dataGetters, actions, actionsDisabled}: PropsType<T>): ReactElement => {
+const TableWithActionButton = <T extends HasId>({items: users, dataGetters, actions, actionsDisabled}: PropsType<T>): ReactElement => {
     const userItems = users.map((user) => ({
         id: user.id,
         items: [
@@ -42,4 +46,4 @@ const UserListWithActionButton = <T extends User>({users, dataGetters, actions, 
     )
 }
 
-export default UserListWithActionButton;
+export default TableWithActionButton;

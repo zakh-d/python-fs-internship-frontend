@@ -6,7 +6,7 @@ import { selectCompanyMembers } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchAddAdmin, fetchCompanyMembers, fetchRemoveMember } from "../../Store/companyProfileSlice"
 import { selectMe } from "../../Store/selectors/auth_selector"
-import UserListWithActionButton from "../User/UserListWIthActionButton"
+import TableWithActionButton from "../Table/TableWithActionButton"
 import ModalWindow from "../ModalWindow"
 import { ActionButton } from "../../Types/ActionButton"
 import {UserInCompany} from "../../Types/UserType"
@@ -67,7 +67,7 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
 
     return ( 
         <>
-            <UserListWithActionButton<UserInCompany> users={members} dataGetters={[
+            <TableWithActionButton<UserInCompany> items={members} dataGetters={[
                 (item: UserInCompany | null) => {
                     if (!item) return 'Username';
                     return <Link to={getUserProfilePath(item.id)}>item.username</Link>;

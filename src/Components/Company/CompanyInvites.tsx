@@ -4,12 +4,12 @@ import { useSelector } from "react-redux"
 import { selectCompanyInvites } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchCancelUserInvite, fetchCompanyInvites, fetchInviteUser } from "../../Store/companyProfileSlice"
-import UserListWithActionButton from "../User/UserListWIthActionButton"
+import TableWithActionButton from "../Table/TableWithActionButton"
 import ModalWindow from "../ModalWindow"
 import {Form as FinalForm} from 'react-final-form'
 import Input from "../Input"
 import { validateEmail } from "../../Utils/validate_email"
-import { usernameEmailDataGetters } from "../../Utils/userList"
+import { usernameEmailDataGetters } from "../../Utils/list_utils"
 
 const CompanyInvites = ({company}: {company: CompanyDetail}): ReactElement => {
     
@@ -36,7 +36,7 @@ const CompanyInvites = ({company}: {company: CompanyDetail}): ReactElement => {
 
     return (
         <>
-        <UserListWithActionButton users={invites} actions={actions} dataGetters={usernameEmailDataGetters}/>
+        <TableWithActionButton items={invites} actions={actions} dataGetters={usernameEmailDataGetters}/>
         <button className="btn btn-primary" onClick={() => setInviteUserModalShown(true)}>Invite User</button>
 
         <ModalWindow isOpen={confirmModalShown} onClose={() => {
