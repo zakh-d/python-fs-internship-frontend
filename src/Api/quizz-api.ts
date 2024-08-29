@@ -43,6 +43,9 @@ const quizzApi = {
     },
     downloadUserResponse: async (quizzId: string, userId: string, format: 'json' | 'csv' = 'csv') => {
         return await apiBase.get(`/quizzes/${quizzId}/responses/${userId}/?format=${format}`, {responseType: 'blob'});
+    },
+    downloadQuizzResponses: async (quizzId: string, format: 'json' | 'csv' = 'csv') => {
+        return await apiBase.get(`/quizzes/${quizzId}/responses/?format=${format}`, {responseType: 'blob'});
     }
 }
 

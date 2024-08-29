@@ -8,6 +8,7 @@ import { AxiosError } from "axios";
 import { customNavigator } from "../Utils/_helper";
 import { getCompanyQuizzPath } from "../Utils/router";
 import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
+import { downloadData } from "../Utils/download";
 
 
 type StateType = {
@@ -513,19 +514,7 @@ void,
 >('quizz/downloadUserResponse', async ({quizzId, userId, format}, {rejectWithValue}) => {
     try {
         const response = await quizzApi.downloadUserResponse(quizzId, userId, format);
-        const href = URL.createObjectURL(response.data);
-
-        // create "a" HTML element with href to file & click
-        const link = document.createElement('a');
-        link.href = href;
-        link.setAttribute('download', 'response.' + format);
-        document.body.appendChild(link);
-        link.click();
-
-        // clean up "a" element & remove ObjectURL
-        document.body.removeChild(link);
-        URL.revokeObjectURL(href);
-
+        downloadData(response.data, `quizz_response_${userId}.${format}`);    
     } catch (e) {
         if (e instanceof AxiosError) {
             if (e.response?.status === 404) {
@@ -533,6 +522,29 @@ void,
             }
         }
         return rejectWithValue('Error downloading response');
+    }
+});
+
+export const downloadQuizzResponses = createAsyncThunk
+<
+void,
+{
+    quizzId: string,
+    format: 'json' | 'csv'
+},
+{
+    rejectValue: string
+}>('quizz/downloadQuizzResponses', async ({quizzId, format}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.downloadQuizzResponses(quizzId, format);
+        downloadData(response.data, `quizz_responses.${format}`);
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404) {
+                toast.error('Responses are not available');
+            }
+        }
+        return rejectWithValue('Error downloading responses');
     }
 });
 
