@@ -5,7 +5,7 @@ import { AppDispatch } from "../store";
 import { userListFetchFailed, userListFetchStarted, userListFetchSuccess } from "../userListSlice";
 import { signUpFailed, signUpStarted, signUpSuccess } from "../userSlice";
 import { RootState } from "../store";
-import { userProfileFetchStarted, userProfileFetchFailed, userProfileFetchSuccess, deleteFetchiStarted, deleteFetchFinished, passwordChangeStarted, passwordChangeFinished } from "../user_profile_slice";
+import { userProfileFetchStarted, userProfileFetchFailed, userProfileFetchSuccess, deleteFetchiStarted, deleteFetchFinished, passwordChangeStarted, passwordChangeFinished } from "../userProfileSlice";
 import { selectMe } from "../selectors/auth_selector";
 import { eraseAuthInfo } from "../authSlice";
 import { UserUpdate } from "../../Types/UserType";

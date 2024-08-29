@@ -62,3 +62,27 @@ export type QuizzResponse = {
         }[]
     
 }
+
+export type QuizzCompletionInfo = {
+    quizz_id: string;
+    quizz_title: string;
+    completion_time: string;
+}
+
+
+export type AverageScoreOfUsers = {
+    results: {
+        score: number;
+        user_email: string;
+    }[],
+    date: string;
+}
+
+export type AverageScoreByQuizes = {
+    results: {
+        score: number;
+        quizz_title: string;
+        quizz_id: string
+    }[],
+    date: string;
+}

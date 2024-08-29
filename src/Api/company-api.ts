@@ -69,6 +69,10 @@ const companyApi = {
 
     removeAdmin: async (companyId: string, userId: string) => {
         return await apiBase.delete(`/companies/${companyId}/admins/${userId}`);
+    },
+
+    membersAverageScoresAnalytics: async (companyId: string) => {
+        return await apiBase.get(`/companies/${companyId}/quizzes/average/members/?interval=days`);
     }
 }
 

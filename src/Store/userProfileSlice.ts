@@ -1,5 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserDetail } from "../Types/UserType";
+import { QuizzCompletionInfo } from "../Types/QuizzTypes";
+import { userApi } from "../Api/users-api";
+import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
 
 type UserProfileType = {
     fetching: boolean,
@@ -7,7 +10,9 @@ type UserProfileType = {
     fetchingPasswordChange: boolean,
     user?: UserDetail,
     isMe: boolean,
+    cumulativeRating: number,
     errors?: string[],
+    completions?: QuizzCompletionInfo[]
 }
 
 const initialState: UserProfileType = {
@@ -15,8 +20,36 @@ const initialState: UserProfileType = {
     fetchingDelete: false,
     fetchingPasswordChange: false,
     user: undefined,
+    cumulativeRating: 0,
     isMe: false,
 }
+
+export const fetchUserLastestQuizzCompletions = createAsyncThunk<
+QuizzCompletionInfo[],
+{userId: string},
+{rejectValue: string}
+>('userProfiles/fetchUserLastestQuizzCompletions', async ({userId}, {rejectWithValue, dispatch}) => {
+    try {
+        dispatch(pageStartedLoading());
+        const response = await userApi.getLastestQuizzCompletions(userId);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue("Failed to fetch user's quizz completions");
+    } finally {
+        dispatch(pageFinishedLoading());
+    }
+});
+
+export const fetchUserRating = createAsyncThunk<
+number,
+{userId: string},
+{}>
+('userProfiles/fetchUserRating', async ({userId}, {dispatch}) => {
+    dispatch(pageStartedLoading());
+    const response = await userApi.getUserRating(userId);
+    dispatch(pageFinishedLoading());
+    return response.data.score;
+});
 
 const userProfilesSlice = createSlice({
     name: "userProfile",
@@ -49,6 +82,15 @@ const userProfilesSlice = createSlice({
         passwordChangeFinished: (state) => {
             state.fetchingPasswordChange = false;
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchUserLastestQuizzCompletions.fulfilled, (state, action) => {
+            state.completions = action.payload;
+        });
+
+        builder.addCase(fetchUserRating.fulfilled, (state, action) => {
+            state.cumulativeRating = action.payload;
+        });
     }
 });
 

@@ -9,6 +9,7 @@ import ModalWindow from "../ModalWindow"
 import {Form as FinalForm} from 'react-final-form'
 import Input from "../Input"
 import { validateEmail } from "../../Utils/validate_email"
+import { usernameEmailDataGetters } from "../../Utils/userList"
 
 const CompanyInvites = ({company}: {company: CompanyDetail}): ReactElement => {
     
@@ -35,7 +36,7 @@ const CompanyInvites = ({company}: {company: CompanyDetail}): ReactElement => {
 
     return (
         <>
-        <UserListWithActionButton users={invites} actions={actions}/>
+        <UserListWithActionButton users={invites} actions={actions} dataGetters={usernameEmailDataGetters}/>
         <button className="btn btn-primary" onClick={() => setInviteUserModalShown(true)}>Invite User</button>
 
         <ModalWindow isOpen={confirmModalShown} onClose={() => {

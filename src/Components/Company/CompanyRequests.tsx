@@ -6,6 +6,7 @@ import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchAcceptUserRequest, fetchCompanyRequests, fetchRejectUserRequest } from "../../Store/companyProfileSlice"
 import UserListWithActionButton from "../User/UserListWIthActionButton"
 import ModalWindow from "../ModalWindow"
+import { usernameEmailDataGetters } from "../../Utils/userList"
 
 const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
     
@@ -44,7 +45,7 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
 
     return (
         <>
-            <UserListWithActionButton users={requests} actions={actions}/>
+            <UserListWithActionButton users={requests} actions={actions} dataGetters={usernameEmailDataGetters}/>
 
             <ModalWindow isOpen={confirmModalShown} onClose={() => {
                 setConfirmModalShown(false);

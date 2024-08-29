@@ -1,6 +1,4 @@
 import Table from "../Table/Table";
-import { Link } from "react-router-dom";
-import { getUserProfilePath } from "../../Utils/router";
 import User from "../../Types/UserType";
 import { ActionButton } from "../../Types/ActionButton";
 import { ReactElement } from "react";
@@ -11,18 +9,18 @@ type ActionDisabled = {
     actionIndex: number;
 }
 
-type PropsType = {
-    users: User[];
+type PropsType<T extends User> = {
+    users: T[];
     actions: ActionButton[];
     actionsDisabled?: ActionDisabled[];
+    dataGetters: ((item: T | null) => JSX.Element | string)[];
 }
 
-const UserListWithActionButton = ({users, actions, actionsDisabled}: PropsType): ReactElement => {
+const UserListWithActionButton = <T extends User>({users, dataGetters, actions, actionsDisabled}: PropsType<T>): ReactElement => {
     const userItems = users.map((user) => ({
         id: user.id,
         items: [
-            <Link to={getUserProfilePath(user.id)}>{user.username}</Link>,
-            user.email,
+            ...dataGetters.map((getter) => getter(user)),
             actions.map((action, index) => {
                 if (actionsDisabled) {
                     const isDisabled = actionsDisabled.find((disabled) => disabled.key(user) && disabled.actionIndex === index);
@@ -40,7 +38,7 @@ const UserListWithActionButton = ({users, actions, actionsDisabled}: PropsType):
     }));
 
     return (
-        <Table theadData={['Username', 'Email', '']} tbodyData={userItems}/>
+        <Table theadData={[...dataGetters.map(getter => getter(null)), '']} tbodyData={userItems}/>
     )
 }
 

@@ -16,9 +16,10 @@ import CompanyAdmins from "../Components/Company/CompanyAdmins";
 import CompanyQuizzes from "../Components/Company/CompanyQuizzes";
 import QuizzForm from "../Components/Quizz/QuizzForm";
 import { getCompanyPath } from "../Utils/router";
+import AverageMembersScores from "../Components/Company/AverageMembersScores";
 
 type TabProps = {
-    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins' | 'quizzes' | 'quizzAdd';
+    openedTab: 'info' | 'members' | 'edit' | 'invites' | 'requests' | 'admins' | 'quizzes' | 'quizzAdd' | 'analytics';
 }
 
 const CompanyProfile = ({openedTab}: TabProps) => {
@@ -55,7 +56,7 @@ const CompanyProfile = ({openedTab}: TabProps) => {
         return <Navigate to={getCompanyPath(company.id)}/>
     }
 
-    if (openedTab === 'quizzAdd' && (role === 'none' || role === 'member')) {
+    if (['quizzAdd', 'analytics'].indexOf(openedTab) > -1 && (role === 'none' || role === 'member')) {
         return <Navigate to={getCompanyPath(company.id)}/>
     }
 
@@ -83,6 +84,9 @@ const CompanyProfile = ({openedTab}: TabProps) => {
         case 'quizzAdd':
             displayedTab = <QuizzForm company={company}/>
             break;
+        case 'analytics':
+            displayedTab = <AverageMembersScores company={company}/>
+            break
     }
 
     return (

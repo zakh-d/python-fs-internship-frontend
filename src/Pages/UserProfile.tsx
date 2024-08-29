@@ -2,16 +2,19 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import {withAuthentication} from "../Utils/hoc/auth_redirect";
 import { Key, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrentUser, selectDeleteFetching, selectIsFetching, selectIsMe } from "../Store/selectors/user_profile_selectors";
+import { selectCompletions, selectCurrentUser, selectDeleteFetching, selectIsFetching, selectIsMe, selectUserCumulativeRating } from "../Store/selectors/user_profile_selectors";
 import useAppDispatch from "../Store/hooks/dispatch";
 import { deleteUser, getUser } from "../Store/thunks/users_thunk";
 import Loader from "../Components/Loader";
 import UserUpdateForm from "../Components/User/UserUpdateForm";
 import ModalWindow from "../Components/ModalWindow";
 import UpdatePasswordForm from "../Components/User/UpdatePasswordForm";
-import { eraseErrors } from "../Store/user_profile_slice";
+import { eraseErrors, fetchUserLastestQuizzCompletions, fetchUserRating } from "../Store/userProfileSlice";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getUserProfileEditPasswordPath, getUserProfileEditPath } from "../Utils/router";
+import QuizzCompletionList from "../Components/Quizz/QuizzCompletionList";
+import { Rating } from "react-simple-star-rating";
+import AvereageScoreByQuizz from "../Components/User/AverageScoreByQuizz";
 
 const UserProfile = ({editing, changePassword}: {editing: boolean, changePassword?: boolean}) => {
     const {userId} = useParams();
@@ -25,6 +28,8 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
     const fetching = useSelector(selectIsFetching);
     const deleteFetching = useSelector(selectDeleteFetching);
     const isMe = useSelector(selectIsMe);
+    const completions = useSelector(selectCompletions);
+    const cumulativeRating = useSelector(selectUserCumulativeRating);
 
     const [deleteConfirm, setDeleteConfirm] = useState(false);
 
@@ -33,7 +38,15 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
             return;
         }
         dispatch(getUser(userId));
+        dispatch(fetchUserRating({userId}));
     }, [userId]);
+
+    useEffect(() => {
+        if (!isMe || !userId) {
+            return;
+        }
+        dispatch(fetchUserLastestQuizzCompletions({userId}));
+    }, [isMe, userId]);
 
     if (fetching) {
         return <Loader/>;
@@ -100,10 +113,26 @@ const UserProfile = ({editing, changePassword}: {editing: boolean, changePasswor
             <img className="m-auto d-block" width={250} src="https://www.svgrepo.com/show/384674/account-avatar-profile-user-11.svg" alt={user.first_name + "'s profile picture"}/>
             <h2 className="text-center">{user?.first_name} {user?.last_name}</h2>
             <p className="text-center text-muted">{user?.email}</p>
+            <p className="text-center">
+
+                <Rating 
+                    initialValue={cumulativeRating / 10}
+                    iconsCount={10}
+                    allowFraction
+                    readonly
+                />
+            </p>
             {isMe && 
                 <div className="row">
 
                     <Link to={getUserProfileEditPath(user.id)} className="btn btn-primary col-lg-4 offset-lg-4 my-1">Edit</Link>
+
+                    <h3 className="text-center mt-4">Latest Quizz Completions</h3>
+                    <QuizzCompletionList completions={completions || []}/>
+
+                    <br /><br /><br />
+                    <AvereageScoreByQuizz user={user} />
+                    <br /><br /><br />
                 </div>
             }
         </div>
