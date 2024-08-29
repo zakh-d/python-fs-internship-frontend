@@ -14,6 +14,7 @@ import ModalWindow from "../Components/ModalWindow";
 import CompanyForm from "../Components/Company/CompanyForm";
 import styled from "styled-components";
 import { getCompanyListPath, getMyCompanyListPath } from "../Utils/router";
+import CompaniesUserPartOf from "../Components/Company/CompaniesUserPartOf";
 
 
 const FixedBottomRightButton = styled.button`
@@ -54,15 +55,18 @@ const AllCompanies = ({showingAllCompanies}: PropsType) => {
                 </li>
                 
             </ul>
+            { loading && <Loader /> }
             {
-                loading ? 
-                <Loader />
-                :
+                showingAllCompanies ? 
+                <>
                 <CompanyList companies={companies}/>
-            }
-            <Pagination totalItems={totalCount} itemsPerPage={10} onPageChange={function (page: number, itemsPerPage: number): void {
-                dispatch(fetchComapnies({page, limit: itemsPerPage, myCompanies: !showingAllCompanies}));
-            } } />
+                <Pagination totalItems={totalCount} itemsPerPage={10} onPageChange={function (page: number, itemsPerPage: number): void {
+                    dispatch(fetchComapnies({page, limit: itemsPerPage, myCompanies: !showingAllCompanies}));
+                } } />
+                </>
+                :
+                <CompaniesUserPartOf companies={companies}/>
+        }
 
             <ModalWindow isOpen={createModalOpen} onClose={function () {
                 setCreateModalOpen(false);

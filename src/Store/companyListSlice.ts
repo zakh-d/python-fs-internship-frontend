@@ -15,13 +15,31 @@ export const fetchComapnies = createAsyncThunk<
     }
     >("companyList/fetchCompanies", async ({page, limit, myCompanies}, thunkAPI) => {
     try {
-        let response = await (myCompanies ? companyApi.getMyCompanies(page, limit) : companyApi.getComanies(page, limit));
+        let response = await (myCompanies ? companyApi.getMyCompanies() : companyApi.getComanies(page, limit));
         return {
             companies: response.data.companies,
             totalCount: response.data.total_count
         };
     } catch (error) {
         return thunkAPI.rejectWithValue('error');
+    }
+});
+
+export const fetchLeaveCompany = createAsyncThunk<
+void,
+{
+    companyId: string,
+    userId: string
+},
+{
+
+}>("companyList/fetchLeaveCompany", async ({companyId, userId}, {dispatch}) => {
+    try {
+        await companyApi.removeCompanyMember(companyId, userId);
+        dispatch(removeCompany(companyId));
+        toast.success('You left company');
+    } catch (error) {
+        toast.error('Error while leaving company');
     }
 });
 
@@ -62,7 +80,11 @@ const initialState: {
 const slice = createSlice({
     name: "companyList",
     initialState,
-    reducers: {},
+    reducers: {
+        removeCompany: (state, action) => {
+            state.companies = state.companies.filter(company => company.id !== action.payload);
+        }
+    },
     extraReducers: builder => {
         builder.addCase(fetchComapnies.pending, (state) => {
             state.loading = true;
@@ -79,4 +101,5 @@ const slice = createSlice({
     } 
 });
 
+export const { removeCompany } = slice.actions;
 export default slice.reducer;

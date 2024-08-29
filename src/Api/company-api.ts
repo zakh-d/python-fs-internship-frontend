@@ -4,8 +4,8 @@ const companyApi = {
     getComanies: async (page: number, limit: number) => {
         return await apiBase.get(`/companies?page=${page}&limit=${limit}`);
     },
-    getMyCompanies: async (page: number, limit: number) => {
-        return await apiBase.get(`/companies/my/?page=${page}&limit=${limit}`);
+    getMyCompanies: async () => {
+        return await apiBase.get('/companies/my/');
     },
     getCompanyById: async (id: string) => {
         return await apiBase.get(`/companies/${id}`);
