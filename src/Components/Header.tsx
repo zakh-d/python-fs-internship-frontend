@@ -4,12 +4,18 @@ import { Link, NavLink } from "react-router-dom";
 import { selectIsAuthenticated, selectMe } from "../Store/selectors/auth_selector";
 import LogoutButton from "./LogoutButton";
 import { getAboutPath, getCompanyListPath, getLoginPath, getMyInvitesPath, getMyRequestsPath, getRegisterPath, getUserListPath, getUserProfilePath } from "../Utils/router";
+import useAppDispatch from "../Store/hooks/dispatch";
+import { openNotificationPanel } from "../Store/notificationSlice";
+import { selectNumberOfUnreadNotifications } from "../Store/selectors/notification_selector";
 
 type HeaderProps = {title: string};
 
 const Header = ({title}: HeaderProps): ReactElement => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const me = useSelector(selectMe);
+    const dispatch = useAppDispatch();
+    const numberOfUnreadNotifications = useSelector(selectNumberOfUnreadNotifications);
+
     return (
         <header className="navbar navbar-expand navbar-light shadow mb-4">
             <div className="container-fluid">
@@ -39,6 +45,18 @@ const Header = ({title}: HeaderProps): ReactElement => {
                                     <li><NavLink className="dropdown-item" to={getMyInvitesPath()}>Invites</NavLink></li>
                                     <li><NavLink className="dropdown-item" to={getMyRequestsPath()}>Requests</NavLink></li>
                                 </ul>
+                            </li>
+                            <li className="nav-item">
+                                <a href="#" className="nav-link position-relative" onClick={() => dispatch(openNotificationPanel())}>
+                                    Notification
+                                    {numberOfUnreadNotifications > 0 &&
+                                    <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {numberOfUnreadNotifications}
+                                        <span className="visually-hidden">unread messages</span>
+                                    </span>
+                                    }
+
+                                </a>
                             </li>
                             <li className="nav-item">
                                 <NavLink to={getAboutPath()} className="nav-link">About</NavLink>
