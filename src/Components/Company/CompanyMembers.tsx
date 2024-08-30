@@ -6,12 +6,11 @@ import { selectCompanyMembers } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchAddAdmin, fetchCompanyMembers, fetchRemoveMember } from "../../Store/companyProfileSlice"
 import { selectMe } from "../../Store/selectors/auth_selector"
-import UserListWithActionButton from "../User/UserListWIthActionButton"
+import TableWithActionButton from "../Table/TableWithActionButton"
 import ModalWindow from "../ModalWindow"
 import { ActionButton } from "../../Types/ActionButton"
 import {UserInCompany} from "../../Types/UserType"
-import { getUserProfilePath } from "../../Utils/router"
-import { Link } from "react-router-dom"
+import { usernameEmailDataGetters } from "../../Utils/list_utils"
 
 const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
     
@@ -67,21 +66,7 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
 
     return ( 
         <>
-            <UserListWithActionButton<UserInCompany> users={members} dataGetters={[
-                (item: UserInCompany | null) => {
-                    if (!item) return 'Username';
-                    return <Link to={getUserProfilePath(item.id)}>item.username</Link>;
-                },
-                (item: UserInCompany | null) => {
-                    if (!item) return 'Email';
-                    return item.email;
-                },
-                (item: UserInCompany | null) => {
-                    if (!item) return 'Latest Quizz Completed At';
-                    if (!item.lastest_quizz_comleted_at) return '----';
-                    return new Date(item.lastest_quizz_comleted_at).toLocaleDateString();
-                }
-            ]} actions={actions} actionsDisabled={actionsDisabled}/>
+            <TableWithActionButton<UserInCompany> items={members} dataGetters={usernameEmailDataGetters} actions={actions} actionsDisabled={actionsDisabled}/>
 
         <ModalWindow isOpen={confirmModalShown} onClose={() => {
                 setConfirmModalShown(false);

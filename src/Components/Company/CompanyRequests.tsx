@@ -4,9 +4,9 @@ import { useSelector } from "react-redux"
 import { selectCompanyRequests } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchAcceptUserRequest, fetchCompanyRequests, fetchRejectUserRequest } from "../../Store/companyProfileSlice"
-import UserListWithActionButton from "../User/UserListWIthActionButton"
+import TableWithActionButton from "../Table/TableWithActionButton"
 import ModalWindow from "../ModalWindow"
-import { usernameEmailDataGetters } from "../../Utils/userList"
+import { usernameEmailDataGetters } from "../../Utils/list_utils"
 
 const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
     
@@ -45,7 +45,7 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
 
     return (
         <>
-            <UserListWithActionButton users={requests} actions={actions} dataGetters={usernameEmailDataGetters}/>
+            <TableWithActionButton items={requests} actions={actions} dataGetters={usernameEmailDataGetters}/>
 
             <ModalWindow isOpen={confirmModalShown} onClose={() => {
                 setConfirmModalShown(false);

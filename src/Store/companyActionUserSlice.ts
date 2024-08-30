@@ -6,6 +6,7 @@ import { userApi } from "../Api/users-api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
+import { setIsMember } from "./companyProfileSlice";
 
 
 const initialState: {
@@ -56,6 +57,7 @@ export const fetchRequestToJoinCompany = createAsyncThunk<
         try {
             await userApi.requestToJoin(me.id, company.id);
             dispatch(pageFinishedLoading());
+            dispatch(setIsMember('pending_request'));
             toast.success('Request sent');
         } catch (error) {
             dispatch(pageFinishedLoading());
@@ -83,6 +85,7 @@ export const fetchCancelRequest = createAsyncThunk<
         await userApi.cancelRequest(me.id, companyId);
         dispatch(pageFinishedLoading());
         dispatch(removeRequest(companyId));
+        dispatch(setIsMember('no'));
     } catch (error) {
         dispatch(pageFinishedLoading());
         if (error instanceof AxiosError) {

@@ -4,10 +4,10 @@ import useAppDispatch from "../../Store/hooks/dispatch";
 import { fetchAdmins, fetchRemoveAdmin } from "../../Store/companyProfileSlice";
 import { useSelector } from "react-redux";
 import { selectCompanyAdmins } from "../../Store/selectors/company_selector";
-import UserListWithActionButton from "../User/UserListWIthActionButton";
+import TableWithActionButton from "../Table/TableWithActionButton";
 import { ActionButton } from "../../Types/ActionButton";
 import User from "../../Types/UserType";
-import { usernameEmailDataGetters } from "../../Utils/userList";
+import { usernameEmailDataGetters } from "../../Utils/list_utils";
 
 const CompanyAdmins = ({company}: {company: CompanyType}) => {
     const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ const CompanyAdmins = ({company}: {company: CompanyType}) => {
     return (
         <>
             <h2>Admins</h2>
-            <UserListWithActionButton<User> users={admins} actions={actions} dataGetters={usernameEmailDataGetters}/>
+            <TableWithActionButton<User> items={admins} actions={actions} dataGetters={usernameEmailDataGetters}/>
         </>
     )
 }
