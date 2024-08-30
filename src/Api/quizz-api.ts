@@ -46,6 +46,12 @@ const quizzApi = {
     },
     downloadQuizzResponses: async (quizzId: string, format: 'json' | 'csv' = 'csv') => {
         return await apiBase.get(`/quizzes/${quizzId}/responses/?format=${format}`, {responseType: 'blob'});
+    },
+    downloadCompanyMemberResponses: async (companyId: string, userId: string, format: 'json' | 'csv' = 'csv') => {
+        return await apiBase.get(`/companies/${companyId}/quizzes/responses/${userId}/?format=${format}`, {responseType: 'blob'});
+    },
+    downloadCompanyMembersResponses: async (companyId: string, format: 'json' | 'csv' = 'csv') => {
+        return await apiBase.get(`/companies/${companyId}/quizzes/responses/?format=${format}`, {responseType: 'blob'});
     }
 }
 

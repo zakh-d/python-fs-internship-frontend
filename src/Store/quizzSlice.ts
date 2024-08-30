@@ -548,6 +548,53 @@ void,
     }
 });
 
+export const downloadCompanyMemberResponses = createAsyncThunk
+<
+void,
+{
+    companyId: string,
+    userId: string,
+    format: 'json' | 'csv'
+},
+{
+    rejectValue: string
+}>('quizz/downloadCompanyMemberResponses', async ({companyId, userId, format}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.downloadCompanyMemberResponses(companyId, userId, format);
+        downloadData(response.data, `quizz_responses_${userId}.${format}`);
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404) {
+                toast.error('Responses are not available');
+            }
+        }
+        return rejectWithValue('Error downloading responses');
+    }
+});
+
+export const downloadCompanyMembersResponses = createAsyncThunk
+<
+void,
+{
+    companyId: string,
+    format: 'json' | 'csv'
+},
+{
+    rejectValue: string
+}>('quizz/downloadCompanyMembersResponses', async ({companyId, format}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.downloadCompanyMembersResponses(companyId, format);
+        downloadData(response.data, `quizz_responses.${format}`);
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404) {
+                toast.error('Responses are not available');
+            }
+        }
+        return rejectWithValue('Error downloading responses');
+    }
+});
+
 export const { 
     addEmptyQuestion,
     addEmptyAnswer,
