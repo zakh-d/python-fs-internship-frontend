@@ -5,7 +5,6 @@ import { customNavigator } from "../Utils/_helper";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import Loader from "../Components/Loader";
-import NotificationList from "../Components/Notification/NotificationList";
 
 const Layout = (): ReactElement => {
     const navigate = useNavigate();
@@ -18,7 +17,6 @@ const Layout = (): ReactElement => {
         <div>
             <Header title="FE Internship"/>
             {isLoading && <Loader/> }
-            <NotificationList/>
             <Outlet/>
         </div>
     )
