@@ -8,6 +8,7 @@ import { AxiosError } from "axios";
 import { customNavigator } from "../Utils/_helper";
 import { getCompanyQuizzPath } from "../Utils/router";
 import { pageFinishedLoading, pageStartedLoading } from "./pageSlice";
+import { downloadData } from "../Utils/download";
 
 
 type StateType = {
@@ -495,6 +496,102 @@ const quizzSlice = createSlice({
                 ...action.payload
             };
         });
+    }
+});
+
+
+export const downloadUserResponse = createAsyncThunk
+<
+void,
+{
+    quizzId: string,
+    userId: string,
+    format: 'json' | 'csv'
+},
+{
+    rejectValue: string
+}
+>('quizz/downloadUserResponse', async ({quizzId, userId, format}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.downloadUserResponse(quizzId, userId, format);
+        downloadData(response.data, `quizz_response_${userId}.${format}`);    
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404) {
+                toast.error('Response is not available');
+            }
+        }
+        return rejectWithValue('Error downloading response');
+    }
+});
+
+export const downloadQuizzResponses = createAsyncThunk
+<
+void,
+{
+    quizzId: string,
+    format: 'json' | 'csv'
+},
+{
+    rejectValue: string
+}>('quizz/downloadQuizzResponses', async ({quizzId, format}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.downloadQuizzResponses(quizzId, format);
+        downloadData(response.data, `quizz_responses.${format}`);
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404) {
+                toast.error('Responses are not available');
+            }
+        }
+        return rejectWithValue('Error downloading responses');
+    }
+});
+
+export const downloadCompanyMemberResponses = createAsyncThunk
+<
+void,
+{
+    companyId: string,
+    userId: string,
+    format: 'json' | 'csv'
+},
+{
+    rejectValue: string
+}>('quizz/downloadCompanyMemberResponses', async ({companyId, userId, format}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.downloadCompanyMemberResponses(companyId, userId, format);
+        downloadData(response.data, `quizz_responses_${userId}.${format}`);
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404) {
+                toast.error('Responses are not available');
+            }
+        }
+        return rejectWithValue('Error downloading responses');
+    }
+});
+
+export const downloadCompanyMembersResponses = createAsyncThunk
+<
+void,
+{
+    companyId: string,
+    format: 'json' | 'csv'
+},
+{
+    rejectValue: string
+}>('quizz/downloadCompanyMembersResponses', async ({companyId, format}, {rejectWithValue}) => {
+    try {
+        const response = await quizzApi.downloadCompanyMembersResponses(companyId, format);
+        downloadData(response.data, `quizz_responses.${format}`);
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 404) {
+                toast.error('Responses are not available');
+            }
+        }
+        return rejectWithValue('Error downloading responses');
     }
 });
 

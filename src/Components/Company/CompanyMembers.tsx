@@ -2,21 +2,21 @@ import { ReactElement, useEffect, useState } from "react"
 import UserList from "../User/UserList"
 import { CompanyDetail } from "../../Types/CompanyType"
 import { useSelector } from "react-redux"
-import { selectCompanyMembers } from "../../Store/selectors/company_selector"
+import { selectCompanyMembers, selectRole } from "../../Store/selectors/company_selector"
 import useAppDispatch from "../../Store/hooks/dispatch"
 import { fetchAddAdmin, fetchCompanyMembers, fetchRemoveMember } from "../../Store/companyProfileSlice"
-import { selectMe } from "../../Store/selectors/auth_selector"
 import TableWithActionButton from "../Table/TableWithActionButton"
 import ModalWindow from "../ModalWindow"
 import { ActionButton } from "../../Types/ActionButton"
 import {UserInCompany} from "../../Types/UserType"
 import { usernameEmailDataGetters } from "../../Utils/list_utils"
+import { downloadCompanyMemberResponses, downloadCompanyMembersResponses } from "../../Store/quizzSlice"
 
 const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
     
     const dispatch = useAppDispatch();
     const members = useSelector(selectCompanyMembers);
-    const me = useSelector(selectMe);
+    const role = useSelector(selectRole)
     const [confirmModalShown, setConfirmModalShown] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
@@ -25,13 +25,13 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
         dispatch(fetchCompanyMembers(company.id));
     }, [company.id]);
 
-    if (company.owner.id !== me?.id) {
+    if (role === 'member' || role === 'none') {
         return (
             <UserList users={members}/>
         )
     }
 
-    const actions: ActionButton[] = [
+    const ownerOnlyActions: ActionButton[] = [
         {
             func: function (id: string): void {
                 dispatch(fetchAddAdmin({companyId: company.id, userId: id}));
@@ -45,7 +45,21 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
                 setConfirmModalShown(true);
                 setSelectedUserId(userId);
             },
-            customClass: 'btn-danger'
+            customClass: 'btn-danger me-1'
+        }
+    ]
+
+    const adminOwnerActions: ActionButton[] = [
+        {
+            text: 'Download Responses',
+            func: (userId: string) => {
+                dispatch(downloadCompanyMemberResponses({
+                    companyId: company.id,
+                    userId: userId,
+                    format: "csv"
+                }));
+            },
+            customClass: 'btn-success'
         }
     ]
 
@@ -64,24 +78,39 @@ const CompanyMembers = ({company}: {company: CompanyDetail}): ReactElement => {
         }
     ]
 
+    const dataGetters = [...usernameEmailDataGetters, (item: UserInCompany | null) => {
+        if (!item) return 'Lastest Completion Date';
+        return new Date(item.lastest_quizz_comleted_at).toLocaleDateString();
+    }];
+
     return ( 
         <>
-            <TableWithActionButton<UserInCompany> items={members} dataGetters={usernameEmailDataGetters} actions={actions} actionsDisabled={actionsDisabled}/>
 
-        <ModalWindow isOpen={confirmModalShown} onClose={() => {
-                setConfirmModalShown(false);
-                setSelectedUserId(null);
-            }} title="Remove Member?">
-                <button className="btn btn-lg btn-danger" onClick={() => {
-                    if (!selectedUserId) return;
-                    dispatch(fetchRemoveMember({companyId: company.id, userId: selectedUserId}));
+            <TableWithActionButton<UserInCompany> items={members} dataGetters={dataGetters}
+                    actions={role === 'owner' ? [...ownerOnlyActions, ...adminOwnerActions] : adminOwnerActions}
+                    actionsDisabled={role === 'owner' ? actionsDisabled : []}/>
+
+            <button className="btn btn-success" onClick={() => {
+                dispatch(downloadCompanyMembersResponses({
+                    companyId: company.id,
+                    format: "csv"
+                }));
+            }}>Download all Members Responses</button>
+
+            <ModalWindow isOpen={confirmModalShown} onClose={() => {
                     setConfirmModalShown(false);
                     setSelectedUserId(null);
-                }}>Yes</button>
-                <button className="btn btn-lg btn-primary" onClick={() => {
-                    setConfirmModalShown(false);
-                    setSelectedUserId(null);
-                }}>No</button>
+                }} title="Remove Member?">
+                    <button className="btn btn-lg btn-danger" onClick={() => {
+                        if (!selectedUserId) return;
+                        dispatch(fetchRemoveMember({companyId: company.id, userId: selectedUserId}));
+                        setConfirmModalShown(false);
+                        setSelectedUserId(null);
+                    }}>Yes</button>
+                    <button className="btn btn-lg btn-primary" onClick={() => {
+                        setConfirmModalShown(false);
+                        setSelectedUserId(null);
+                    }}>No</button>
             </ModalWindow>
         </>
     )
