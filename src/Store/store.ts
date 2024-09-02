@@ -12,6 +12,7 @@ import companyActionUserReducer from "./companyActionUserSlice";
 import quizzReducer from "./quizzSlice";
 import quizzWorkflowReducer from "./quizzWorkflowSlice";
 import analyticsReducer from "./analyticsSlice";
+import notificationReducer from "./notificationSlice";
 
 const store = configureStore({
     reducer: {
@@ -27,7 +28,8 @@ const store = configureStore({
         companyActionUser: companyActionUserReducer,
         quizz: quizzReducer,
         quizzWorkflow: quizzWorkflowReducer,
-        analytics: analyticsReducer
+        analytics: analyticsReducer,
+        notification: notificationReducer
     }
 });
 
