@@ -7,4 +7,4 @@ cd ~/service
 
 sudo docker rm -f app-container
 sudo docker build -t app .
-sudo docker run --name app-container -p 80:80 app
+sudo docker run -d --name app-container -p 0.0.0.0:80:80 app
