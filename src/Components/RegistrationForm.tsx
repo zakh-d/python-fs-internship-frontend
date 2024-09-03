@@ -7,7 +7,7 @@ import useAppDispatch from "../Store/hooks/dispatch";
 import { signUp } from "../Store/thunks/users_thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import { useAuth0 } from "@auth0/auth0-react";
+// import { useAuth0 } from "@auth0/auth0-react";
 import { validateEmail } from "../Utils/validate_email";
 import { getLoginPath } from "../Utils/router";
 
@@ -15,7 +15,7 @@ const RegistrationForm = () : ReactElement => {
     const dispatch = useAppDispatch();
     const signUpStatus = useSelector((state: RootState) => state.users.userCreation.status);
     const errors = useSelector((state: RootState) => state.users.userCreation.errors);
-    const {loginWithRedirect} = useAuth0();
+    // const {loginWithRedirect} = useAuth0();
 
     const fields: InputPropsType[] = [
         {
@@ -98,10 +98,10 @@ const RegistrationForm = () : ReactElement => {
                     <div className="d-flex justify-content-between mb-2">
                         <button type="submit" className="btn flex-fill btn-secondary mt-2 mr-1" disabled={signUpStatus === 'fetching'}>Register</button>
                         <div className="m-1"></div>
-                        <button type="button" className="btn flex-fill btn-outline-secondary mt-2 ml-1" disabled={signUpStatus === 'fetching'}
+                        {/* <button type="button" className="btn flex-fill btn-outline-secondary mt-2 ml-1" disabled={signUpStatus === 'fetching'}
                                 onClick={() => loginWithRedirect({ authorizationParams: {
                                     screen_hint: 'signup',
-                                }})}>Auth0</button>
+                                }})}>Auth0</button> */}
                     </div>
                     {
                         signUpStatus === 'failed' &&
