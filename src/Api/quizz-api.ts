@@ -52,6 +52,9 @@ const quizzApi = {
     },
     downloadCompanyMembersResponses: async (companyId: string, format: 'json' | 'csv' = 'csv') => {
         return await apiBase.get(`/companies/${companyId}/quizzes/responses/?format=${format}`, {responseType: 'blob'});
+    },
+    downloadQuizzExcelExample: async () => {
+        return await apiBase.get(`/quizzes/import/example/`, {responseType: 'blob'});
     }
 }
 

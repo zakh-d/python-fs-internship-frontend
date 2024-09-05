@@ -595,6 +595,16 @@ void,
     }
 });
 
+export const downloadQuizzExcelExample = createAsyncThunk<void, undefined, {}>(
+    'quizz/downloadExampleExcel', async () => {
+    try {
+        const response = await quizzApi.downloadQuizzExcelExample();
+        downloadData(response.data, 'quizz_example.xlsx');
+    } catch (e) {
+        toast.error('Error downloading example, please try again later');
+    }
+});
+
 export const { 
     addEmptyQuestion,
     addEmptyAnswer,

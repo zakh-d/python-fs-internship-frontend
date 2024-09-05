@@ -7,7 +7,7 @@ import { fetchCompanyQuizzes } from "../../Store/quizzSlice";
 import QuizzCardList from "../Quizz/QuizzCardList";
 import Pagination from "../Pagination";
 import { Link } from "react-router-dom";
-import { getCompanyQuizzAddPath } from "../../Utils/router";
+import { getCompanyQuizzAddPath, getQuizzUploadPath } from "../../Utils/router";
 
 const CompanyQuizzes = ({company}: {company: Company}): ReactElement => {
     const dispatch = useAppDispatch();
@@ -21,6 +21,7 @@ const CompanyQuizzes = ({company}: {company: Company}): ReactElement => {
     return (
     <div>
         <Link className="btn btn-primary" to={getCompanyQuizzAddPath(company.id)}>Add Quizz</Link>
+        <Link className="btn btn-success" to={getQuizzUploadPath(company.id)}>Upload</Link>
         <br /><br />
         <QuizzCardList company={company} quizzes={quizzes}/>
         <br />
