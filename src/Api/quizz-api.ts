@@ -55,6 +55,12 @@ const quizzApi = {
     },
     downloadQuizzExcelExample: async () => {
         return await apiBase.get(`/quizzes/import/example/`, {responseType: 'blob'});
+    },
+    sendExcelFile: async (company_id: string, file: File) => {
+        const formData = new FormData();
+        formData.append('excel_file', file);
+        
+        return await apiBase.post(`/quizzes/import/${company_id}/`, formData);
     }
 }
 

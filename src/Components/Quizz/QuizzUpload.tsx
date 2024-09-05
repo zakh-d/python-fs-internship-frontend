@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAppDispatch from "../../Store/hooks/dispatch";
-import { downloadQuizzExcelExample } from "../../Store/quizzSlice";
+import { downloadQuizzExcelExample, uploadExcelFile } from "../../Store/quizzSlice";
 import Company from "../../Types/CompanyType";
 import { FileUploader } from "react-drag-drop-files";
 
@@ -23,7 +23,9 @@ const QuizzUpload = ({company}: {company: Company}) => {
             
             <FileUploader handleChange={handleChange} multiple={false} types={excelFileTypes}/>
             }
-            { file && <button className="btn btn-success">Upload</button>}
+            { file && <button className="btn btn-success" onClick={() => {
+                dispatch(uploadExcelFile({companyId: company.id, file}));
+            }}>Upload</button>}
             <br /><br />
             <p className="text-muted">
                 Not sure what your excel file should look like <a href="#" onClick={() => dispatch(downloadQuizzExcelExample())}>Download Example</a>
