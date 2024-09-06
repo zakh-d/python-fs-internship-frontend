@@ -57,7 +57,7 @@ const CompanyProfile = ({openedTab}: TabProps) => {
         return <Navigate to={getCompanyPath(company.id)}/>
     }
 
-    if (['quizzAdd', 'analytics'].indexOf(openedTab) > -1 && (role === 'none' || role === 'member')) {
+    if (['quizzAdd', 'analytics', 'quizz_upload'].indexOf(openedTab) > -1 && (role === 'none' || role === 'member')) {
         return <Navigate to={getCompanyPath(company.id)}/>
     }
 
