@@ -26,7 +26,7 @@ const CompanyQuizzes = ({company}: {company: Company}): ReactElement => {
             (role === 'owner' || role == 'admin') &&
             <>
                 <Link className="btn btn-primary" to={getCompanyQuizzAddPath(company.id)}>Add Quizz</Link>
-                <Link className="btn btn-success" to={getQuizzUploadPath(company.id)}>Upload</Link>
+                <Link className="btn btn-success ms-1" to={getQuizzUploadPath(company.id)}>Upload</Link>
             </>
 
         }
