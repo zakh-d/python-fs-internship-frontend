@@ -98,6 +98,15 @@ const quizzWorkflowSlice = createSlice({
                 return;
             }
             state.quizzResponse.questions[state.currentQuestionIndex].answer_ids = state.quizzResponse.questions[state.currentQuestionIndex].answer_ids.filter(id => id !== action.payload);
+        },
+        uncheckAllAnswers: (state) => {
+            if (!state.quizzResponse || !state.quizzToPass) {
+                return;
+            }
+            if (state.quizzResponse.questions.length <= state.currentQuestionIndex) {
+                return;
+            }
+            state.quizzResponse.questions[state.currentQuestionIndex].answer_ids = [];
         }
     },
     extraReducers: builder => {
@@ -127,6 +136,7 @@ const quizzWorkflowSlice = createSlice({
 export const {
     nextQuestion,
     checkAnswer,
-    uncheckAnswer
+    uncheckAnswer,
+    uncheckAllAnswers
 } = quizzWorkflowSlice.actions;
 export default quizzWorkflowSlice.reducer;

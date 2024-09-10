@@ -11,6 +11,7 @@ import {
   uncheckAnswer,
   checkAnswer,
   fetchCompleteQuizz,
+  uncheckAllAnswers,
 } from "../../Store/quizzWorkflowSlice";
 
 const QuestionTake = () => {
@@ -40,6 +41,9 @@ const QuestionTake = () => {
                     checked={selectedAnswers.includes(answer.id)}
                     onChange={(e) => {
                         if (e.target.checked) {
+                          if (!question.multiple) {
+                            dispatch(uncheckAllAnswers());
+                          }
                         dispatch(checkAnswer(answer.id));
                         } else {
                         dispatch(uncheckAnswer(answer.id));
