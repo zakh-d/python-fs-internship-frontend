@@ -595,6 +595,36 @@ void,
     }
 });
 
+export const downloadQuizzExcelExample = createAsyncThunk<void, undefined, {}>(
+    'quizz/downloadExampleExcel', async () => {
+    try {
+        const response = await quizzApi.downloadQuizzExcelExample();
+        downloadData(response.data, 'quizz_example.xlsx');
+    } catch (e) {
+        toast.error('Error downloading example, please try again later');
+    }
+});
+
+
+export const uploadExcelFile = createAsyncThunk<void, {companyId: string, file: File}, {}>(
+    'quizz/uploadExcelFile', 
+    async ({companyId, file}, {}) => {
+        try {
+            await quizzApi.sendExcelFile(companyId, file);
+            customNavigator.navigate?.(getCompanyQuizzPath(companyId));
+        }
+        catch (e) {
+            if (e instanceof AxiosError) {
+                e.response?.data.detail && toast.error(e.response.data.detail);
+            }
+            else {
+                toast.error('Error uploading file, please try again later');
+            }
+        }
+        
+    }
+);
+
 export const { 
     addEmptyQuestion,
     addEmptyAnswer,

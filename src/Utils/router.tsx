@@ -37,6 +37,7 @@ const COMPANY_PROFILE_REQUESTS_PATH = "/companies/:companyId/requests";
 const COMPANY_PROFILE_QUIZZ_PATH = "/companies/:companyId/quizz/";
 const COMPANY_PROFILE_QUIZZ_ADD_PATH = "/companies/:companyId/quizz/add";
 const COMPANY_QUIZZ_PATH = "/company/:companyId/quizz/:quizzId";
+const COMPANY_QUIZZ_UPLOAD = "/company/:companyId/quizz-upload";
 const COMPANY_TAKE_QUIZZ_PATH = "/company/:companyId/quizz/:quizzId/take";
 const COMPANY_AVERAGE_MEMBERS_SCORE_PATH = "/company/:companyId/analytics";
 
@@ -53,6 +54,7 @@ export const getCompanyQuizzAddPath = (companyId: string) => COMPANY_PROFILE_QUI
 export const getQuizzPath = (companyId:string, quizzId: string) => COMPANY_QUIZZ_PATH.replace(":companyId", companyId).replace(":quizzId", quizzId);
 export const getTakeQuizzPath = (companyId:string, quizzId: string) => COMPANY_TAKE_QUIZZ_PATH.replace(":companyId", companyId).replace(":quizzId", quizzId);
 export const getCompanyAverageMembersScoresPath = (companyId: string) => COMPANY_AVERAGE_MEMBERS_SCORE_PATH.replace(":companyId", companyId)
+export const getQuizzUploadPath = (companyId: string) => COMPANY_QUIZZ_UPLOAD.replace(":companyId", companyId);
 
 
 const LOGIN_PATH = "/login";
@@ -142,6 +144,10 @@ const router = createBrowserRouter([
             {
                 path: COMPANY_AVERAGE_MEMBERS_SCORE_PATH,
                 element: <CompanyProfile openedTab="analytics"/>
+            },
+            {
+                path: COMPANY_QUIZZ_UPLOAD,
+                element: <CompanyProfile openedTab="quizz_upload"/>
             },
             {
                 path: COMPANY_QUIZZ_PATH,
